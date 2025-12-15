@@ -6,7 +6,7 @@
 
 const Header = () => {
   const theme = useMantineTheme();
-   const colorHex = theme.colors.brightSun[4];
+   //const colorHex = theme.colors.brightSun[4];
   return (
     <div className='w-full bg-mine-shaft-950 h-20 text-white flex
     justify-between px-6 items-center '>
@@ -15,7 +15,7 @@ const Header = () => {
       <div className='flex gap-1 items-center text-bright-sun-400'>
         <IconAnchor className='h-10 w-8 ' stroke={2.25} />
         <div className='text-3xl font-semibold'>
-          iJobs
+          Find Job
         </div>
       </div>
       
@@ -34,7 +34,7 @@ const Header = () => {
           <IconSettings stroke={1.5} />
         </div>
          <div className='bg-mine-shaft-900 p-1.5 rounded-full'>
-          <Indicator color="red" size={6} offset={6} processing>
+          <Indicator color={theme.colors.brightSun[4]} size={6} offset={6} processing>
               <IconBell stroke={1.5} />
           </Indicator>
           
