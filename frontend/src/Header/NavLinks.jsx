@@ -14,7 +14,8 @@ const NavLinks = () => {
 
   return (
     <div className="flex gap-5 h-full items-center text-mine-shaft-300">
-      {links.map((link, index) => {
+      {
+        links.map((link, index) => {
         const isActive = location.pathname === `/${link.URL}`;
 
         return (
@@ -33,8 +34,11 @@ const NavLinks = () => {
             </Link>
           </div>
         );
-      })}
+        })
+      }
     </div>
+
+    
   );
 };
 

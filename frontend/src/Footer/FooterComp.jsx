@@ -8,7 +8,7 @@ import {footerLinks} from "../assets/Data/Data";
 
 const FooterComp = () => {
   return (
-    <div className="mt-20 pb-5 flex gap-5 justify-around ">
+    <div className="pt-20 pb-5 flex gap-5 justify-around bg-mine-shaft-950 font-['poppins] ">
       <div className="w-1/4 flex flex-col gap-4 ">
         <div className="flex gap-1 items-center text-bright-sun-400">
           <IconAnchor className="h-6 w-6 " stroke={2.25} />

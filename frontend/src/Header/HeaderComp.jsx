@@ -19,6 +19,7 @@ const Header = () => {
         </div>
       </div>
       
+      
       {/* links */}
       {NavLinks()}
 
@@ -28,17 +29,17 @@ const Header = () => {
         <div className='flex items-center gap-2'>
           <div>Rutik</div>
           <Avatar src={profile} alt="it's me" />
-
         </div>
+
         <div className='bg-mine-shaft-900 p-1.5 rounded-full'>
           <IconSettings stroke={1.5} />
         </div>
+
          <div className='bg-mine-shaft-900 p-1.5 rounded-full'>
           <Indicator color={theme.colors.brightSun[4]} size={6} offset={6} processing>
               <IconBell stroke={1.5} />
           </Indicator>
-          
-        </div>
+          </div>
 
       </div>
     </div>
