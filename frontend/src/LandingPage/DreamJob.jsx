@@ -5,7 +5,7 @@ import { IconSearch } from "@tabler/icons-react";
 import avatar from "../assets/avatar.png";
 import avatar1 from "../assets/avatar1.png";
 import avatar2 from "../assets/avatar2.png";
-import google from "../assets/Icons/Google.png"
+
 
 const DreamJob = () => {
   return (
@@ -70,7 +70,7 @@ const DreamJob = () => {
             backdrop-blur-md  flex flex-col gap-3">
                 <div className="flex gap-2 items-center ">
                     <div className="w-12 h-10 p-1 bg-mine-shaft-900 rounded-lg ">
-                        <img src={google} alt="" />
+                        <img src={`/Icons/Google.png`} alt="" />
                     </div>
                     <div className="text-sm text-mine-shaft-100">
                         <div>

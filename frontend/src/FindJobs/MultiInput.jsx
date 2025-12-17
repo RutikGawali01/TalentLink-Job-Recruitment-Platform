@@ -10,6 +10,7 @@ import {
 } from '@mantine/core';
 //import { useDispatch } from 'react-redux';
 //import { updateFilter } from '../../Slices/FilterSlice';
+import {IconSelector} from "@tabler/icons-react"
 
 const MultiInput = (props) => {
   //const dispatch = useDispatch();
@@ -93,13 +94,15 @@ const MultiInput = (props) => {
     >
       <Combobox.DropdownTarget>
         <PillsInput
+        variant='unstyled'
           label={props.title}
           onClick={() => combobox.openDropdown()}
           leftSection={
-            <div className="text-bright-sun-400 bg-mine-shaft-800 p-1 rounded-full gap-2">
+            <div className="flex text-bright-sun-400  p-0.8 m-1 ">
               {props.icon && <props.icon />}
             </div>
           }
+          rightSection={<IconSelector />}
         >
           <Pill.Group>
             {value.length > 0 && (
@@ -115,7 +118,7 @@ const MultiInput = (props) => {
 
             <Combobox.EventsTarget>
               <PillsInput.Field
-                className='flex gap-2'
+                className='flex gap-2 mr-2'
                 value={search}
                 placeholder="Search values"
                 onFocus={() => combobox.openDropdown()}
