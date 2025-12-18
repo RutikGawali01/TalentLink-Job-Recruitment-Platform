@@ -1,7 +1,7 @@
   import React from 'react'
   import { IconAnchor , IconBell , IconSettings } from '@tabler/icons-react';
   import { Avatar , Indicator , useMantineTheme } from '@mantine/core';
-  import profile from '../assets/avatar.png';
+  import profile from '/avatar.png';
   import NavLinks from './NavLinks';
 
 const Header = () => {

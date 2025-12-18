@@ -1,7 +1,7 @@
 import React from 'react'
 import {work} from "../assets/Data/Data";
 import {Avatar} from "@mantine/core";
-import avatar1 from "../assets/avatar1.png";
+import avatar1 from "/avatar1.png";
 
 const Working = () => {
   return (

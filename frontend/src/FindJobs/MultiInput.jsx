@@ -73,7 +73,7 @@ const MultiInput = (props) => {
     )
     .map((item) => (
       <Combobox.Option value={item} key={item} active={value.includes(item)}>
-        <Group gap="sm">
+        <Group gap="sm" >
           <Checkbox size='xs' color={theme.colors.brightSun[4]}
             checked={value.includes(item)}
             onChange={() => {}}
@@ -81,7 +81,7 @@ const MultiInput = (props) => {
             tabIndex={-1}
             style={{ pointerEvents: 'none' }}
           />
-          <span>{item}</span>
+          <span className='text-mine-shaft-300'>{item}</span>
         </Group>
       </Combobox.Option>
     ));
@@ -95,10 +95,10 @@ const MultiInput = (props) => {
       <Combobox.DropdownTarget>
         <PillsInput
         variant='unstyled'
-          label={props.title}
+          // label={props.title}
           onClick={() => combobox.openDropdown()}
           leftSection={
-            <div className="flex text-bright-sun-400  p-0.8 m-1 ">
+            <div className="flex text-bright-sun-400  p-0.8 m-2 ">
               {props.icon && <props.icon />}
             </div>
           }
@@ -118,9 +118,9 @@ const MultiInput = (props) => {
 
             <Combobox.EventsTarget>
               <PillsInput.Field
-                className='flex gap-2 mr-2'
+                className='!text-mine-shaft-200 flex gap-2 mr-2'
                 value={search}
-                placeholder="Search values"
+                placeholder={props.title}
                 onFocus={() => combobox.openDropdown()}
                 onBlur={() => combobox.closeDropdown()}
                 onChange={(event) => {
@@ -139,8 +139,8 @@ const MultiInput = (props) => {
         </PillsInput>
       </Combobox.DropdownTarget>
 
-      <Combobox.Dropdown>
-        <Combobox.Options  >
+      <Combobox.Dropdown className=''>
+        <Combobox.Options className='' >
           {options}
 
           {!exactOptionMatch && search.trim().length > 0 && (

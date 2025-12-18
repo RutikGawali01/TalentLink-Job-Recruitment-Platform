@@ -1,6 +1,6 @@
 import React from "react";
 import { Avatar, Rating } from "@mantine/core";
-import avatar from "../assets/avatar.png";
+import avatar from "/avatar.png";
 import { testimonials } from "../assets/Data/Data";
 
 const Testimonials = () => {
