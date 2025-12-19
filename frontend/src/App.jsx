@@ -4,6 +4,7 @@ import { MantineProvider, createTheme } from "@mantine/core";
 import HomePage from "./pages/HomePage.jsx";
 import FindJobs from "./pages/FindJobs.jsx";
 import FindTalentPage from "./pages/FindTalentPage.jsx"
+import TalentProfilePage from "./pages/TalentProfilePage.jsx";
 import "./index.css"; // <-- MUST contain your @theme tokens (or App.css if you put them there)
 import FooterComp from "../src/Footer/FooterComp.jsx";
 import Header from "../src/Header/HeaderComp.jsx";
@@ -32,7 +33,7 @@ function App() {
         <Routes>
           <Route path="/find-jobs" element={<FindJobs />} />
           <Route path="/find-talent" element={<FindTalentPage />} />
-          
+           <Route path="/talent-profile" element={<TalentProfilePage />} />         
           <Route  path="*" element={< HomePage />} />
         </Routes>
         <FooterComp />
