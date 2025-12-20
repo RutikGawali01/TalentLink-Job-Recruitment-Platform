@@ -2,11 +2,11 @@ import React from 'react'
 import {IconBookmark, IconClockHour3} from "@tabler/icons-react";
 import {Text} from "@mantine/core";
  import {Divider, useMantineTheme} from "@mantine/core"
-
+import { Link } from "react-router-dom";
 const JobCard = (props) => {
   const theme = useMantineTheme();
   return (
-    <div className='bg-mine-shaft-900 cursor-pointer  flex flex-col gap-3 rounded-xl p-4 w-80 hover:shadow-[0_0_5px_1px_yellow] !shadow-mine-shaft-600 '>
+    <Link to="/jobs" className='bg-mine-shaft-900 cursor-pointer  flex flex-col gap-3 rounded-xl p-4 w-80 hover:shadow-[0_0_5px_1px_yellow] !shadow-mine-shaft-600 '>
        <div className='flex justify-between '>
           <div className='flex gap-2 items-center '>
               <div className='p-2 rounded-md  bg-mine-shaft-800 '> 
@@ -48,7 +48,7 @@ const JobCard = (props) => {
              </div>
       </div>
 
-    </div>
+    </Link>
   )
 }
 

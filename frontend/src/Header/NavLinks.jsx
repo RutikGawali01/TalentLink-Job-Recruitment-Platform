@@ -6,7 +6,7 @@ const NavLinks = () => {
   const links = [
     { name: "Find jobs", URL: "find-jobs" },
     { name: "Find Talent", URL: "find-talent" },
-    { name: "Upload jobs", URL: "upload-job" },
+    { name: "Post jobs", URL: "post-job" },
     { name: "About us", URL: "about" },
   ];
 

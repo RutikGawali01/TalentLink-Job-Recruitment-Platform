@@ -7,6 +7,7 @@ import {
   Pill,
   PillsInput,
   useCombobox,
+  ScrollArea
 } from '@mantine/core';
 //import { useDispatch } from 'react-redux';
 //import { updateFilter } from '../../Slices/FilterSlice';
@@ -141,13 +142,16 @@ const MultiInput = (props) => {
 
       <Combobox.Dropdown className=''>
         <Combobox.Options className='' >
+          <ScrollArea.Autosize mah = {200}  type="scroll" >
           {options}
 
           {!exactOptionMatch && search.trim().length > 0 && (
             <Combobox.Option value="$create">
               + Create {search}
+
             </Combobox.Option>
           )}
+          </ScrollArea.Autosize>
         </Combobox.Options>
       </Combobox.Dropdown>
     </Combobox>
