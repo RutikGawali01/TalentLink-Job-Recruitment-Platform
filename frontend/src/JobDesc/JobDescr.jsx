@@ -101,7 +101,7 @@ const JobDescr = () => {
               </div>
             </div>
           </div>
-            <Link to="" >
+            <Link to="/company" >
               <Button
                 color={theme.colors.brightSun[4]}
                 variant="light"

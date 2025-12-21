@@ -8,6 +8,7 @@ import TalentProfilePage from "./pages/TalentProfilePage.jsx";
 import PostJobPage from "./pages/PostJobPage.jsx"
 import JobDescriptionPage from "./pages/JobDescriptionPage.jsx";
 import AppplyJobPage from "./pages/ApplyJobPage.jsx";
+import CompanyPage from "./pages/CommpanyPage.jsx";
 import "./index.css"; // <-- MUST contain your @theme tokens (or App.css if you put them there)
 import FooterComp from "../src/Footer/FooterComp.jsx";
 import Header from "../src/Header/HeaderComp.jsx";
@@ -50,6 +51,8 @@ function App() {
           <Route path="/jobs" element= {<JobDescriptionPage />} />
           <Route path="/talent-profile" element={<TalentProfilePage />} />
           <Route path="/apply-job" element = {<AppplyJobPage />} />
+          <Route path="/company" element = {<CompanyPage />} />
+
           <Route  path="*" element={< HomePage />} />
         </Routes>
         <FooterComp />
