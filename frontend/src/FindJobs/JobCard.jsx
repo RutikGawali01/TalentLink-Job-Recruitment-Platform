@@ -44,7 +44,7 @@ const JobCard = (props) => {
                &#8377; {props.package}
           </div>
           <div className='flex gap-1 text-xs items-center text-mine-shaft-300'>
-              <IconClockHour3 stroke={1.5} className='h-5 w-5' />  {props.postedDaysAgo} days ago
+              <IconClockHour3 stroke={1.5} className='h-5 w-5' /> Posted {props.postedDaysAgo} days ago
              </div>
       </div>
 

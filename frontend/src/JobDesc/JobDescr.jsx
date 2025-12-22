@@ -6,7 +6,9 @@ import { card } from "../assets/Data/JobDescData";
 import { skills, desc } from "../assets/Data/JobDescData";
 import DOMPurify from "dompurify";
 
-const JobDescr = () => {
+// we have used this component in PostedJobs page thats why we have used props 
+// this props will help to change button text 
+const JobDescr = (props) => {
   const theme = useMantineTheme();
   const data = DOMPurify.sanitize(desc); // protect script attack
   return (
@@ -27,11 +29,13 @@ const JobDescr = () => {
         <div className=" flex flex-col gap-2 items-center ">
           <Link to="/apply-job">
             <Button color={theme.colors.brightSun[4]} size="sm" variant="light">
-              Apply{" "}
+              {props.edit? "Edit" : "Apply"}
             </Button>
           </Link>
-
-          <IconBookmark className="text-bright-sun-400 cursor-pointer" />
+          {
+              props.edit? <Button color="" size="sm" variant="outline">
+                        Delete</Button>
+              : <IconBookmark className="text-bright-sun-400 cursor-pointer" />}
         </div>
       </div>
       <Divider size="xs" my="xl" />
