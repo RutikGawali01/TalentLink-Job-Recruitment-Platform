@@ -11,6 +11,8 @@ import PostedJobsPage from "./pages/PostedJobsPage.jsx";
 import JobHistoryPage from "./pages/JobHistoryPage.jsx"
 import FooterComp from "./Footer/FooterComp.jsx";
 import Header from "./Header/HeaderComp.jsx";
+import SignUpPage from "./pages/SignUpPage.jsx"
+import ProfilePage from "./pages/ProfilePage.jsx";
 import { Divider } from "@mantine/core";
 
 function App() {
@@ -30,6 +32,10 @@ function App() {
           <Route path="/company" element={<CompanyPage />} />
           <Route path="/posted-job" element={<PostedJobsPage />} />
           <Route path="/job-history" element={<JobHistoryPage />} />
+          <Route path="/signup" element={<SignUpPage />} />
+          <Route path="/login" element={<SignUpPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
+
           <Route path="*" element={<HomePage />} />
         </Routes>
 
