@@ -1,0 +1,12 @@
+package com.jobportal.entity;
+
+import com.jobportal.DTO.AccountType;
+
+public class User {
+    private String id;
+    private  String name;
+    private String email;
+    private String password;
+    private AccountType accountType;
+
+}
