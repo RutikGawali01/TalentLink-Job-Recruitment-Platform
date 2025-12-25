@@ -1,12 +1,18 @@
-import { Divider } from "@mantine/core";
-  import { IconAnchor , IconBell , IconSettings } from '@tabler/icons-react';
+import { Button, useMantineTheme } from "@mantine/core";
+import {useNavigate} from "react-router-dom";
+  import { IconAnchor , IconArrowLeft , IconSettings } from '@tabler/icons-react';
 import SignUp from "../SignUpLogin/SignUp"
 import Login from "../SignUpLogin/Login"
 import {useLocation} from "react-router-dom"
 const SignUpPage = () => {
     const location = useLocation();
+    const navigate = useNavigate();
+     const theme = useMantineTheme();
   return (
-    <div className="min-h-[90vh] bg-mine-shaft-950 font-['poppins'] overflow-hidden">
+    <div className="min-h-[90vh] bg-mine-shaft-950 font-['poppins'] overflow-hidden relative">
+        <Button size="sm" onClick={() => navigate("/")} leftSection={<IconArrowLeft size={20} />} my="lg" color={theme.colors.brightSun[4]}
+         autoContrast variant="light" className="!absolute left-5 z-10 "
+         >Home</Button>
       <div className={`w-[100vw] h-[100vh] transition-all ease-in-out duration-800 flex [&>*]:flex-shrink-0 
                 ${location.pathname =='/signup'?'-translate-x-1/2':'translate-x-0'}`}>
         <Login/>
