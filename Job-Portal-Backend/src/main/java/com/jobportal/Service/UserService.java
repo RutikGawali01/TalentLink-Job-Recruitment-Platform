@@ -1,8 +1,10 @@
 package com.jobportal.Service;
 
 import com.jobportal.DTO.LoginDTO;
+import com.jobportal.DTO.ResponseDTO;
 import com.jobportal.DTO.UserDTO;
 import com.jobportal.Exception.JobPortalException;
+import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 
 public interface UserService {
@@ -10,4 +12,9 @@ public interface UserService {
 
     public UserDTO loginUser(LoginDTO loginDTO) throws JobPortalException;
 
+    public boolean sendOTP(String email) throws Exception;
+
+    public boolean verifyOTP(String email, String otp) throws Exception;
+
+    public ResponseDTO changePassword( LoginDTO loginDTO) throws JobPortalException;
 }

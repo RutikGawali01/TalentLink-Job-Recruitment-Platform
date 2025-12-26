@@ -5,6 +5,8 @@ import {useState} from "react"
 import {loginUser} from "../Services/UserService";
 import {loginValidation} from "../Services/FormValidation";
 import {notifications} from "@mantine/notifications"
+import ResetPassword from "./ResetPassword";
+import {useDisclosure} from "@mantine/hooks";
 const form={
   email:"",
   password:""
@@ -14,6 +16,8 @@ const Login = () => {
 
   const [formError, setFormError] = useState(form);
   const [data, setData] = useState(form);
+  const [opened, {open, close}] = useDisclosure(false);
+
   const navigate= useNavigate();
   
 
@@ -65,6 +69,7 @@ const Login = () => {
   }
 
   return (
+    <> 
     <div className="w-1/2 px-20 flex flex-col justify-center gap-3">
       <div className=" text-2xl font-semibold">Create Account</div>
       <TextInput  onChange={handleChange} name="email" value={data.email}
@@ -77,9 +82,18 @@ const Login = () => {
         withAsterisk onChange={handleChange} leftSection={<IconLock size={18} stroke={1.5} />} label="Password" placeholder="Password" />
       <Button onClick={handleSubmit} autoContrast variant="filled">Login</Button>
       <div className="mx-auto">
-       Don't have an account? <span onClick={()=> {navigate("/signup"); setFormError(form); setData(form)}} className="text-bright-sun-400 hover:underline cursor-pointer">Sign up</span>
+       Don't have an account? <span onClick={()=> {navigate("/signup"); setFormError(form); setData(form)}} 
+       className="text-bright-sun-400 hover:underline cursor-pointer">
+        Sign up
+        </span>
       </div>
+
+      <div onClick={open} className="text-bright-sun-400 text-center hover:underline cursor-pointer">Forget Password?</div>
+
     </div>
+
+    <ResetPassword opened={opened} close={close} />
+    </> 
   )
 }
 
