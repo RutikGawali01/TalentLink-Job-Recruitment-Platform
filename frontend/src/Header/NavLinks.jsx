@@ -9,7 +9,7 @@ const NavLinks = () => {
     { name: "Post jobs", URL: "post-job" },
     { name: "Posted Job", URL: "posted-job" },
     { name: "Job History", URL: "job-history" },
-    { name: "Sign Up", URL: "signup" },
+    // { name: "Sign Up", URL: "signup" },
 
   ];
 

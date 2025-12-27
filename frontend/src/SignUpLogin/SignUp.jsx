@@ -5,14 +5,18 @@ import {
   Anchor,
   Checkbox,
 } from "@mantine/core";
-import { IconAt,IconX, IconCheck, IconLock } from "@tabler/icons-react";
+import { IconAt, IconX, IconCheck, IconLock } from "@tabler/icons-react";
 import { Link, useNavigate } from "react-router-dom";
-import { Radio, Group } from "@mantine/core";
+import { Radio, Group, LoadingOverlay } from "@mantine/core";
 import { useState } from "react";
 
 import { registerUser } from "../Services/UserService";
 import { signupValidation } from "../Services/FormValidation";
-import {notifications} from "@mantine/notifications"
+import { notifications } from "@mantine/notifications";
+import {
+  successNotification,
+  errorNotification,
+} from "../Services/NotificationService";
 
 const SignUp = () => {
   const form = {
@@ -25,7 +29,9 @@ const SignUp = () => {
 
   const [formError, setFormError] = useState(form);
   const [data, setData] = useState(form);
-  const navigate= useNavigate();
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+
   const handleChange = (event) => {
     if (typeof event == "string") {
       setData({ ...data, accountType: event });
@@ -36,11 +42,14 @@ const SignUp = () => {
     setData({ ...data, [name]: value });
     setFormError({ ...formError, [name]: signupValidation(name, value) });
     if (name === "password" && data.confirmPassword !== "") {
-      let err= "";
-      if (data.confirmPassword !== value)
-        err =  "Passwords do not match.";
+      let err = "";
+      if (data.confirmPassword !== value) err = "Passwords do not match.";
 
-      setFormError({ ...formError, [name]: signupValidation(name, value), confirmPassword:err });
+      setFormError({
+        ...formError,
+        [name]: signupValidation(name, value),
+        confirmPassword: err,
+      });
     }
     if (name === "confirmPassword") {
       if (data.password !== value)
@@ -50,55 +59,49 @@ const SignUp = () => {
   };
 
   const handleSubmit = () => {
-    let valid = true, newFormError={};
-    for(let key in data){
-      if(key === "accountType") continue;
-      if(key !== "confirmPassword")newFormError[key]=signupValidation(key, data[key]);
-      else if(data[key] !== data["password"]) newFormError[key]="Passwords do not match.";
-      if(newFormError[key]) valid= false;
+    let valid = true,
+      newFormError = {};
+    for (let key in data) {
+      if (key === "accountType") continue;
+      if (key !== "confirmPassword")
+        newFormError[key] = signupValidation(key, data[key]);
+      else if (data[key] !== data["password"])
+        newFormError[key] = "Passwords do not match.";
+      if (newFormError[key]) valid = false;
     }
     setFormError(newFormError);
     //console.log(valid);
-    if(valid == true){
-        registerUser(data)
-      .then((res) => {
-        console.log(res);
-        setData(form);
-        notifications.show({
-          withCloseButton: true,
-          title: "Registered Successfully",
-          message:"Redirecting to login page...",
-          icon: <IconCheck  style={{width: "90%", height:"90%"}}/>,
-          color:"teal",
-          withBorder: true,
-          className:"!border-green-500"
-        })
-        setTimeout(()=>{
+    if (valid == true) {
+      setLoading(true); // only if all fields are valid then loading
+      registerUser(data)
+        .then((res) => {
+          console.log(res);
+          setData(form);
+
+          successNotification(
+            "Registered Successfully",
+            "Redirecting to home page..."
+          );
+          setTimeout(() => {
+            setLoading(false);
             navigate("/login");
-        }, 4000);
-
-
-      })
-      .catch((err) => {
-        console.log(err);
-        notifications.show({
-          withCloseButton: true,
-          title: "Registration Failed",
-          message: err.response.data.errorMessage,
-          icon: <IconX  style={{width: "90%", height:"90%"}}/>,
-          color:"red",
-          withBorder: true,
-          className:"!border-red-500"
+          }, 4000);
         })
-
-      })
-
-
+        .catch((err) => {
+          console.log(err);
+          setLoading(false);
+          const errorMsg =
+            err?.response?.data?.errorMessage || "Something went wrong";
+          errorNotification("Registration Failed", errorMsg);
+        });
     }
-    
   };
 
   return (
+    <>
+      <LoadingOverlay visible={loading} zIndex={1000} className="translate-x-1/2" overlayProps={{radius:"sm", blur:2}} 
+        loaderProps={{color:"yellow", type:"bars"}}
+    />
     <div className="w-1/2 px-20 flex flex-col justify-center gap-3">
       <div className=" text-2xl font-semibold">Create Account</div>
       <TextInput
@@ -173,16 +176,24 @@ const SignUp = () => {
           </>
         }
       />
-      <Button onClick={handleSubmit} autoContrast variant="filled">
+      <Button loading={loading} onClick={handleSubmit} autoContrast variant="filled">
         Sign up
       </Button>
       <div className="mx-auto">
         Have an account?{" "}
-        <span  onClick={()=> {navigate("/login"); setFormError(form); setData(form)}} className="cursor-pointer text-bright-sun-400 hover:underline">
+        <span
+          onClick={() => {
+            navigate("/login");
+            setFormError(form);
+            setData(form);
+          }}
+          className="cursor-pointer text-bright-sun-400 hover:underline"
+        >
           Login
         </span>
       </div>
     </div>
+    </>
   );
 };
 
