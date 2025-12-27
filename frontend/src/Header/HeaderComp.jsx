@@ -1,12 +1,15 @@
   import React from 'react'
   import { IconAnchor , IconBell , IconSettings } from '@tabler/icons-react';
-  import { Avatar , Indicator , useMantineTheme } from '@mantine/core';
+  import { Avatar , Indicator, Button, useMantineTheme } from '@mantine/core';
   import profile from '/avatar.png';
   import NavLinks from './NavLinks';
   import {useLocation} from "react-router-dom";
   import ProfileMenu from "./ProfieMenu";
+  import {Link} from "react-router-dom";
+  import {useSelector} from "react-redux";
 
 const Header = () => {
+  const user = useSelector((state)=> state.user);
   const location = useLocation();
   const theme = useMantineTheme();
    //const colorHex = theme.colors.brightSun[4];
@@ -30,11 +33,16 @@ const Header = () => {
 
       {/* profile section */}
       <div className='flex gap-2 items-center'>
-        <ProfileMenu/>
 
-        <div className='bg-mine-shaft-900 p-1.5 rounded-full'>
+        { user ? <ProfileMenu/> : <Link to="/login">
+          <Button variant='subtle' color={theme.colors.brightSun[4]} className='!border !border-mine-shaft-400' >
+              Login
+          </Button>
+        </Link>}
+
+        {/* <div className='bg-mine-shaft-900 p-1.5 rounded-full'>
           <IconSettings stroke={1.5} />
-        </div>
+        </div> */}
 
          <div className='bg-mine-shaft-900 p-1.5 rounded-full'>
           <Indicator color={theme.colors.brightSun[4]} size={6} offset={6} processing>
