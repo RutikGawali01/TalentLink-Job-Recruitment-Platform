@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { IconMapPin,IconBriefcase, IconPencil, IconPlus, IconDeviceFloppy,} from "@tabler/icons-react";
 import {Divider,Avatar, useMantineTheme, ActionIcon,Textarea, TagsInput} from "@mantine/core";
 import ExperienceCard from "./ExperienceCard";
@@ -7,8 +7,17 @@ import SelectInput from "./SelectInput";
 import fields from "../assets/Data/Profile";
 import ExpInput from "./ExpInput"
 import CertiInput from "./CertiInput";
+import {useSelector, useDispatch} from "react-redux";
+import {getProfile} from "../Services/ProfileService";
+import Info from "./Info";
+import {setProfile} from "../Slice/ProfileSlice";
 
 const ProfileComp = (props) => {
+  const dispatch = useDispatch();
+
+  const user = useSelector((state)=> state.user);
+  const profile = useSelector((state)=> state.profile);
+
   const[skills, setSkills] = useState(["React", "SpringBoot", "MongoDB", "HTML", "CSS", "JavaScript", "Node.js", "Express", "MySQL", "Python", "Django", "Figma", "Sketch", "Docker", "AWS"]);
   const [about, setAbout] = useState(`${props.about}`);
   const select = fields;
@@ -27,6 +36,15 @@ const ProfileComp = (props) => {
     setEdit(newEdit);
     //console.log(edit);
   };
+  useEffect(() => {
+    // console.log(profile);
+    getProfile(user.id).then((data)=>{
+      dispatch(setProfile(data));
+    }).catch((error)=>{
+      console.log(error);
+    })
+  }, [])
+  
   const theme = useMantineTheme();
   return (
     <div className="w-4/5 mx-auto">
@@ -40,44 +58,9 @@ const ProfileComp = (props) => {
       </div>
 
       <div className="px-3 mt-19  ">
-        <div className="text-3xl font-semibold flex justify-between ">
-          {" "}
-          {props.name}
-          <ActionIcon
-            size="lg"
-            variant="subtle"
-            color={theme.colors.brightSun[4]}
-            onClick={() => handleEdit(0)}
-          >
-            {edit[0] ? (
-              <IconPencil className="h-4/5 w-4/5 " />
-            ) : (
-              <IconDeviceFloppy className="h-4/5 w-4/5 " />
-            )}
-          </ActionIcon>
-        </div>
-        {edit[0] ? (
-          <>
-            {" "}
-            <div className="text-xl flex gap-1 items-center ">
-              {" "}
-              <IconBriefcase className="h-5 w-5" stroke={1.5} />
-              {props.role} &bull; {props.company}
-            </div>
-            <div className="text-lg flex gap-1 items-center text-mine-shaft-300 ">
-              <IconMapPin className="h-5 w-5" stroke={1.5} /> {props.location}
-            </div>{" "}
-          </>
-        ) : (
-          <>
-            {" "}
-            <div className=" flex gap-10 [&>*]:w-1/2">
-              <SelectInput {...select[0]} />
-              <SelectInput {...select[1]} />
-            </div>
-            <SelectInput {...select[2]} />{" "}
-          </>
-        )}
+       <Info {...props} />
+
+
       </div>
 
       <Divider mx="xs" my="xl" />
@@ -103,7 +86,7 @@ const ProfileComp = (props) => {
           value={about} autosize minRows={3} placeholder="Enter about yourself "
           onChange={(event) => setAbout(event.currentTarget.value)}
         /> : <div className="text-sm text-mine-shaft-300 text-justify">
-          {props.about}
+          {profile?.about}
         </div>
         }
         
@@ -130,9 +113,9 @@ const ProfileComp = (props) => {
           </ActionIcon>
         </div>
         {
-          !edit[2] ? <TagsInput value={skills} onChange={setSkills}  placeholder="add skills" splitChars={[',', ' ','|']} /> 
+          !edit[2] ? <TagsInput value={profile?.skills} onChange={setSkills}  placeholder="add skills" splitChars={[',', ' ','|']} /> 
           : <div className="flex flex-wrap gap-2">
-          {skills.map((skill, index) => (
+          {profile?.skills?.map((skill, index) => (
             <div
               key={index}
               className=" font-medium bg-mine-shaft-900 text-sm  bg-opacity-15 rounded-3xl text-bright-sun-400 px-3 py-1"
@@ -171,7 +154,7 @@ const ProfileComp = (props) => {
           </div>
         </div>
         <div className="flex flex-col gap-8">
-          {props.experience.map((exp, index) => (
+          {profile?.experiences?.map((exp, index) => (
             <ExperienceCard key={index} {...exp} edit = {edit[3]} />
           ))}
           {addExp &&<ExpInput add   setEdit = {setAddExp}/>}
@@ -196,7 +179,7 @@ const ProfileComp = (props) => {
         </div>
         </div>
         <div className="flex flex-col gap-8">
-          {props.certifications.map((certif, index) => (
+          {profile?.certifications?.map((certif, index) => (
             <CertificationCard key={index} {...certif} edit ={edit[4]} />
           ))}
           {

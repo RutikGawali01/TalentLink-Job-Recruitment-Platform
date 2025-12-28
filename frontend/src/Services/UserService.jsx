@@ -4,7 +4,6 @@ const registerUser = async (user)=>{
     return axios.post(`${base_url}register`, user)
     .then(res=> res.data)
     .catch(error=> {throw error;});
-
 }
 const loginUser = async (login)=>{
     return axios.post(`${base_url}login`, login)

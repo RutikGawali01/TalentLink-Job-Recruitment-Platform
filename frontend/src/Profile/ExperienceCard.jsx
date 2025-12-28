@@ -1,6 +1,7 @@
 import {useMantineTheme, Button } from "@mantine/core";
 import {useState} from "react"
 import ExpInput from "./ExpInput";
+import {formateDate} from "../Services/Utilities";
 
 const ExperienceCard = (props) => {
     const theme = useMantineTheme();
@@ -23,7 +24,7 @@ const ExperienceCard = (props) => {
           </div>
 
           <div className='text-sm text-mine-shaft-300 '>
-            {props.startDate} - {props.endDate}
+            {formateDate(props.startDate)} - {formateDate(props.endDate)}
           </div>
        </div>
 

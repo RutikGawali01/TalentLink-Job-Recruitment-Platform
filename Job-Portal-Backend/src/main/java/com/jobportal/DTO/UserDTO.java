@@ -27,6 +27,7 @@ public class UserDTO {
     @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,15}$", message = "{user.password.invalid}")
     private String password;
     private AccountType accountType;
+    private Long profileId;
 
 
 // no need of this bcz model mapper can be used
