@@ -32,6 +32,8 @@ public class User {
     private String password;
     private AccountType accountType;
 
+    private Long profileId;
+
 
     // no need of this bcz model mapper is used
 //    public UserDTO toDTO(){
