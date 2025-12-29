@@ -1,18 +1,7 @@
 import { Combobox, InputBase, useCombobox, ScrollArea } from '@mantine/core';
-import {useState, useEffect} from 'react'
-
-
+import { useState, useEffect } from 'react';
 
 const SelectInput = (props) => {
-
-  useEffect(() => {
-    setData(props.options);
-    setValue(props.form.getInputProps(props.name).value);
-    setSearch(props.form.getInputProps(props.name).value);
-  }, [])
-  
-
-
   const combobox = useCombobox({
     onDropdownClose: () => combobox.resetSelectedOption(),
   });
@@ -21,10 +10,21 @@ const SelectInput = (props) => {
   const [value, setValue] = useState('');
   const [search, setSearch] = useState('');
 
+  // 🔥 Will update whenever editing values are inserted
+  useEffect(() => {
+    setData(props.options);
+
+    const currentValue = props.form.values[props.name]; // cleaner access
+    setValue(currentValue || "");
+    setSearch(currentValue || "");
+  }, [props.form.values[props.name]]);   // 👈 runs when form receives values
+
   const exactOptionMatch = data.some((item) => item === search);
   const filteredOptions = exactOptionMatch
     ? data
-    : data.filter((item) => item?.toLowerCase().includes(search?.toLowerCase().trim()));
+    : data.filter((item) =>
+        item?.toLowerCase().includes(search?.toLowerCase().trim())
+      );
 
   const options = filteredOptions.map((item) => (
     <Combobox.Option value={item} key={item}>
@@ -46,15 +46,15 @@ const SelectInput = (props) => {
           setSearch(val);
           props.form.setFieldValue(props.name, val);
         }
-
         combobox.closeDropdown();
       }}
     >
       <Combobox.Target>
-        <InputBase  {...props.form.getInputProps(props.name)}
-         withAsterisk
-          label= {props.label}
-          leftSection={<props.leftSection stroke={1.5}/>}
+        <InputBase
+          {...props.form.getInputProps(props.name)}
+          withAsterisk
+          label={props.label}
+          leftSection={<props.leftSection stroke={1.5} />}
           rightSection={<Combobox.Chevron />}
           value={search}
           onChange={(event) => {
@@ -66,7 +66,7 @@ const SelectInput = (props) => {
           onFocus={() => combobox.openDropdown()}
           onBlur={() => {
             combobox.closeDropdown();
-            setSearch(value || '');
+            setSearch(value || "");
           }}
           placeholder={props.placeholder}
           rightSectionPointerEvents="none"
@@ -75,16 +75,16 @@ const SelectInput = (props) => {
 
       <Combobox.Dropdown>
         <Combobox.Options>
-          <ScrollArea.Autosize mah = {200}  type="scroll" >
-          {options}
-          {!exactOptionMatch && search?.trim()?.length > 0 && (
-            <Combobox.Option value="$create">+ Create {search}</Combobox.Option>
-          )}
+          <ScrollArea.Autosize mah={200} type="scroll">
+            {options}
+            {!exactOptionMatch && search?.trim()?.length > 0 && (
+              <Combobox.Option value="$create">+ Create {search}</Combobox.Option>
+            )}
           </ScrollArea.Autosize>
         </Combobox.Options>
       </Combobox.Dropdown>
     </Combobox>
   );
-}
+};
 
 export default SelectInput;

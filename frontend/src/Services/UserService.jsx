@@ -1,5 +1,6 @@
 import axios from "axios"
 const base_url = "http://localhost:9090/users/"
+// sign up 
 const registerUser = async (user)=>{
     return axios.post(`${base_url}register`, user)
     .then(res=> res.data)

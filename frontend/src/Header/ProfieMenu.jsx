@@ -15,6 +15,7 @@ import {useDispatch, useSelector} from "react-redux"
 import {removeUser} from "../Slice/UserSlice"
 
 const ProfileMenu = () => {
+
   const dispatch = useDispatch();
   // for state look up in userSLices
   const user = useSelector((state)=> state.user);
@@ -23,12 +24,13 @@ const ProfileMenu = () => {
   const handleLogOut = ()=> {
       dispatch(removeUser());
   }
+  const profile = useSelector((state) => state.profile);
   return (
     <Menu shadow="md" width={200} opened={opened} onChange={setOpened}>
       <Menu.Target>
         <div className="cursor-pointer flex items-center gap-2">
           <div>{user.name}</div>
-          <Avatar src="/avatar.png" alt="it's me" />
+          <Avatar src={profile.picture ? `data:image/jpeg;base64,${profile.picture}`:"/avatar.png"} alt="it's me" />
         </div>
       </Menu.Target>
 

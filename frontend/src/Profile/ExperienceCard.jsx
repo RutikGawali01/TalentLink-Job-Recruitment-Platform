@@ -2,10 +2,24 @@ import {useMantineTheme, Button } from "@mantine/core";
 import {useState} from "react"
 import ExpInput from "./ExpInput";
 import {formateDate} from "../Services/Utilities";
+import {useSelector, useDispatch} from "react-redux";
+import {changeProfile} from "../Slice/ProfileSlice"
+import {successNotification} from "../Services/NotificationService";
 
 const ExperienceCard = (props) => {
+  const dispatch = useDispatch();
     const theme = useMantineTheme();
-    const [edit, setEdit] = useState(false)
+    const [edit, setEdit] = useState(false);
+    const profile  = useSelector((state)=> state.profile);
+
+    const handleDelete =()=>{
+      let exp = [...profile.experiences];
+      exp.splice(props.index, 1);
+      let updatedProfile = {...profile, experiences: exp};
+      dispatch(changeProfile(updatedProfile));
+        successNotification("Success", "Experience deleted successfully");
+      
+    }
   return (
      !edit ? <div className='flex flex-col gap-2'>
          <div className='flex justify-between '>
@@ -24,7 +38,7 @@ const ExperienceCard = (props) => {
           </div>
 
           <div className='text-sm text-mine-shaft-300 '>
-            {formateDate(props.startDate)} - {formateDate(props.endDate)}
+            {formateDate(props.startDate)} - {props.working ? "present":formateDate(props.endDate)}
           </div>
        </div>
 
@@ -32,14 +46,14 @@ const ExperienceCard = (props) => {
        <div className='text-sm text-mine-shaft-300 text-justify  '>
             {props.description}    
        </div>
-       { !props.edit && 
+       { props.edit && 
         <div className="flex gap-5 " >
             <Button onClick={() => setEdit(true)} color={theme.colors.brightSun[4]} variant="outline">Edit </Button>
-            <Button color={theme.colors.brightSun[4]} variant="outline">Delete </Button>
+            <Button color="red.8" onClick={handleDelete} variant="outline">Delete </Button>
         </div>   
         }   
 
-    </div>: <ExpInput description = {`${props.description}`  } setEdit ={setEdit} />
+    </div>: <ExpInput   {...props} setEdit ={setEdit} />
   )
 }
 
