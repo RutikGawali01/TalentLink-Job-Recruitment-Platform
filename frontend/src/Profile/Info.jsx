@@ -1,4 +1,4 @@
-import { IconMapPin,IconBriefcase, IconPencil, IconDeviceFloppy } from "@tabler/icons-react";
+import { IconMapPin,IconBriefcase, IconPencil, IconX, IconCheck } from "@tabler/icons-react";
 import { ActionIcon,useMantineTheme } from "@mantine/core";
 import SelectInput from "./SelectInput";
 import fields from "../assets/Data/Profile";
@@ -23,14 +23,19 @@ const Info = (props) => {
         console.log(form.getValues());
     }else{
         setEdit(false);
-        let updatedProfile = {...profile, ...form.getValues()};
-        dispatch(changeProfile(updatedProfile));
-        console.log(updatedProfile);
-        successNotification("Success", "Profile updated successfully");
 
     }
     //setEdit((prev) => !prev); // toggle edit
   };
+
+  const handleSave = ()=>{
+        setEdit(false);
+        let updatedProfile = {...profile, ...form.getValues()};
+        dispatch(changeProfile(updatedProfile));
+        //console.log(updatedProfile);
+        successNotification("Success", "Profile updated successfully");
+
+  }
 
   const form = useForm({
     mode:'controlled',
@@ -41,19 +46,30 @@ const Info = (props) => {
     <>  
       <div className="text-3xl font-semibold flex justify-between ">
         {user.name}
-
-        <ActionIcon
-          size="lg"
-          variant="subtle"
-          color={theme.colors.brightSun[4]}
-          onClick={handleClick}          // FIXED
-        >
-          { edit ? (
-            <IconDeviceFloppy className="h-4/5 w-4/5" />  // Save when editing
-          ) : (
-            <IconPencil className="h-4/5 w-4/5" />
-          )}
-        </ActionIcon>
+        <div>
+          { edit && 
+            <ActionIcon
+            size="lg"
+            variant="subtle"
+            color="green.8"
+            onClick={handleSave}
+          >
+              <IconCheck className="h-4/5 w-4/5" />  
+          </ActionIcon>
+          }
+          <ActionIcon
+            size="lg"
+            variant="subtle"
+            color={edit ? "red.8": `${theme.colors.brightSun[4]}`}
+            onClick={handleClick}          // FIXED
+          >
+            { edit ? (
+              <IconX className="h-4/5 w-4/5" />  // Save when editing
+            ) : (
+              <IconPencil className="h-4/5 w-4/5" />
+            )}
+          </ActionIcon>        
+        </div>
       </div>
 
       {!edit ? (

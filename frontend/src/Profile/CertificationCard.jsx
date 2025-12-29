@@ -1,8 +1,27 @@
+import { useState, useEffect } from "react";
 import { IconMapPin,IconBriefcase, IconTrash, IconPlus, IconDeviceFloppy,} from "@tabler/icons-react";
 import {Divider,Avatar, useMantineTheme, ActionIcon,Textarea, TagsInput} from "@mantine/core";
 import {formateDate} from "../Services/Utilities"
+import {useSelector, useDispatch} from "react-redux";
+import {changeProfile} from "../Slice/ProfileSlice"
+import {successNotification} from "../Services/NotificationService";
+
 const CertificationCard = (props) => {
     const theme = useMantineTheme();
+    const [addCerti, setAddCerti] = useState(false);
+    const dispatch = useDispatch();
+    const [edit, setEdit] = useState(false);
+    const profile  = useSelector((state)=> state.profile);
+
+    const handleDelete =()=>{
+      let certi = [...profile.certifications];
+      certi.splice(props.index, 1);
+      let updatedProfile = {...profile, certifications: certi};
+      dispatch(changeProfile(updatedProfile));
+        successNotification("Success", "Certificate deleted successfully");
+      
+    }
+
   return (
         <div className='flex justify-between '>
           <div className='flex gap-2 items-center '>
@@ -28,7 +47,8 @@ const CertificationCard = (props) => {
                     </div>
                 </div>
                 { !props.edit &&
-                <ActionIcon size="lg"   variant="subtle" color={theme.colors.brightSun[4]}  onClick={() => setAddExp(true)}>
+                <ActionIcon size="lg"   variant="subtle" color={theme.colors.brightSun[4]} 
+                 onClick={handleDelete}>
                     <IconTrash className="h-4/5 w-4/5 "  stroke={1.5} />
                 </ActionIcon>
                 }
