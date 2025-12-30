@@ -26,29 +26,21 @@ import {successNotification} from "../Services/NotificationService";
 const ProfileComp = (props) => {
   const dispatch = useDispatch();
 
-  const user = useSelector((state) => state.user);
+  //const user = useSelector((state) => state.user);
   const profile = useSelector((state) => state.profile);
   const select = fields;
   const [addExp, setAddExp] = useState(false);
 
-  const [edit, setEdit] = useState([
-    "false",
-    "false",
-    "false",
-    "false",
-    "false",
-  ]);
-
-  useEffect(() => {
-    // console.log(profile);
-    getProfile(user.id)
-      .then((data) => {
-        dispatch(setProfile(data));
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
+  // useEffect(() => {
+  //   // console.log(profile);
+  //   getProfile(user.id)
+  //     .then((data) => {
+  //       dispatch(setProfile(data));
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // }, []);
 
   const handleFileChange = async (image)=>{
     let picture = await getBase64(image);

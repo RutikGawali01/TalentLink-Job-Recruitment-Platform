@@ -3,31 +3,32 @@ import { Button, useMantineTheme, ActionIcon } from "@mantine/core";
 import { Link } from "react-router-dom";
 import { Divider } from "@mantine/core";
 import { card } from "../assets/Data/JobDescData";
-import { skills, desc } from "../assets/Data/JobDescData";
+
 import DOMPurify from "dompurify";
+import {timeAgo} from "../Services/Utilities";
 
 // we have used this component in PostedJobs page thats why we have used props 
 // this props will help to change button text 
 const JobDescr = (props) => {
   const theme = useMantineTheme();
-  const data = DOMPurify.sanitize(desc); // protect script attack
+  const data = DOMPurify.sanitize(props.description); // protect script attack
   return (
     <div className="w-2/3 ">
       <div className="flex justify-between ">
         <div className="flex gap-2 items-center ">
           <div className="p-3 rounded-lg  bg-mine-shaft-800 ">
-            <img className="h-14  " src={`/Icons/Google.png`} alt="" />
+            <img className="h-14  " src={`/Icons/${props.company}.png`} alt="" />
           </div>
 
           <div className="flex flex-col gap-1 ">
-            <div className="font-semibold text-2xl ">software Engineer</div>
+            <div className="font-semibold text-2xl ">{props.jobTitle}</div>
             <div className="text-lg text-mine-shaft-300">
-              Google &#x2022; 3 days ago &#x2022; 48 Applicants
+              {props.company} &#x2022; {timeAgo(props.postTime)} &#x2022; {props.applicants?props.applicants.length : 0} Applicants
             </div>
           </div>
         </div>
         <div className=" flex flex-col gap-2 items-center ">
-          <Link to="/apply-job">
+          <Link to={`/apply-job/${props.id}`}>
             <Button color={theme.colors.brightSun[4]} size="sm" variant="light">
               {props.edit? "Edit" : "Apply"}
             </Button>
@@ -40,7 +41,9 @@ const JobDescr = (props) => {
       </div>
       <Divider size="xs" my="xl" />
       <div className="flex justify-between ">
-        {card.map((item, index) => (
+        
+        {
+          card.map((item, index) => (
           <div key={index} className="flex flex-col gap-1 items-center">
             <ActionIcon
               color={theme.colors.brightSun[4]}
@@ -56,7 +59,7 @@ const JobDescr = (props) => {
               />
             </ActionIcon>
             <div className="text-sm teext-mine-shaft=300">{item.name}</div>
-            <div className="font-semibold">{item.value}</div>
+            <div className="font-semibold">{props?props[item.id]:"NA"} {item.id == "packageOffered" && <>LPA</>}</div>
           </div>
         ))}
       </div>
@@ -65,7 +68,7 @@ const JobDescr = (props) => {
       <div>
         <div className="text-xl font-semibold mb-5">Required Skills:</div>
         <div className="flex gap-2 flex-wrap">
-          {skills.map((skill, index) => (
+          { props?.skillsRequired?.map((skill, index) => (
             <ActionIcon
               key={index}
               p="xs"
@@ -95,17 +98,17 @@ const JobDescr = (props) => {
         <div className="flex justify-between mb-3 ">
           <div className="flex gap-2 items-center ">
             <div className="p-3 rounded-lg  bg-mine-shaft-800 ">
-              <img className="h-8 " src={`/Icons/Google.png`} alt="" />
+              <img className="h-8 " src={`/Icons/{props.company}.png`} alt="" />
             </div>
 
             <div className="flex flex-col">
-              <div className="font-medium text-lg ">Google</div>
+              <div className="font-medium text-lg ">{props.company}</div>
               <div className=" text-mine-shaft-300">
                 10k+ employees
               </div>
             </div>
           </div>
-            <Link to="/company" >
+            <Link to={`/company/${props.company}`} >
               <Button
                 color={theme.colors.brightSun[4]}
                 variant="light"

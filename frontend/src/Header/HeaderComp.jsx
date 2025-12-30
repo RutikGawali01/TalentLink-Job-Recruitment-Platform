@@ -1,4 +1,4 @@
-  import React from 'react'
+  import {useState, useEffect } from 'react'
   import { IconAnchor , IconBell , IconSettings } from '@tabler/icons-react';
   import { Avatar , Indicator, Button, useMantineTheme } from '@mantine/core';
   import profile from '/avatar.png';
@@ -6,10 +6,30 @@
   import {useLocation} from "react-router-dom";
   import ProfileMenu from "./ProfieMenu";
   import {Link} from "react-router-dom";
-  import {useSelector} from "react-redux";
+  import {useSelector, useDispatch} from "react-redux";
+  import { getProfile } from "../Services/ProfileService";
+import { setProfile } from "../Slice/ProfileSlice";
 
 const Header = () => {
-  const user = useSelector((state)=> state.user);
+
+  const dispatch = useDispatch();
+
+  const user = useSelector((state) => state.user);
+  
+ // const select = fields;
+  const [addExp, setAddExp] = useState(false);
+
+  useEffect(() => {
+    // console.log(profile);
+    getProfile(user?.id)
+      .then((data) => {
+        dispatch(setProfile(data));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
   const location = useLocation();
   const theme = useMantineTheme();
    //const colorHex = theme.colors.brightSun[4];

@@ -1,7 +1,20 @@
 import JobCard from "../FindJobs/JobCard";
-import {jobList} from "../assets/Data/JobsData";
+import {useParams} from "react-router-dom";
+import {useState, useEffect} from 'react'
+import {getAllJobs} from "../Services/JobService";
 
-const RecommendedJobs = () => {
+
+
+const RecommendedJobs = (props) => {
+  const {id} = useParams();
+  const [jobList, setJobList] = useState([{}]);
+  useEffect(() => {
+    getAllJobs().then((res) => {
+      setJobList(res);
+    }).catch((err)=>{
+      console.log(err);
+    })
+  },[])
   return (
     <div>
       <div className='text-xl font-semibold mb-5'>
@@ -9,7 +22,7 @@ const RecommendedJobs = () => {
       </div>
       <div className="flex flex-col flex-wrap gap-5 ">
         {
-            jobList.map((job, index) => index<6 &&
+            jobList.map((job, index) => index<6 && id != job.id &&
                 <JobCard key={index} {...job} />
             )
         }
