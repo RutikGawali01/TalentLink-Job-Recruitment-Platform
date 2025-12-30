@@ -74,13 +74,7 @@ const ExpInput = (props) => {
       </div>
       <SelectInput form={form} name="location" {...select[2]} />{" "}
       <Textarea {...form.getInputProps('description')} withAsterisk
-        label="Summary" 
-        
-        autosize
-        minRows={3}
-        placeholder="Enter Summary "
-        
-      />
+        label="Summary"  autosize  minRows={3}  placeholder="Enter Summary "/>
       <div className=" flex gap-10 [&>*]:w-1/2">
             {/* <MonthPickerInput {...form.getInputProps('startDate')} withAsterisk maxDate={form.getValues().endDate || undefined}  label="Start Date" placeholder="Pick date"  onChange={setStartDate} />
             <MonthPickerInput {...form.getInputProps('endDate')} disabled={form.getValues().working} withAsterisk minDate={form.getValues()startDate ||  undefined} maxDate={new Date()}   label="end Date" placeholder="Pick date"  onChange={setEndDate} /> */}

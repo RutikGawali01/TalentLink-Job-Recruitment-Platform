@@ -15,6 +15,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.lang.annotation.Documented;
 
 @Data
+
+
 @Document(collection = "users" )
 @NoArgsConstructor
 

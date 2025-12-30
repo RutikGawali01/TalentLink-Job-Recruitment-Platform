@@ -11,7 +11,7 @@ import {content} from "../assets/Data/PostJob"
 
 
 
-const TextEditor = () => {
+const TextEditor = (props) => {
     const theme = useMantineTheme();
    
   const editor = useEditor({
@@ -24,7 +24,10 @@ const TextEditor = () => {
       Highlight,
       TextAlign.configure({ types: ['heading', 'paragraph'] }),
     ],
-    content,
+    content:props.form.getValues().description,
+    onUpdate({editor}){
+      props.form.setFieldValue('description', editor.getHTML());
+    },
   });
 
   return (

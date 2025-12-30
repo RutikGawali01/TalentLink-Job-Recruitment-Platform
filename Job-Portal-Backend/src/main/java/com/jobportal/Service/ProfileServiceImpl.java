@@ -39,18 +39,27 @@ public class ProfileServiceImpl implements ProfileService{
 
     @Override
     public ProfileDTO getProfile(Long id) throws JobPortalException {
-        Profile profile = profileRepository.findById(id).orElseThrow(()-> new JobPortalException("PROFILE_NOT_FOUND"));
-        return  modelMapper.map(profile, ProfileDTO.class);
+        Profile profile = profileRepository.findById(id)
+                .orElseThrow(() -> new JobPortalException("PROFILE_NOT_FOUND"));
+
+        return profile.toDTO();   // returning DTO using constructor conversion
     }
+
 
     @Override
     public ProfileDTO updateProfile(ProfileDTO profileDTO) throws JobPortalException {
-        Profile profile = profileRepository.findById(profileDTO.getId()).orElseThrow(()-> new JobPortalException("PROFILE_NOT_FOUND"));
 
-        profile =  modelMapper.map(profileDTO, Profile.class);
+        // check profile exists before updating
+        profileRepository.findById(profileDTO.getId())
+                .orElseThrow(() -> new JobPortalException("PROFILE_NOT_FOUND"));
+
+        // Convert DTO -> Entity using constructor
+        Profile profile = profileDTO.toEntity();
+
         profileRepository.save(profile);
 
-        return modelMapper.map(profile, ProfileDTO.class);
-        //return profileDTO;
+        // return updated data using Entity → DTO conversion
+        return profile.toDTO();
     }
+
 }
