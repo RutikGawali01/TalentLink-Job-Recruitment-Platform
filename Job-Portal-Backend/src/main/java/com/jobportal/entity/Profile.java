@@ -34,7 +34,8 @@ public class Profile {
     private List<Experience> experiences;
     private List<Certification> certifications;
 
-    // Convert Entity → DTO
+    private List<Long> savedJobs;
+
     public ProfileDTO toDTO() {
         return new ProfileDTO(
                 id,
@@ -46,7 +47,8 @@ public class Profile {
                 picture!=null ? Base64.getEncoder().encodeToString(picture) : null,
                 skills,
                 experiences,
-                certifications
+                certifications,
+                savedJobs
         );
     }
 }

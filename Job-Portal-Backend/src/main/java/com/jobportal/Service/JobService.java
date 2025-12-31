@@ -1,5 +1,6 @@
 package com.jobportal.Service;
 
+import com.jobportal.DTO.ApplicantDTO;
 import com.jobportal.DTO.JobDTO;
 import com.jobportal.Exception.JobPortalException;
 
@@ -12,4 +13,6 @@ public interface JobService {
     public List<JobDTO> getAllJobs() throws  JobPortalException;
 
     public JobDTO getJob(Long id) throws JobPortalException;
+
+    public void applyJob(ApplicantDTO applicantDTO, Long id) throws JobPortalException;
 }

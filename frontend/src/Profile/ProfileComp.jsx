@@ -21,7 +21,7 @@ import Experience from "./Experience";
 import Certification from "./Certification";
 import {changeProfile} from "../Slice/ProfileSlice"
 import {successNotification} from "../Services/NotificationService";
-
+import {getBase64} from "../Services/Utilities";
 
 const ProfileComp = (props) => {
   const dispatch = useDispatch();
@@ -49,15 +49,6 @@ const ProfileComp = (props) => {
     dispatch(changeProfile(updatedProfile));
     successNotification("Success", "Profile Picture  updated successfully");
 
-
-  }
-  const getBase64 = (file)=>{
-    return new Promise((resolve, reject)=>{
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload=()=>resolve(reader.result);
-      reader.onerror= error=> reject(error);
-    })
 
   }
 
