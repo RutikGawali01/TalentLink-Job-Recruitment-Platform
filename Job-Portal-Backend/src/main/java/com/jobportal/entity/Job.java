@@ -1,11 +1,11 @@
 package com.jobportal.entity;
 
-import com.jobportal.DTO.Applicant;
+
+import com.jobportal.DTO.JobDTO;
 import com.jobportal.DTO.JobStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.cglib.core.Local;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -33,5 +33,23 @@ public class Job {
     private List<String> skillsRequired;
     private JobStatus jobStatus;
 
+    public JobDTO toDTO() {
+        return new JobDTO(
+                id,
+                jobTitle,
+                company,
+                applicants != null ? applicants.stream().map((x)-> x.toDTO()).toList():null,
+                about,
+                experience,
+                jobType,
+                location,
+                packageOffered,
+                postTime,
+                description,
+                skillsRequired,
+                jobStatus
 
+        );
+    }
 }
+
