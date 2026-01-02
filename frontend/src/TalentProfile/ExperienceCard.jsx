@@ -1,4 +1,4 @@
-import React from 'react'
+import {formateDate} from "../Services/Utilities";
 
 const ExperienceCard = (props) => {
   return (
@@ -19,7 +19,7 @@ const ExperienceCard = (props) => {
           </div>
 
           <div className='text-sm text-mine-shaft-300 '>
-            {props.startDate} - {props.endDate}
+           {formateDate(props.startDate)} - {formateDate(props.endDate)}
           </div>
        </div>
 

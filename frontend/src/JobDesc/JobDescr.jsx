@@ -61,13 +61,13 @@ const JobDescr = (props) => {
               {props.edit? "Edit" : "Apply"}
             </Button>
           </Link>}
-          { applied &&
+          {!props.edit || applied &&
             <Button color="green.8" size="sm" variant="light">
               Applied
             </Button>
           }
           {
-              props.edit? <Button color="" size="sm" variant="outline">
+              props.edit? <Button color="red.8" size="sm" variant="outline">
                         Delete</Button>
               :  profile.savedJobs?.includes(props.id)? 
             <IconBookmarkFilled onClick={handleSaveJob} className='text-bright-sun-400 cursor-pointer ' /> :

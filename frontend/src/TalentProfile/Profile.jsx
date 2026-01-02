@@ -1,26 +1,39 @@
-import React from "react";
+import {useState, useEffect} from "react";
 import { IconMapPin, IconBriefcase } from "@tabler/icons-react";
 import { Divider, Avatar, useMantineTheme, Button } from "@mantine/core";
 import ExperienceCard from "./ExperienceCard";
 import CertificationCard from "./CertificationCard";
+import {useParams} from "react-router-dom"
+import {getProfile} from "../Services/ProfileService"
 
 const Profile = (props) => {
   const theme = useMantineTheme();
+  const {id} = useParams();
+  const [profile, setProfile] = useState(null);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+   getProfile(id).then((res)=>{
+    setProfile(res);
+   }).catch((err)=>{
+    console.log(err);
+   })
+  }, [id])
+  
   return (
     <div className="w-2/3">
       <div className="relative">
         <img className="rounded-t-2xl" src="/Profile/banner.jpg" alt="" />
         <img
           className="h-48 w-48 absolute -bottom-1/3 left-3  rounded-full border-mine-shaft-950 border-8 "
-          src="/avatar.png"
+          src={profile?.picture ? `data:image/jpeg;base64,${profile.picture}`:"/avatar.png"}
           alt=""
         />
       </div>
 
       <div className="px-3 mt-16  ">
         <div className="text-3xl font-semibold flex justify-between ">
-          {" "}
-          {props.name}
+          {profile?.name}
           <Button color={theme.colors.brightSun[4]} variant="light">
             Messege{" "}
           </Button>
@@ -28,10 +41,10 @@ const Profile = (props) => {
         <div className="text-xl flex gap-1 items-center ">
           {" "}
           <IconBriefcase className="h-5 w-5" stroke={1.5} />
-          {props.role} &bull; {props.company}
+          {profile?.jobTitle} &bull; {profile?.company}
         </div>
         <div className="text-lg flex gap-1 items-center text-mine-shaft-300 ">
-          <IconMapPin className="h-5 w-5" stroke={1.5} /> {props.location}
+          <IconMapPin className="h-5 w-5" stroke={1.5} /> {profile?.location}
         </div>
       </div>
 
@@ -40,7 +53,7 @@ const Profile = (props) => {
       <div className="px-3 ">
         <div className=" text-2xl font-semibold mb-3 ">about</div>
         <div className="text-sm text-mine-shaft-300 text-justify">
-          {props.about}
+          {profile?.about}
         </div>
       </div>
 
@@ -49,7 +62,7 @@ const Profile = (props) => {
       <div className="">
         <div className=" text-2xl font-semibold mb-3 ">skills</div>
         <div className="flex flex-wrap gap-2">
-          {props.skills.map((skill, index) => (
+          {profile?.skills?.map((skill, index) => (
             <div
               key={index}
               className=" font-medium bg-mine-shaft-900 text-sm  bg-opacity-15 rounded-3xl text-bright-sun-400 px-3 py-1"
@@ -70,7 +83,7 @@ const Profile = (props) => {
       <div className="px-3 ">
         <div className=" text-2xl font-semibold mb-5">Experience</div>
         <div className="flex flex-col gap-8">
-          {props.experience.map((exp, index) => (
+          {profile?.experiences?.map((exp, index) => (
             <ExperienceCard key={index} {...exp} />
           ))}
         </div>
@@ -80,7 +93,7 @@ const Profile = (props) => {
       <div className="px-3">
         <div className=" text-2xl font-semibold mb-5">Certifications</div>
         <div className="flex flex-col gap-8">
-          {props.certifications.map((certif, index) => (
+          {profile?.certifications.map((certif, index) => (
             <CertificationCard key={index} {...certif} />
           ))}
         </div>

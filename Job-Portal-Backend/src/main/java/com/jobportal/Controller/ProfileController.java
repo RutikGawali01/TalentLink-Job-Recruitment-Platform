@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @CrossOrigin
 @RequestMapping("/profiles")
@@ -32,4 +34,11 @@ public class ProfileController {
         //profileService.getProfile(id);
         return new ResponseEntity<>( profileService.updateProfile(profileDTO), HttpStatus.OK);
     }
+
+    @GetMapping("/getAll")
+    public ResponseEntity<List<ProfileDTO>> getAllProfile() throws Exception{
+        //profileService.getProfile(id);
+        return new ResponseEntity<>( profileService.getAllProfile(), HttpStatus.OK);
+    }
+
 }

@@ -1,4 +1,4 @@
-import React from 'react'
+import {formateDate} from "../Services/Utilities";
 
 const CertificationCard = (props) => {
   return (
@@ -19,7 +19,7 @@ const CertificationCard = (props) => {
 
           <div className='flex flex-col items-end '>
             <div className='text-sm text-mine-shaft-300 '>
-                {props.issueDate}
+               Issued : {formateDate(props.issueDate)}
             </div>
             <div className='text-sm text-mine-shaft-300 '>
                 ID: {props.certificateId}

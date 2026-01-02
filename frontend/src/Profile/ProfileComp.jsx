@@ -23,8 +23,10 @@ import {changeProfile} from "../Slice/ProfileSlice"
 import {successNotification} from "../Services/NotificationService";
 import {getBase64} from "../Services/Utilities";
 
+
 const ProfileComp = (props) => {
   const dispatch = useDispatch();
+  
 
   //const user = useSelector((state) => state.user);
   const profile = useSelector((state) => state.profile);
