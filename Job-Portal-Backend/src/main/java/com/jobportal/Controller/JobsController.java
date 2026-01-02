@@ -44,5 +44,21 @@ public class JobsController {
         return new ResponseEntity<>(new ResponseDTO("Applied Successfully!"), HttpStatus.OK);
     }
 
+    @GetMapping("/postedBy/{id}")
+    public ResponseEntity<List<JobDTO>> getsJobsPostedBy(@PathVariable Long id) throws Exception{
+
+        return new ResponseEntity<>( jobService.getsJobsPostedBy(id), HttpStatus.OK);
+    }
+
+    @PostMapping("/changeAppliStatus")
+    public ResponseEntity<ResponseDTO> changeAppliStatus(@RequestBody Application application ) throws JobPortalException {
+        jobService.changeAppliStatus(application);
+        return new ResponseEntity<>(new ResponseDTO("Application Status change Successfully!"), HttpStatus.OK);
+    }
+
+
+
+
+
 
 }

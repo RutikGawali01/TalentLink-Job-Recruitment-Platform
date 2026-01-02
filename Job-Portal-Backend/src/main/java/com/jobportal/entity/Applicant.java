@@ -25,7 +25,7 @@ public class Applicant {
     private String coverLetter;
     private LocalDateTime timestamp;
     private ApplicationStatus applicationStatus;
-
+    private LocalDateTime interviewTime;
     public ApplicantDTO toDTO() {
         return new ApplicantDTO(
                 applicantId,
@@ -36,7 +36,8 @@ public class Applicant {
                 resume!=null ? Base64.getEncoder().encodeToString(resume) : null,
                 coverLetter,
                 timestamp,
-                applicationStatus
+                applicationStatus,
+                interviewTime
         );
     }
 

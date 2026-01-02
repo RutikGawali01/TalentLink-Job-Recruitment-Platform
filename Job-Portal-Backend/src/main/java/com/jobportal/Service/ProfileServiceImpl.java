@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Service("profileService")
 @RequiredArgsConstructor
@@ -60,6 +61,11 @@ public class ProfileServiceImpl implements ProfileService{
 
         // return updated data using Entity → DTO conversion
         return profile.toDTO();
+    }
+
+    @Override
+    public List<ProfileDTO> getAllProfile() {
+       return profileRepository.findAll().stream().map((x)-> x.toDTO()).toList();
     }
 
 }

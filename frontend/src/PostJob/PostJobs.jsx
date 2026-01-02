@@ -6,10 +6,12 @@ import {useForm, isNotEmpty} from "@mantine/form"
 import {postJob} from "../Services/JobService";
 import {successNotification, errorNotification} from "../Services/NotificationService";
 import {useNavigate} from "react-router-dom"
+import {useSelector} from "react-redux";
 
 const PostJobs = () => {
     const select = fields;
     const navigate = useNavigate();
+    const user = useSelector((state)=> state.user);
 
     const form  =useForm({
       mode:'controlled',
@@ -45,19 +47,33 @@ const PostJobs = () => {
     const handlePost=()=>{
       form.validate();
       if(!form.isValid())return;
-      postJob(form.getValues())
+      postJob({...form.getValues(), postedBy:user.id, jobStatus:"ACTIVE"})
         .then((res)=>{
           console.log(res)
           successNotification("Success", "Job Posted  successfully");
-          navigate("/posted-job")
+          navigate(`/posted-jobs/${res.id}`);
 
         }).catch((err)=>{
           console.log(err)
           const errorMsg = err?.response?.data?.errorMessage || "Something went wrong";
           errorNotification(" Error",errorMsg)
       })
-
     }
+
+    const handleDraft=()=>{
+      postJob({...form.getValues(), postedBy:user.id, jobStatus:"DRAFT"})
+        .then((res)=>{
+          console.log(res)
+          successNotification("Success", "Job Drafted  successfully");
+          navigate(`/posted-jobs/${res.id}`);
+
+        }).catch((err)=>{
+          console.log(err)
+          const errorMsg = err?.response?.data?.errorMessage || "Something went wrong";
+          errorNotification(" Error",errorMsg)
+      })
+    }
+
      const theme = useMantineTheme();
 
 
@@ -96,7 +112,7 @@ const PostJobs = () => {
       </div>
       <div className=" flex gap-4 items-start pt-5">
           <Button  color={theme.colors.brightSun[4]} onClick={handlePost} variant='light' >Publish Job </Button>
-          <Button  color={theme.colors.brightSun[4]}  variant='outline' >Save as Draft </Button>
+          <Button  color={theme.colors.brightSun[4]}  onClick={handleDraft} variant='outline' >Save as Draft </Button>
       </div>
     </div>
   )
