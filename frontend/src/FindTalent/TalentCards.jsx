@@ -29,6 +29,7 @@ const TalentCards = (props) => {
   const [app, {open: openApp, close: closeApp}] = useDisclosure(false);
 
   useEffect(() => {
+    //console.log(props.totalExp);
     if (props.applicantId) {
       getProfile(props.applicantId)
         .then((res) => {
@@ -115,7 +116,7 @@ const TalentCards = (props) => {
       ) : (
         <div className="flex justify-between">
           <div className="font-semibold text-mine-shaft-200">
-            23 LPA
+            Experience : {props.totalExp?props.totalExp:0} Years
           </div>
           <div className="flex gap-1 text-xs items-center text-mine-shaft-300">
             <IconMapPin stroke={1.5} className="h-5 w-5" />

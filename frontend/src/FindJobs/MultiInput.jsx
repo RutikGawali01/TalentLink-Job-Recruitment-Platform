@@ -9,12 +9,12 @@ import {
   useCombobox,
   ScrollArea
 } from '@mantine/core';
-//import { useDispatch } from 'react-redux';
-//import { updateFilter } from '../../Slices/FilterSlice';
+import { useDispatch } from 'react-redux';
+import { updateFilter } from '../Slice/FilterSlice';
 import {IconSelector} from "@tabler/icons-react"
 
 const MultiInput = (props) => {
-  //const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   const combobox = useCombobox({
     onDropdownClose: () => combobox.resetSelectedOption(),
@@ -41,19 +41,16 @@ const MultiInput = (props) => {
       setValue((current) => [...current, search]);
       dispatch(updateFilter({ [props.title]: [...value, search] }));
     } else {
-      const updatedValues = value.includes(val)
-        ? value.filter((v) => v !== val)
-        : [...value, val];
-
-      setValue(updatedValues);
-      dispatch(updateFilter({ [props.title]: updatedValues }));
+      dispatch(updateFilter({ [props.title]: value.includes(val)?value.filter((v) => v !== val):[...value, val]  }));
+      setValue((current)=> current.includes(val)?current.filter((v) => v !== val):[...current, val])
+      
     }
   };
 
   const handleValueRemove = (val) => {
-    const updatedValues = value.filter((v) => v !== val);
-    setValue(updatedValues);
-    dispatch(updateFilter({ [props.title]: updatedValues }));
+
+    dispatch(updateFilter({ [props.title]: value.filter((v) => v !== val) }));
+    setValue((current) => current.filter((v) => v !== val));
   };
 
   const theme = useMantineTheme();

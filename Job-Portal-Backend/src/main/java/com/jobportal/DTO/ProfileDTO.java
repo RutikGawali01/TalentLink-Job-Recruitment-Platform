@@ -22,7 +22,7 @@ public class ProfileDTO {
     private String about;
 
     private String picture;    // Base64 String from UI
-
+    private Long totalExp;
     private List<String> skills;
     private List<Experience> experiences;
     private List<Certification> certifications;
@@ -39,6 +39,7 @@ public class ProfileDTO {
                 location,
                 about,
                 picture!=null ? Base64.getDecoder().decode(picture) : null,
+                totalExp,
                 skills,
                 experiences,
                 certifications,

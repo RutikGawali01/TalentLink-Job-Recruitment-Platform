@@ -1,6 +1,6 @@
 import { IconBookmark,IconBookmarkFilled, IconMapPin } from "@tabler/icons-react";
 import { Button, useMantineTheme, ActionIcon } from "@mantine/core";
-import { Link } from "react-router-dom";
+import { Link , useParams} from "react-router-dom";
 import { Divider } from "@mantine/core";
 import { card } from "../assets/Data/JobDescData";
 import {useSelector, useDispatch} from "react-redux"
@@ -8,6 +8,10 @@ import {changeProfile} from "../Slice/ProfileSlice";
 import DOMPurify from "dompurify";
 import {timeAgo} from "../Services/Utilities";
 import {useState, useEffect} from 'react';
+import {postJob} from "../Services/JobService"
+import {errorNotification, successNotification} from "../Services/NotificationService"
+
+
 // we have used this component in PostedJobs page thats why we have used props 
 // this props will help to change button text 
 const JobDescr = (props) => {
@@ -35,6 +39,18 @@ const JobDescr = (props) => {
      }else {
       setApplied(false);}
    }, [props]);
+
+   const handleClose = ()=>{
+    postJob({...props,  jobStatus: "CLOSED"}).then((res)=>{
+      console.log(res);
+        successNotification("Success", "Job CLosed Successfully");
+    }).catch((err)=>{
+      console.log(err);
+        errorNotification("Error", err.response?.data?.errorMessage);
+    })
+
+
+   }
    
    
    
@@ -56,9 +72,10 @@ const JobDescr = (props) => {
         </div>
         <div className=" flex flex-col gap-2 items-center ">
           { (props.edit || !applied) &&
-            <Link to={`/apply-job/${props.id}`}>
+            <Link to={ props.edit? `/post-job/${props.id}`:`/apply-job/${props.id}`}>
+
             <Button color={theme.colors.brightSun[4]} size="sm" variant="light">
-              {props.edit? "Edit" : "Apply"}
+              {props.closed? "Re-open" : props.edit? "Edit" : "Apply"}
             </Button>
           </Link>}
           {!props.edit || applied &&
@@ -67,8 +84,8 @@ const JobDescr = (props) => {
             </Button>
           }
           {
-              props.edit? <Button color="red.8" size="sm" variant="outline">
-                        Delete</Button>
+              props.edit &&  !props.closed ? <Button onClick={handleClose} color="red.8" size="sm" variant="outline" >
+                Close</Button>
               :  profile.savedJobs?.includes(props.id)? 
             <IconBookmarkFilled onClick={handleSaveJob} className='text-bright-sun-400 cursor-pointer ' /> :
             <IconBookmark onClick={handleSaveJob} className='text-mines-shaft-300 cursor-pointer hover:text-bright-sun-400' />

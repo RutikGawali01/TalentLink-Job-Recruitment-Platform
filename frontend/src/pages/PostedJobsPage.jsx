@@ -27,8 +27,8 @@ const PostedJobsPage = () => {
   return (
     <div className="min-h-[100vh] bg-mine-shaft-950 font-['poppins'] px-4">
       <div className="flex gap-5">
-            <PostedJobComp job={job} jobList ={jobList}/>
-            <PostedJobDesc {...job} />
+            <PostedJobComp job={job} id ={id} jobList ={jobList}/>
+            <PostedJobDesc {...job} id = {id} />
       </div>
     </div>
   )
