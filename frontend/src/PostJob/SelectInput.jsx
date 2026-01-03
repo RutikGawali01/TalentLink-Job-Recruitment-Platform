@@ -10,7 +10,7 @@ const SelectInput = (props) => {
     setValue(props.form.getInputProps(props.name).value);
     setSearch(props.form.getInputProps(props.name).value);
     
-  }, []);
+  }, [props]);
 
 
   // useEffect(() => {

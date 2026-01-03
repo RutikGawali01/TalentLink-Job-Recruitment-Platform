@@ -1,11 +1,37 @@
 import { Badge, useMantineTheme, Tabs } from "@mantine/core";
 import JobDescr from "../JobDesc/JobDescr";
 import TalentCards from "../FindTalent/TalentCards";
-import { talents } from "../assets/Data/TalentData";
+import { useState, useEffect } from "react";
 
 const PostedJobDesc = (props) => {
   const theme = useMantineTheme();
+  const [tab, setTab] = useState("overview");
+  const [arr, setArr] = useState([]);
+  
+  const handleTabChange = (value) =>{
+    setTab(value);
+    if(value == "applicants"){
+      setArr(props.applicants
+                ?.filter((x) => x.applicationStatus == "APPLIED"));
+    }else if(value == "invited"){
+      setArr(props.applicants
+                ?.filter((x) => x.applicationStatus == "INTERVIEWING"));
+    }else if(value == "Offered"){
+      setArr(props.applicants
+                ?.filter((x) => x.applicationStatus == "OFFERED"));
+    }else if(value == "Rejected"){
+      setArr(props.applicants
+                ?.filter((x) => x.applicationStatus == "REJECTED"));
+    }
+  }
+  useEffect(() => {
+    handleTabChange("overview");
+  }, [props]);
+  
+
+
   return (
+  
 
     <div className="mt-5 w-3/4 px-5 ">
       {props.jobTitle? <>
@@ -18,7 +44,7 @@ const PostedJobDesc = (props) => {
 
       <div className="font-medium text-mine-shaft-300">{props.location}</div>
       <div>
-        <Tabs defaultValue="overview" variant="outline" radius="lg">
+        <Tabs value={tab} onChange={handleTabChange} variant="outline" radius="lg">
           <Tabs.List
             className="[&_button]:!text-lg font-semibold 
                     [&_button[data-active='true']]:!text-bright-sun-400 mb-5"
@@ -31,46 +57,44 @@ const PostedJobDesc = (props) => {
           </Tabs.List>
 
           <Tabs.Panel value="overview" className="[&>div]:w-full">
-            <JobDescr edit {...props} />
+            <JobDescr edit={true} {...props} closed = {props.jobStatus == "CLOSED"} /> 
+             
           </Tabs.Panel>
           <Tabs.Panel value="applicants">
             <div className="flex mt-10 flex-wrap gap-6 justify-around">
-              {props.applicants
-                ?.filter((x) => x.applicationStatus == "APPLIED")
+              {arr?.length?arr
                 .map(
                   (talent, index) =>
                     index < 6 && <TalentCards key={index} {...talent} posted={true}/>
-                )}
+                ): <div className="text-2xl font-semibold"> No Applicants  </div> }
             </div>
           </Tabs.Panel>
           <Tabs.Panel value="invited">
             <div className="flex mt-10 flex-wrap gap-6 justify-around">
-              {props.applicants
-                ?.filter((x) => x.applicationStatus == "INTERVIEWING")
+              {arr?.length?arr
                 .map(
                   (talent, index) =>
                   index < 6 && <TalentCards key={index} {...talent} invited={true} />
-              )}
+              ): <div className="text-2xl font-semibold"> No Invited Candidates </div>}
             </div>
           </Tabs.Panel>
           <Tabs.Panel value="Offered">
             <div className="flex mt-10 flex-wrap gap-6 justify-around">
-              {props.applicants
-                ?.filter((x) => x.applicationStatus == "OFFERED")
+              {arr?.length?arr
                 .map(
                   (talent, index) =>
                   index < 6 && <TalentCards key={index} {...talent} offered={true} />
-              )}
+              ): <div className="text-2xl font-semibold"> No Offered Candidates  </div>}
             </div>
           </Tabs.Panel>
           <Tabs.Panel value="Rejected">
             <div className="flex mt-10 flex-wrap gap-6 justify-around">
-              {props.applicants
-                ?.filter((x) => x.applicationStatus == "REJECTED")
+              {arr?.length?arr
                 .map(
                   (talent, index) =>
                   index < 6 && <TalentCards key={index} {...talent} rejected ={true} />
-              )}
+              ): <div className="text-2xl font-semibold"> No Rejected Candidates  </div>
+            }
             </div>
           </Tabs.Panel>
         </Tabs>

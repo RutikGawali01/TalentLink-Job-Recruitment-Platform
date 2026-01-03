@@ -2,6 +2,7 @@ import { useMantineTheme, Tabs } from "@mantine/core";
 import PostedJobCard from "./PostedJobCard";
 import { activeJobs } from "../assets/Data/PostedJob";
 import { useState, useEffect } from "react";
+// props contain job , joblist and job id 
 const PostedJobComp = (props) => {
   const [activeTab, setActiveTab] = useState("ACTIVE");
   useEffect(() => {
@@ -18,6 +19,8 @@ const PostedJobComp = (props) => {
           ?.filter((job) => job?.jobStatus == "ACTIVE").length}]</Tabs.Tab>
             <Tabs.Tab value="DRAFT"> Drafts [{props.jobList
           ?.filter((job) => job?.jobStatus == "DRAFT").length}]</Tabs.Tab>
+          <Tabs.Tab value="CLOSED"> Closed [{props.jobList
+          ?.filter((job) => job?.jobStatus == "CLOSED").length}]</Tabs.Tab>
           </Tabs.List>
         </Tabs>
       </div>

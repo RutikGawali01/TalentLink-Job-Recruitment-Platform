@@ -29,6 +29,7 @@ public class Profile {
     private String about;
 
     private byte[] picture;    // Stored in DB as byte[]
+    private Long totalExp;
 
     private List<String> skills;
     private List<Experience> experiences;
@@ -46,6 +47,7 @@ public class Profile {
                 location,
                 about,
                 picture!=null ? Base64.getEncoder().encodeToString(picture) : null,
+                totalExp,
                 skills,
                 experiences,
                 certifications,
