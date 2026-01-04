@@ -18,7 +18,7 @@ const SearchBar = () => {
         dispatch(updateFilter({name:event.target.value}));
         setName(event.target.value);
       }
-  }
+  } 
      
   return (
     <div className="flex px-5 py-8 items-center !text-mine-shaft-100  ">

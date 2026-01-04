@@ -40,7 +40,7 @@ const TalentCards = (props) => {
         });
     } else {
       setProfile(props);
-      console.log(props.interviewTime);
+      //console.log(props.interviewTime);
     }
   }, [props]);
 

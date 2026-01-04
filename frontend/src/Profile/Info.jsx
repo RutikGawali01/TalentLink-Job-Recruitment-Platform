@@ -1,5 +1,5 @@
 import { IconMapPin,IconBriefcase, IconPencil, IconX, IconCheck } from "@tabler/icons-react";
-import { ActionIcon,useMantineTheme } from "@mantine/core";
+import { ActionIcon,useMantineTheme , NumberInput} from "@mantine/core";
 import SelectInput from "./SelectInput";
 import fields from "../assets/Data/Profile";
 import {useForm} from "@mantine/form";
@@ -19,7 +19,7 @@ const Info = (props) => {
   const handleClick = () => {
     if(!edit){
         setEdit(true);
-        form.setValues({jobTitle: profile.jobTitle, company: profile.company, location: profile.location});
+        form.setValues({'jobTitle': profile.jobTitle, 'company': profile.company, 'location': profile.location, 'totalExp':profile.totalExp});
         console.log(form.getValues());
     }else{
         setEdit(false);
@@ -39,7 +39,7 @@ const Info = (props) => {
 
   const form = useForm({
     mode:'controlled',
-    initialValues:{jobTitle:'', company:'', location: ''},
+    initialValues:{jobTitle:'', company:'', location: '', totalExp:0},
   });
 
   return (
@@ -82,6 +82,11 @@ const Info = (props) => {
             <IconMapPin className="h-5 w-5" stroke={1.5}/>
             {profile.location}
           </div>
+          <div className="text-lg flex gap-1 items-center text-mine-shaft-300 ">
+            <IconBriefcase className="h-5 w-5" stroke={1.5}/>
+            Experience: {profile.totalExp} Years
+          </div>
+
         </>
       ) : (
         <>
@@ -89,7 +94,11 @@ const Info = (props) => {
             <SelectInput form ={form} name="jobTitle"  {...select[0]}/>
             <SelectInput form = {form } name="company" {...select[1]}/>
           </div>
-          <SelectInput form = {form} name="location" {...select[2]}/>
+          <div  className="flex gap-10 [&>*]:w-1/2">
+            <SelectInput form = {form} name="location" {...select[2]}/>
+            <NumberInput withAsterisk  label="Experience " hideControls min={0} max={40}  clampBehavior="strict" {...form.getInputProps('totalExp')} />
+          </div>
+          
         </>
       )}
     </>

@@ -25,7 +25,7 @@ public class jobServiceImpl implements JobService {
     @Override
     public JobDTO postJob(JobDTO jobDTO) throws JobPortalException {
         //System.out.println(jobDTO.getId());
-        if(jobDTO.getId() == null){
+        if(jobDTO.getId() == 0){
             jobDTO.setId(Utilities.getNextSequence("jobs"));
             jobDTO.setPostTime(LocalDateTime.now());
         }else { // job already present
