@@ -47,11 +47,11 @@ const ExpInput = (props) => {
   const handleSave = ()=> {
     form.validate();
     if(!form.isValid())return;
-    let exp =[...profile.experiences];
+    let exp =[...profile?.experiences];
     if(props.add){
       exp.push(form.getValues());
-      exp[exp.length-1] = startDate=exp[exp.length-1].startDate.toISOString();
-      exp[exp.length-1] = endDate=exp[exp.length-1].endDate.toISOString();
+      //exp[exp.length-1] = startDate=exp[exp.length-1].startDate.toISOString();
+      //exp[exp.length-1] = endDate=exp[exp.length-1].endDate.toISOString();
     }
     else {
       exp[props.index]= form.getValues();
@@ -67,7 +67,7 @@ const ExpInput = (props) => {
   return (
 
     <div className="flex flex-col gap-3 ">
-      <div className="text-lg font-semibold">{props.add ? "Add" :"Edit" } Experience</div>
+      <div className="text-lg font-semibold">{props?.add ? "Add" :"Edit" } Experience</div>
       <div className=" flex gap-10 [&>*]:w-1/2">
         <SelectInput form={form} name="title" {...select[0]} />
         <SelectInput form={form} name="company" {...select[1]} />

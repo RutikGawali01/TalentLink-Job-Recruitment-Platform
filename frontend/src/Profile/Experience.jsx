@@ -48,7 +48,7 @@ const Experience = () => {
           {profile?.experiences?.map((exp, index) => (
             <ExperienceCard key={index} index = {index} {...exp} edit = {edit} />
           ))}
-          {addExp  &&<ExpInput add setEdit = {setAddExp}/>}
+          {addExp  &&<ExpInput add={true} setEdit = {setAddExp}/>}
         </div>
       </div>
   )

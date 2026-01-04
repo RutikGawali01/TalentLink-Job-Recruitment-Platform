@@ -28,7 +28,7 @@ const Header = () => {
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  }, [user]);
 
   const location = useLocation();
   const theme = useMantineTheme();
