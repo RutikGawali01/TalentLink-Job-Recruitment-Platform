@@ -1,9 +1,11 @@
 package com.jobportal.Service;
 
 import com.jobportal.DTO.LoginDTO;
+import com.jobportal.DTO.NotificationDTO;
 import com.jobportal.DTO.ResponseDTO;
 import com.jobportal.DTO.UserDTO;
 import com.jobportal.Exception.JobPortalException;
+import com.jobportal.Repository.NotificationRepository;
 import com.jobportal.Repository.OTPRepository;
 import com.jobportal.Repository.UserRepository;
 import com.jobportal.entity.OTP;
@@ -48,6 +50,9 @@ public class UserServiceImpl implements UserService{
 
     @Autowired
     private ProfileService profileService;
+
+    @Autowired
+    private NotificationService notificationService;
 
     @Override
     public UserDTO registerUser(UserDTO userDTO) throws JobPortalException {
@@ -108,6 +113,11 @@ public class UserServiceImpl implements UserService{
                 .orElseThrow(()-> new JobPortalException("USER_NOT_FOUND"));
         user.setPassword(passwordEncoder.encode(loginDTO.getPassword()));
         userRepository.save(user);
+        NotificationDTO notif = new NotificationDTO();
+        notif.setUserId(user.getId());
+        notif.setMessage("Password Reset successfully...");
+        notif.setAction("Password Reset");
+        notificationService.sendNotification(notif);
         return  new ResponseDTO("Password changed successfully.");
     }
 
@@ -117,7 +127,7 @@ public class UserServiceImpl implements UserService{
         List<OTP> expiredOTPs = otpRepository.findByCreationTimeBefore(expiry);
         if(!expiredOTPs.isEmpty()){
             otpRepository.deleteAll(expiredOTPs);
-            System.out.println("Removed "+expiredOTPs.size()+" expired OTPs");
+            //System.out.println("Removed "+expiredOTPs.size()+" expired OTPs");
         }
 
     }

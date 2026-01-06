@@ -1,7 +1,7 @@
   import {useState, useEffect } from 'react'
   import { IconAnchor , IconBell , IconSettings } from '@tabler/icons-react';
   import { Avatar , Indicator, Button, useMantineTheme } from '@mantine/core';
-  import profile from '/avatar.png';
+import NotifiMenu from "./NotifiMenu";
   import NavLinks from './NavLinks';
   import {useLocation} from "react-router-dom";
   import ProfileMenu from "./ProfieMenu";
@@ -64,11 +64,13 @@ const Header = () => {
           <IconSettings stroke={1.5} />
         </div> */}
 
-         <div className='bg-mine-shaft-900 p-1.5 rounded-full'>
+         {/* <div className='bg-mine-shaft-900 p-1.5 rounded-full'>
           <Indicator color={theme.colors.brightSun[4]} size={6} offset={6} processing>
               <IconBell stroke={1.5} />
           </Indicator>
-          </div>
+          </div> */}
+
+          {user ?<NotifiMenu /> : <></>}
 
       </div>
     </div>
