@@ -10,6 +10,7 @@ import { useInterval } from "@mantine/hooks";
 import { useState } from "react";
 import { IconAt, IconLock } from "@tabler/icons-react";
 import { sendOtp, changePassword , verifyOtp} from "../Services/UserService";
+import {signupValidation} from "../Services/FormValidation";
 import {
   successNotification,
   errorNotification,
@@ -170,7 +171,7 @@ const ResetPassword = (props) => {
             withAsterisk
             onChange={(e) => {
               setPassword(e.target.value);
-              setPassErr(signUpValidation("password", e.target.value));
+              setPassErr(signupValidation("password", e.target.value));
             }}
             leftSection={<IconLock size={18} stroke={1.5} />}
             label="Password"
