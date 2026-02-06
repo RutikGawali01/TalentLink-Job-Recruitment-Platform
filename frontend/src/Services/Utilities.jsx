@@ -73,6 +73,16 @@ const getBase64 = (file)=>{
 
   }
 
+   const formatEnumLabel = (value) => {
+    if (!value) return "-";
+
+    return value
+        .toLowerCase()
+        .replace(/_/g, " ")
+        .replace(/\b\w/g, (c) => c.toUpperCase());
+    };
 
 
-export {formateDate, timeAgo, getBase64, formatInterviewTime, openBase64PDF};
+
+
+export {formateDate, timeAgo, getBase64, formatInterviewTime, openBase64PDF, formatEnumLabel};

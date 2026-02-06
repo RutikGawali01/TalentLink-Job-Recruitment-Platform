@@ -1,8 +1,6 @@
 package com.jobportal.entity;
 
-import com.jobportal.DTO.Certification;
-import com.jobportal.DTO.Experience;
-import com.jobportal.DTO.ProfileDTO;
+import com.jobportal.DTO.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -34,8 +32,13 @@ public class Profile {
     private List<String> skills;
     private List<Experience> experiences;
     private List<Certification> certifications;
+    private List<Education> educations;
 
     private List<Long> savedJobs;
+    private Portfolio portfolio;
+
+    private Boolean profileCompleted = false;
+
 
     public ProfileDTO toDTO() {
         return new ProfileDTO(
@@ -51,7 +54,10 @@ public class Profile {
                 skills,
                 experiences,
                 certifications,
-                savedJobs
+                educations,
+                savedJobs,
+                portfolio,
+                profileCompleted
         );
     }
 }

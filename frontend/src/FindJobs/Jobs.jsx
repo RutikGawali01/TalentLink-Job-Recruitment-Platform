@@ -9,7 +9,9 @@ import { useSelector, useDispatch } from "react-redux";
 const Jobs = () => {
   const dispatch = useDispatch();
   const [jobList, setJobList] = useState([{}]);
+
   const filter = useSelector((state) => state.filter);
+  
   const sort = useSelector((state)=>state.sort);
   const [filteredJobs, setFilteredJobs] = useState([]);
 
@@ -87,9 +89,11 @@ const Jobs = () => {
 
   return (
     <div className="p-5 ">
-      <div className="flex justify-between">
-        <div className="text-2xl font-semibold ">Recommended Jobs</div>
-          <Sort sort="job" />
+      <div className="mx-34">
+            <div className="flex justify-between">
+          <div className="text-2xl font-semibold ">Recommended Jobs</div>
+            <Sort sort="job" />
+        </div>
       </div>
 
       <div className="flex mt-10 flex-wrap gap-5 justify-center">

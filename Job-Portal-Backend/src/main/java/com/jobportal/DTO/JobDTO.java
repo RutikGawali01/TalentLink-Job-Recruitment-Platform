@@ -28,7 +28,7 @@ public class JobDTO {
     private String description;
     private List<String> skillsRequired;
     private JobStatus jobStatus;
-    private Long postedBy;
+    private Long postedBy;// userId of recruiter / employer
 
     public Job toEntity() {
         return new Job(

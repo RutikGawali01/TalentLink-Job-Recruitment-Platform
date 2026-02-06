@@ -1,38 +1,38 @@
-import axios from "axios";
-const base_url = "http://localhost:9090/jobs/";
+
+import axiosInstance from "../Interceptor/AxiosInterceptor";
 
 const postJob = async (job)=>{
-    return axios.post(`${base_url}post`,job)
+    return axiosInstance.post(`/jobs/post`,job)
     .then(res=> res.data)
     .catch(error=> {throw error;});
 }
 const getAllJobs = async()=>{
-    return axios.get(`${base_url}getAll`)
+    return axiosInstance.get(`/jobs/getAll`)
     .then(result => result.data)
     .catch(error => {throw error;});   
 }
 
 const getJob = (id)=>{
-    return axios.get(`${base_url}get/${id}`)
+    return axiosInstance.get(`/jobs/get/${id}`)
     .then(result => result.data)
     .catch(error => {throw error;});
 }
 
 const applyJob = async (id, applicant) =>{
-    return axios.post(`${base_url}apply/${id}`, applicant)
+    return axiosInstance.post(`/jobs/apply/${id}`, applicant)
     .then(result => result.data)
     .catch(error => {throw error;}); 
 
 }
 const getJobPostedBy= async (id)=>{
-    return axios.get(`${base_url}postedBy/${id}`)
+    return axiaxiosInstanceos.get(`/jobs/postedBy/${id}`)
     .then(result => result.data)
     .catch(error => {throw error});
 }
 
 // change application status
 const changeAppliStatus = async (application)=>{
-    return axios.post(`${base_url}changeAppliStatus`, application)
+    return axiosInstance.post(`/jobs/changeAppliStatus`, application)
     .then(result => result.data)
     .catch(error => {throw error});
 }

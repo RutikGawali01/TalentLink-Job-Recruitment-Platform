@@ -48,7 +48,7 @@ const ExperienceCard = (props) => {
        </div>
        { props.edit && 
         <div className="flex gap-5 " >
-            <Button onClick={() => setEdit(true)} color={theme.colors.brightSun[4]} variant="outline">Edit </Button>
+            <Button onClick={() => setEdit(true)} color="brand" variant="outline">Edit </Button>
             <Button color="red.8" onClick={handleDelete} variant="outline">Delete </Button>
         </div>   
         }   

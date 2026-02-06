@@ -46,8 +46,8 @@ const CertificationCard = (props) => {
                         ID: {props.certificateId}
                     </div>
                 </div>
-                { !props.edit &&
-                <ActionIcon size="lg"   variant="subtle" color={theme.colors.brightSun[4]} 
+                { props.edit &&
+                <ActionIcon size="lg"   variant="subtle" color="brand"
                  onClick={handleDelete}>
                     <IconTrash className="h-4/5 w-4/5 "  stroke={1.5} />
                 </ActionIcon>

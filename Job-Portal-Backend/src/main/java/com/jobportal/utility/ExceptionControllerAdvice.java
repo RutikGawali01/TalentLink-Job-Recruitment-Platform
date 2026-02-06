@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
-@RestControllerAdvice
+@RestControllerAdvice //This is a global exception handler for all controllers
 public class ExceptionControllerAdvice {
 
     //used to access environment variables

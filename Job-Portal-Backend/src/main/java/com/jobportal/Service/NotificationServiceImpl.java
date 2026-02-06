@@ -8,6 +8,7 @@ import com.jobportal.entity.Notification;
 import com.jobportal.utility.Utilities;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -22,6 +23,7 @@ public class NotificationServiceImpl implements NotificationService{
     private ModelMapper modelMapper;
 
     @Override
+    @Async
     public void sendNotification(NotificationDTO notificationDTO) throws JobPortalException {
         notificationDTO.setId(Utilities.getNextSequence("notification"));
         notificationDTO.setStatus(NotificationStatus.UNREAD);
