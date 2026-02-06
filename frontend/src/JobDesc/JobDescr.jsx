@@ -59,13 +59,13 @@ const JobDescr = (props) => {
     <div className="w-2/3 ">
       <div className="flex justify-between ">
         <div className="flex gap-2 items-center ">
-          <div className="p-3 rounded-lg  bg-mine-shaft-800 ">
+          <div className="p-3 rounded-lg  bg-[var(--blue-100)] ">
             <img className="h-14  " src={`/Icons/${props.company}.png`} alt="" />
           </div>
 
           <div className="flex flex-col gap-1 ">
             <div className="font-semibold text-2xl ">{props.jobTitle}</div>
-            <div className="text-lg text-mine-shaft-300">
+            <div className="text-lg text-secondary">
               {props.company} &#x2022; {timeAgo(props.postTime)} &#x2022; {props.applicants?props.applicants.length : 0} Applicants
             </div>
           </div>
@@ -74,7 +74,7 @@ const JobDescr = (props) => {
           { (props.edit || !applied) &&
             <Link to={ props.edit? `/post-job/${props.id}`:`/apply-job/${props.id}`}>
 
-            <Button color={theme.colors.brightSun[4]} size="sm" variant="light">
+            <Button color="brand" size="sm" variant="light">
               {props.closed? "Re-open" : props.edit? "Edit" : "Apply"}
             </Button>
           </Link>}
@@ -87,8 +87,8 @@ const JobDescr = (props) => {
               props.edit &&  !props.closed ? <Button onClick={handleClose} color="red.8" size="sm" variant="outline" >
                 Close</Button>
               :  profile.savedJobs?.includes(props.id)? 
-            <IconBookmarkFilled onClick={handleSaveJob} className='text-bright-sun-400 cursor-pointer ' /> :
-            <IconBookmark onClick={handleSaveJob} className='text-mines-shaft-300 cursor-pointer hover:text-bright-sun-400' />
+            <IconBookmarkFilled onClick={handleSaveJob} className='text-[var(--blue-600)]  cursor-pointer ' /> :
+            <IconBookmark onClick={handleSaveJob} className='text-secondary cursor-pointer hover:text-[var(--blue-600)] ' />
           }
         </div>
       </div>
@@ -99,7 +99,7 @@ const JobDescr = (props) => {
           card.map((item, index) => (
           <div key={index} className="flex flex-col gap-1 items-center">
             <ActionIcon
-              color={theme.colors.brightSun[4]}
+              color="brand"
               className=" !h-12 !w-12 "
               variant="light"
               radius="xl"
@@ -111,7 +111,7 @@ const JobDescr = (props) => {
                 stroke={1.5}
               />
             </ActionIcon>
-            <div className="text-sm teext-mine-shaft=300">{item.name}</div>
+            <div className="text-sm texxt-secondary">{item.name}</div>
             <div className="font-semibold">{props?props[item.id]:"NA"} {item.id == "packageOffered" && <>LPA</>}</div>
           </div>
         ))}
@@ -125,7 +125,7 @@ const JobDescr = (props) => {
             <ActionIcon
               key={index}
               p="xs"
-              color={theme.colors.brightSun[4]}
+              color="brand"
               className=" !h-fit !w-fit !font-medium !text-sm "
               variant="light"
               radius="xl"
@@ -138,9 +138,9 @@ const JobDescr = (props) => {
       </div>
       <Divider size="xs" my="xl" />
       <div
-        className="[&_h4]:text-xl [&_h4]:my-5 [&_h4]:font-semibold  [&_h4]:text-mine-shaft-200
-       [&_p]:text-justify  [&_*]:text-mine-shaft-300
-          [&_li]:marker:text-bright-sun-400 [&_li]:mb-1 "
+        className="[&_h4]:text-xl [&_h4]:my-5 [&_h4]:font-semibold  [&_h4]:text-secondary
+       [&_p]:text-justify  [&_*]:text-secondary
+          [&_li]:marker:text-[var(--blue-600)]  [&_li]:mb-1 "
         dangerouslySetInnerHTML={{ __html: cleanHTML }}
       ></div>
       <Divider size="xs" my="xl" />
@@ -150,20 +150,20 @@ const JobDescr = (props) => {
 
         <div className="flex justify-between mb-3 ">
           <div className="flex gap-2 items-center ">
-            <div className="p-3 rounded-lg  bg-mine-shaft-800 ">
+            <div className="p-3 rounded-lg  bg-[var(--blue-100)] ">
               <img className="h-8 " src={`/Icons/{props.company}.png`} alt="" />
             </div>
 
             <div className="flex flex-col">
               <div className="font-medium text-lg ">{props.company}</div>
-              <div className=" text-mine-shaft-300">
+              <div className=" text-secondary">
                 10k+ employees
               </div>
             </div>
           </div>
             <Link to={`/company/${props.company}`} >
               <Button
-                color={theme.colors.brightSun[4]}
+                color="brand"
                 variant="light"
               >
                 Company Page
@@ -171,7 +171,7 @@ const JobDescr = (props) => {
             </Link>
         </div>
 
-        <div className="text-mine-shaft-300 text-justify">
+        <div className="text-secondary text-justify">
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime illo iure in, corporis soluta ad, saepe a dolore modi itaque natus nesciunt eaque? Consequatur asperiores dicta provident ratione consectetur tempora culpa assumenda quas? Ipsam?
         </div>
             

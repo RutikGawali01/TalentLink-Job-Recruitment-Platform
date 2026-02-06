@@ -17,15 +17,18 @@ import java.util.Base64;
 @Document(collection = "applicants")
 public class Applicant {
     private Long applicantId;
+//     private Long jobId;     // reference only
+//    private Long userId;
     private String name;
     private String email;
     private Long phone;
-    private String website;
+    private String website;// portfolio
     private byte[] resume;
     private String coverLetter;
     private LocalDateTime timestamp;
     private ApplicationStatus applicationStatus;
     private LocalDateTime interviewTime;
+
     public ApplicantDTO toDTO() {
         return new ApplicantDTO(
                 applicantId,

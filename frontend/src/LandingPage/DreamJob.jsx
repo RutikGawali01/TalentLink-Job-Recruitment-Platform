@@ -10,51 +10,83 @@ import avatar2 from "/avatar2.png";
 
 const DreamJob = () => {
   return (
-    <div className="flex  items-center px-16">
+    <div className="flex  items-center px-16 bg-[var(--blue-100)] px-20 ">
       {/* left side text area */}
-      <div className="flex flex-col w-[45%] gap-3">
-        <div className="text-6xl leading-tight font-semibold text-mine-shaft-100 [&>span]:text-bright-sun-400">
-          Find Your
-          <span> Dream</span> <span>Job</span> With Us
+      <div className="flex flex-col w-[45%] gap-3 my-15 mx-5">
+                  <div className="text-6xl font-semibold text-primary">
+          Find Your{" "}
+          <span className="bg-[linear-gradient(to_right,#2563eb,#9333ea)] bg-clip-text text-transparent">
+            Dream
+          </span>{" "}
+          <span className="bg-[linear-gradient(to_right,#2563eb,#9333ea)] bg-clip-text text-transparent">
+            Job
+          </span>{" "}
+          With Us
         </div>
-        
-        <div className="text-lg text-mine-shaft-200 ">
+
+
+        <div className="text-lg text-tertiary ">
           Good Life begins with a good company. start explore thousands of jobs
           in one place.
         </div>
+
         {/* job search box */}
-        <div className="flex gap-3 mt-5">
-          <TextInput
-            className="bg-mine-shaft-900 rounded-lg p-1 px-2 text-mine-shaft-100 [&_input]:text-mine-shaft-100"
-            variant="unstyled"
-            label="Job Title"
-            placeholder="Software Engineer"
-          />
+        <div className="mt-5 bg-primary rounded-2xl p-6 shadow-md w-fit">
+          {/* Inputs Row */}
+          <div className="flex gap-6">
+            
+            {/* Job Title */}
+            <div className="w-64 border border-[var(--border-default)] rounded-lg px-3 py-2 focus-within:border-[var(--border-accent)]">
+              <TextInput
+                variant="unstyled"
+                label="Job Title"
+                placeholder="Software Engineer"
+                classNames={{
+                  input: "p-0 text-gray-800",
+                  label: "mb-1 text-sm font-medium text-gray-700",
+                }}
+              />
+            </div>
 
-          <TextInput
-            className="bg-mine-shaft-900 rounded-lg p-1 px-2 text-mine-shaft-100 [&_input]:text-mine-shaft-100"
-            variant="unstyled"
-            label="job type"
-            placeholder="full time"
-          />
+            {/* Job Type */}
+            <div className="w-64 border border-[var(--border-default)] rounded-lg px-3 py-2 focus-within:border-[var(--border-accent)]">
+              <TextInput
+                variant="unstyled"
+                label="Job Type"
+                placeholder="Full time"
+                classNames={{
+                  input: "p-0 text-gray-800",
+                  label: "mb-1 text-sm font-medium text-gray-700",
+                }}
+              />
+            </div>
 
-          <div className="flex items-center justify-center h-full w-20 bg-bright-sun-400 text-mine-shaft-100 rounded-lg p-2 hover:bg-bright-sun-500 cursor-pointer">
-            <IconSearch className="h-[85%] w-[85%]" />
+          </div>
+
+          {/* Search Button */}
+          <div className="mt-6">
+            <button className="flex items-center justify-center gap-2 w-full bg-[linear-gradient(to_right,#2563eb,#9333ea)]  text-white py-3 rounded-lg font-medium hover:opacity-90 transition">
+              <IconSearch size={18} />
+              Search Jobs
+            </button>
           </div>
         </div>
+
+
+
       </div>
 
       {/* image section and cards */}
-      <div className="w-[55%] flex items-center justify-center">
+      <div className="w-[55%] flex items-center justify-center mx-5 my-15 ">
         <div className="w-[30rem] relative">
           <img src={boy} alt="boy" />
           {/* 10k+ got job card */}
           <div
             className="absolute -right-10 w-fit top-[50%]  
-            border-bright-sun-400 border rounded-lg p-2 
+            border-accent border rounded-lg p-2 
             backdrop-blur-md  "
           >
-            <div className="text-center text-mine-shaft-100 mb-1 text-sm">
+            <div className="text-center font-black text-primary mb-1 text-sm">
               10K+ got job
             </div>
             <Avatar.Group>
@@ -67,23 +99,23 @@ const DreamJob = () => {
 
             {/*  */}
             <div className="absolute -left-5 w-fit top-[25%]  
-            border-bright-sun-400 border rounded-lg p-2 
-            backdrop-blur-md  flex flex-col gap-3">
+                border-accent  rounded-lg p-2 
+                backdrop-blur-md  flex flex-col gap-3">
                 <div className="flex gap-2 items-center ">
                     <div className="w-12 h-10 p-1 bg-mine-shaft-900 rounded-lg ">
                         <img src="/Icons/Google.png" alt="" />
                     </div>
-                    <div className="text-sm text-mine-shaft-100">
-                        <div>
+                    <div className="text-sm text-primary">
+                        <div className="font-bold ">
                             Software Engineer
                         </div>
-                        <div className="text-mine-shaft-200 text-xs
+                        <div className="text-secondary text-xs
                         ">
                             New York
                         </div>
                     </div>
                 </div>
-                <div className="flex gap-2 justify-around text-mine-shaft-200 text-xs">
+                <div className="flex gap-2 justify-around text-secondary text-xs">
                     <span>1 day ago</span>
                     <span>120 Applicants </span>
                 </div>

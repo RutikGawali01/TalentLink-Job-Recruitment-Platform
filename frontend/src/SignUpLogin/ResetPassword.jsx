@@ -16,16 +16,18 @@ import {
   errorNotification,
 } from "../Services/NotificationService";
 const ResetPassword = (props) => {
+  
   const theme = useMantineTheme();
   const [email, setEmail] = useState("");
   const [otpSent, setOtpSent] = useState(false);
-  const [otpSending, setOtpSending] = useState(false);
+  const [otpSending, setOtpSending] = useState(false);// for loading overlay
   const [verified, setVerified] = useState(false);
   const [password, setPassword] = useState("");
   const [passErr, setPassErr] = useState("");
   const [resendLoader, setResendLoader] = useState(false);
 
   const [seconds, setSeconds] = useState(60);
+
   const interval = useInterval(() => {
     if (seconds === 0) {
       setResendLoader(false);
@@ -128,6 +130,8 @@ const ResetPassword = (props) => {
           label=" Email"
           placeholder="Your email"
         />
+        {/* PinInput automatically passes the entered OTP as an argument to the function you give in onComplete.
+         so otp send in handleVerifyOTP  */}
         {otpSent && (
           <PinInput
             onComplete={handleVerifyOTP}

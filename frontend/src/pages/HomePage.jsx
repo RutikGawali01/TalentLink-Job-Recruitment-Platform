@@ -9,7 +9,7 @@ import Subscribe from "../LandingPage/Subscribe.jsx";
 
 const HomePage = () => {
   return (
-    <div className="min-h-[100vh] bg-mine-shaft-950 font-['poppins']">
+    <div className="min-h-[100vh] font-['poppins']">
       
       <DreamJob />
       <Companies />

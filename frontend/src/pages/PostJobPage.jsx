@@ -4,7 +4,7 @@
 const PostJobPage = () => {
    const theme = useMantineTheme();
   return (
-    <div className="min-h-[90vh] bg-mine-shaft-950 font-['poppins'] p-4">
+    <div className="min-h-[90vh] bg-secondary font-['poppins'] p-4">
         <PostJobs />
     </div>
   )

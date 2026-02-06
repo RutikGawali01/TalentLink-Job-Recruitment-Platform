@@ -11,11 +11,15 @@ import {
 } from '@mantine/core';
 import { useDispatch } from 'react-redux';
 import { updateFilter } from '../Slice/FilterSlice';
-import {IconSelector} from "@tabler/icons-react"
+import { IconSelector } from "@tabler/icons-react"
 
 const MultiInput = (props) => {
   const dispatch = useDispatch();
 
+  //It manages:
+  // highlighted option
+  // keyboard navigation
+  // open / close state
   const combobox = useCombobox({
     onDropdownClose: () => combobox.resetSelectedOption(),
     onDropdownOpen: () => combobox.updateSelectedOptionIndex('active'),
@@ -23,38 +27,43 @@ const MultiInput = (props) => {
 
   const MAX_DISPLAYED_VALUES = 2;
 
-  const [search, setSearch] = useState('');
-  const [data, setData] = useState([]);
-  const [value, setValue] = useState([]);
+  const [search, setSearch] = useState('');//What user is typing  
+  const [data, setData] = useState([]);//Available options (dropdown list)
+  const [value, setValue] = useState([]);//Selected values
 
+  // SYNC PROPS → LOCAL STATE
+  //Without this: dropdown won’t update
   useEffect(() => {
     setData(props.options || []);
   }, [props.options]);
 
+  //Show + Create XYZ only if it doesn’t exist
+  // Used to decide:
+  // show or hide + Create {search}
   const exactOptionMatch = data.some((item) => item === search);
 
   const handleValueSelect = (val) => {
     setSearch('');
-
+    //Creating a new option
     if (val === '$create') {
-      setData((current) => [...current, search]);
-      setValue((current) => [...current, search]);
-      dispatch(updateFilter({ [props.title]: [...value, search] }));
+      setData((current) => [...current, search]);//add new option to dropdown list
+      setValue((current) => [...current, search]);//select newly created option
+      dispatch(updateFilter({ [props.title]: [...value, search] }));//This keeps UI filters and backend filters in sync.
     } else {
-      dispatch(updateFilter({ [props.title]: value.includes(val)?value.filter((v) => v !== val):[...value, val]  }));
-      setValue((current)=> current.includes(val)?current.filter((v) => v !== val):[...current, val])
-      
+      //: TOGGLE(Switch) EXISTING OPTION
+      dispatch(updateFilter({ [props.title]: value.includes(val) ? value.filter((v) => v !== val) : [...value, val] }));
+      setValue((current) => current.includes(val) ? current.filter((v) => v !== val) : [...current, val])
     }
   };
 
   const handleValueRemove = (val) => {
-
-    dispatch(updateFilter({ [props.title]: value.filter((v) => v !== val) }));
+    dispatch(updateFilter({ [props.title]: value.filter((v) => v !== val) }));//update global filter state
     setValue((current) => current.filter((v) => v !== val));
   };
 
   const theme = useMantineTheme();
 
+  //Show only first selected value.
   const values = value
     .slice(
       0, 1
@@ -72,9 +81,9 @@ const MultiInput = (props) => {
     .map((item) => (
       <Combobox.Option value={item} key={item} active={value.includes(item)}>
         <Group gap="sm" >
-          <Checkbox size='xs' color={theme.colors.brightSun[4]}
+          <Checkbox size='xs' color="brand"
             checked={value.includes(item)}
-            onChange={() => {}}
+            onChange={() => { }}
             aria-hidden
             tabIndex={-1}
             style={{ pointerEvents: 'none' }}
@@ -92,11 +101,11 @@ const MultiInput = (props) => {
     >
       <Combobox.DropdownTarget>
         <PillsInput
-        variant='unstyled'
+          variant='unstyled'
           // label={props.title}
           onClick={() => combobox.openDropdown()}
           leftSection={
-            <div className="flex text-bright-sun-400  p-0.8 m-2 ">
+            <div className="flex text-[var(--blue-600)]  p-0.8 m-2 ">
               {props.icon && <props.icon />}
             </div>
           }
@@ -116,7 +125,7 @@ const MultiInput = (props) => {
 
             <Combobox.EventsTarget>
               <PillsInput.Field
-                className='!text-mine-shaft-200 flex gap-2 mr-2'
+                className='!text-secondary flex gap-2 mr-2'
                 value={search}
                 placeholder={props.title}
                 onFocus={() => combobox.openDropdown()}
@@ -139,15 +148,15 @@ const MultiInput = (props) => {
 
       <Combobox.Dropdown className=''>
         <Combobox.Options className='' >
-          <ScrollArea.Autosize mah = {200}  type="scroll" >
-          {options}
+          <ScrollArea.Autosize mah={200} type="scroll" >
+            {options}
 
-          {!exactOptionMatch && search.trim().length > 0 && (
-            <Combobox.Option value="$create">
-              + Create {search}
+            {!exactOptionMatch && search.trim().length > 0 && (
+              <Combobox.Option value="$create">
+                + Create {search}
 
-            </Combobox.Option>
-          )}
+              </Combobox.Option>
+            )}
           </ScrollArea.Autosize>
         </Combobox.Options>
       </Combobox.Dropdown>

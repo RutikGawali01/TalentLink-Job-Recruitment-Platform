@@ -2,6 +2,7 @@ package com.jobportal.utility;
 
 public class Data {
 
+    // OTP messaage in email
     public static String getMessage(String OTP, String userName) {
         return
                 "<!DOCTYPE html>\n" +

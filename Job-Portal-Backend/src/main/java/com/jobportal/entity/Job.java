@@ -22,7 +22,8 @@ public class Job {
     private Long id;
     private String jobTitle;
     private String company;
-    private List<Applicant> applicants;
+    private List<Applicant> applicants;//Cause memory issues in real systems
+    // so use jobId in Applicant
     private String about;
     private String experience;
     private String  jobType;
@@ -32,7 +33,7 @@ public class Job {
     private String description;
     private List<String> skillsRequired;
     private JobStatus jobStatus;
-    private Long postedBy;
+    private Long postedBy;// userId of recruiter / employer
 
     public JobDTO toDTO() {
         return new JobDTO(

@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class Application {
 
-    private Long id;
+    private Long jobId  ;//id → jobId
     private Long applicantId;
     private LocalDateTime interviewTime;
     private ApplicationStatus applicationStatus;

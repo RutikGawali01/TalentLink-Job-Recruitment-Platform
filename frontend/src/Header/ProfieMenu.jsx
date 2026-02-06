@@ -13,29 +13,44 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux"
 import {removeUser} from "../Slice/UserSlice"
+import {clearProfile} from "../Slice/ProfileSlice";
+
+import {removeJwt} from "../Slice/JwtSlice"
 
 const ProfileMenu = () => {
 
   const dispatch = useDispatch();
   // for state look up in userSLices
   const user = useSelector((state)=> state.user);
+  
   const [checked, setChecked] = useState(false);
   const [opened, setOpened] = useState(false);
-  const handleLogOut = ()=> {
-      dispatch(removeUser());
-  }
+
+ const handleLogOut = () => {
+   dispatch(removeJwt());
+   dispatch(removeUser());
+   dispatch(clearProfile()); // if exists
+   localStorage.clear(); // optional but strong
+   //navigate("/login");
+};
+
   const profile = useSelector((state) => state.profile);
+  const employerProfile = useSelector((state)=>state.employerProfile)
   return (
     <Menu shadow="md" width={200} opened={opened} onChange={setOpened}>
       <Menu.Target>
         <div className="cursor-pointer flex items-center gap-2">
           <div>{user.name}</div>
-          <Avatar src={profile.picture ? `data:image/jpeg;base64,${profile.picture}`:"/avatar.png"} alt="it's me" />
+          <Avatar src={profile?.picture ? `data:image/jpeg;base64,${profile?.picture}`:"/avatar.png"} alt="it's me" />
         </div>
       </Menu.Target>
 
       <Menu.Dropdown onChange={() => setOpened(true)}>
-        <Link to="/profile">
+        
+        <Link to={user.accountType === "EMPLOYER"
+            ? "/employer/profile"
+            : "/applicant/profile"}
+          >
           <Menu.Item leftSection={<IconUserCircle size={14} />}>
             Profile
           </Menu.Item>
@@ -52,19 +67,19 @@ const ProfileMenu = () => {
               checked={checked}
               onChange={(event) => setChecked(event.currentTarget.checked)}
               size="md"
-              color="dark.4"
+              color="brand"
               onLabel={
                 <IconSun
                   size={16}
                   stroke={2.5}
-                  color="var(--mantine-color-yellow-4)"
+                  color="var(--blue-500)"
                 />
               }
               offLabel={
                 <IconMoonStars
                   size={16}
                   stroke={2.5}
-                  color="var(--mantine-color-blue-6)"
+                  color="var(--bg-secondary)"
                 />
               }
             />
