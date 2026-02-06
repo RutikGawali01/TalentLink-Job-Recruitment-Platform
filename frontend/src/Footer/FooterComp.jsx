@@ -10,9 +10,9 @@ import {useLocation} from "react-router-dom";
 const FooterComp = () => {
   const location = useLocation();
   return (
-    location.pathname != "/signup" &&
-    location.pathname != "/login" && 
-    <div className="pt-20 pb-5 flex gap-5 justify-around bg-mine-shaft-950 font-['poppins] ">
+    location.pathname != "/applicant/signup" && location.pathname != "/employer/signup" &&
+    location.pathname != "/applicant/login" && location.pathname != "/employer/login" &&
+    <div className="pt-20 pb-5 flex gap-5 justify-around bg-[var(--blue-100)] font-['poppins] ">
       <div className="w-1/4 flex flex-col gap-4 ">
         <div className="flex gap-1 items-center text-bright-sun-400">
           <IconAnchor className="h-6 w-6 " stroke={2.25} />

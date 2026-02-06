@@ -14,37 +14,66 @@ import Header from "../Header/HeaderComp.jsx";
 import SignUpPage from "./SignUpPage.jsx"
 import ProfilePage from "./ProfilePage.jsx";
 import { Divider } from "@mantine/core";
-import {getItem} from "../Services/LocalStorageService.jsx"
+import { getItem } from "../Services/LocalStorageService.jsx"
+import ProtectedRoute from "../Services/ProtectedRoute.jsx";
+import PublicRoute from "../Services/PublicRoute.jsx";
+import EmployerProfilePage from "./EmployerProfilePage.jsx";
+import EmployerDashboardPage from "./EmployerDashboardPage.jsx";
+import ApplicantDashboardPage from "./ApplicantDashboardPage.jsx";
+import ApplicantNavLinks from "../Header/ApplicantNavLinks.jsx";
+import NavLinksController from "../Header/NavLinksController.jsx";
 
-const AppRoutes = () => {
-    const user = getItem("user");
+const  AppRoutes = () => {
+  const user = getItem("user");
   return (
-   <BrowserRouter>
+    <BrowserRouter>
       <div className="relative">
         <Header />
-        <Divider size="xs" mx="md" />
+        {/* < NavLinksController/> */}
+        <Divider  className="text-primary" />
 
         <Routes>
-          <Route path="/find-jobs" element={<FindJobs />} />
-          <Route path="/find-talent" element={<FindTalentPage />} />
-          <Route path="/post-job/:id" element={<PostJobPage />} />
+          <Route path="/find-jobs" element={ <ProtectedRoute allowedRoles={["APPLICANT"]}>   <FindJobs /> </ProtectedRoute> } />
+
+          {/* <Route path="/find-talent" element={<ProtectedRoute allowedRoles={["EMPLOYER"]}> <FindTalentPage /> </ProtectedRoute>   } /> */}
+          <Route path="/find-talent" element={ <FindTalentPage />   } />
+
+
+          <Route path="/post-job/:id" element={<ProtectedRoute allowedRoles={["EMPLOYER"]}>  <PostJobPage />  </ProtectedRoute>} />
+
           <Route path="/jobs/:id" element={<JobDescriptionPage />} />
+
           <Route path="/talent-profile/:id" element={<TalentProfilePage />} />
-          <Route path="/apply-job/:id" element={<AppplyJobPage />} />
+
+          <Route path="/apply-job/:id" element={ <ProtectedRoute allowedRoles={["APPLICANT"]}> <AppplyJobPage />   </ProtectedRoute>  } />
+
           <Route path="/company/:name" element={<CompanyPage />} />
-          <Route path="/posted-jobs/:id" element={<PostedJobsPage />} />
-          <Route path="/job-history" element={<JobHistoryPage />} />
 
-          <Route path="/signup" element={user ? <Navigate to="/" /> : <SignUpPage />} />
+          <Route path="/posted-jobs/:id" element={<ProtectedRoute allowedRoles={["EMPLOYER"]}>  <PostedJobsPage /></ProtectedRoute>} />
 
-          <Route path="/login" element={user ? <Navigate to="/" /> : <SignUpPage />} />
-          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/job-history" element={<ProtectedRoute allowedRoles={["APPLICANT"]}> <JobHistoryPage />  </ProtectedRoute>} />
+
+          <Route path="/applicant/signup" element={<PublicRoute><SignUpPage /></PublicRoute>} />
+
+          <Route path="/employer/signup" element={<PublicRoute><SignUpPage /></PublicRoute>} />
+
+          <Route path="/applicant/login" element={<PublicRoute><SignUpPage /></PublicRoute>} />
+          <Route path="/employer/login" element={<PublicRoute><SignUpPage /></PublicRoute>} />
+
+
+          <Route path="/applicant/profile" element={<ProfilePage />} />
+
+          <Route path="/employer/profile" element={<EmployerProfilePage/>} />
+
+          <Route path="/employer/dashboard" element={<EmployerDashboardPage/>} />
+
+          <Route path="/applicant/dashboard" element={<ApplicantDashboardPage/>} />
 
           <Route path="*" element={<HomePage />} />
-        </Routes>
+        </Routes> 
 
         <FooterComp />
-      </div>
+      </div>  
     </BrowserRouter>
   )
 }

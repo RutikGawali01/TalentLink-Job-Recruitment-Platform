@@ -99,11 +99,15 @@ const PostJobs = () => {
 
 
   return (
-    <div className='w-4/5 mx-auto '>
-      <div className='text-2xl font-semibold '>
+    <div className='w-4/5 mx-auto bg-white border-default p-10 rounded-2xl'>
+      <div className='text-2xl text-center  font-semibold '>
         Post a Job
       </div>
-      <div className=" flex flex-col gap-5">
+      <div className="text-center text-tertiary"> 
+        Create an exceptional job listing that attracts top talent
+      </div>
+
+      <div className=" flex flex-col gap-5 mt-5">
         <div className=" flex gap-10 [&>*]:w-1/2">
           <SelectInput form={form} name="jobTitle" {...select[0] } />
           <SelectInput form={form} name="company" {...select[1] } />
@@ -124,15 +128,15 @@ const PostJobs = () => {
       </div>
 
       <div className="flex flex-col gap-5
-            [&_button[data-active='true']]:!text-bright-sun-400  
-            [&_button[data-active='true']]:!bg-bright-sun-400/20">
+            [&_button[data-active='true']]:!text-[var(--blue-600)] 
+            [&_button[data-active='true']]:!bg-[var(--blue-600)]/20">
         <div className="pt-5 text-sm font-medium">Job Description: <span className="text-red-500">*</span> </div>
         <TextEditor form = {form} data={editorData} />
 
       </div>
       <div className=" flex gap-4 items-start pt-5">
-          <Button  color={theme.colors.brightSun[4]} onClick={handlePost} variant='light' >Publish Job </Button>
-          <Button  color={theme.colors.brightSun[4]}  onClick={handleDraft} variant='outline' >Save as Draft </Button>
+          <Button  color="brand" onClick={handlePost} variant='filled' >Publish Job </Button>
+          <Button  color="brand"  onClick={handleDraft} variant='outline' >Save as Draft </Button>
       </div>
     </div>
   )

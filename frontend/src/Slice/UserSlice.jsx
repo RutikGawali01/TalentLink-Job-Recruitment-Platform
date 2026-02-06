@@ -4,8 +4,9 @@ const UserSlice = createSlice({
     name:"user",
     initialState:getItem("user"),
     reducers:{
+        // state - user data
         setUser:(state, action)=>{
-            setItem("user", action.payload);
+            setItem("user", action.payload);// action.payload - whole obj set in localstorage
             state=getItem("user");
             return state; // this is important for updation of state in other component
         },
@@ -21,4 +22,4 @@ const UserSlice = createSlice({
 });
 
 export const {setUser, removeUser} = UserSlice.actions;
-export default UserSlice.reducer;
+export default UserSlice.reducer; 

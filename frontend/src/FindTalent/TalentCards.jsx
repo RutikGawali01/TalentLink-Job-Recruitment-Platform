@@ -17,19 +17,34 @@ import {successNotification, errorNotification } from "../Services/NotificationS
 import {formatInterviewTime, openBase64PDF} from "../Services/Utilities";
 
 const TalentCards = (props) => {
+   // Find Talents page
+// Posted Jobs → Applicants
+// Interviewed candidates
+// Offered / Rejected candidates
+
+// INTERVIEWING status
   const [date, setDate] = useState(null);
   const [time , setTime] = useState(null);
+
   const theme = useMantineTheme();
-  const [opened, { open, close }] = useDisclosure(false);
-  const ref = useRef(null);
+  const [opened, { open, close }] = useDisclosure(false);//Schedule Interview modal
+  
+  const ref = useRef(null);//Reference to <TimeInput /> to open time picker programmatically.
+
   // this profile generally refers to the talents who is applying , interviewing , rejected  in posted-jobs component
   const [profile, setProfile] = useState({});
-  const {id} = useParams();
+  const {id} = useParams();// get jobId from path 
+  // used while changing application status
+
 
   const [app, {open: openApp, close: closeApp}] = useDisclosure(false);
+  //Controls View Application modal
 
+
+  // profile loading logic
   useEffect(() => {
     //console.log(props.totalExp);
+    // Applicant comes from posted jobs
     if (props.applicantId) {
       getProfile(props.applicantId)
         .then((res) => {
@@ -38,7 +53,8 @@ const TalentCards = (props) => {
         .catch((err) => {
           console.log(err);
         });
-    } else {
+    } else {//Find Talents page
+      // profile data already exists in props 
       setProfile(props);
       //console.log(props.interviewTime);
     }
@@ -47,9 +63,9 @@ const TalentCards = (props) => {
     const handleOffer = (status)=>{
       let interview = {id, applicantId:profile?.id, applicationStatus:status};
       if(status == "INTERVIEWING"){
-        const [hours, minutes] = time.split(":").map(Number);
+        const [hours, minutes] = time.split(":").map(Number);//time = "14:30" --> split → [14, 30]
         date?.setHours(hours, minutes);
-        interview={...interview, interviewTime:date};
+        interview={...interview, interviewTime:date};// update
       }
         changeAppliStatus(interview).then((res)=>{
           if(status == "INTERVIEWING"){
@@ -61,18 +77,22 @@ const TalentCards = (props) => {
           }
           
           window.location.reload();
-        }).then((err)=>{
+        }).catch((err)=>{
           console.log(err);
           errorNotification("Error", err.response.data.errorMessage);
         })
-  }
+    }
 
   return (
-    <div className="bg-mine-shaft-900 cursor-pointer flex flex-col gap-3 rounded-xl p-4 w-96 hover:shadow-[0_0_5px_1px_yellow] !shadow-mine-shaft-600">
+    // Find Talents page
+// Posted Jobs → Applicants
+// Interviewed candidates
+// Offered / Rejected candidates
+    <div className="bg-white cursor-pointer flex flex-col gap-3 rounded-xl p-4 w-96 hover:shadow-[0_0_5px_1px_blue] !shadow-[var(--blue-600)]">
       {/* Header */}
       <div className="flex justify-between">
         <div className="flex gap-2 items-center">
-          <div className="p-2 rounded-full bg-mine-shaft-800">
+          <div className="p-2 rounded-full bg-[var(--blue-100)]">
             <Avatar
               size="lg"
               src={
@@ -86,54 +106,56 @@ const TalentCards = (props) => {
 
           <div>
             <div className="font-semibold text-lg">{props.name}</div>
-            <div className="text-sm text-mine-shaft-300">
+            <div className="text-sm text-[var(--blue-600)]">
               {profile?.jobTitle} &#x2022; {profile?.company}
             </div>
           </div>
         </div>
 
-        <IconHeart className="text-mine-shaft-300 cursor-pointer" />
+        <IconHeart className="text-[var(--blue-400)] cursor-pointer" />
       </div>
 
       {/* Skills */}
-      <div className="flex gap-5 [&>div]:py-1 [&>div]:px-2 [&>div]:border [&>div]:border-mine-shaft-600 [&>div]:text-bright-sun-400 [&>div]:rounded-lg text-xs">
+      <div className="flex gap-5 [&>div]:py-1 [&>div]:px-2 [&>div]:border [&>div]:border-default [&>div]:text-[var(--blue-600)] [&>div]:rounded-lg text-xs">
         {profile?.skills?.map((skill, index) => index < 4  &&  
           <div key={index}>{skill}</div>
         )}
       </div>
 
       {/* About */}
-      <Text className="!text-xs text-justify text-mine-shaft-300" lineClamp={3}>
+      <Text className="!text-xs text-justify text-secondary" lineClamp={3}>
         {profile?.about}
       </Text>
 
-      <Divider size="xs" color={theme.colors.mineShaft[7]} />
+      <Divider size="xs" color="brand" />
+      {/*  interview info */}
       {props.invited ? (
-        <div className="flex gap-1 text-mine-shaft-200 text-sm items-center">
+        <div className="flex gap-1 text-secondary text-sm items-center">
           <IconCalendarMonth className="" stroke={1.5} />
           Interview: {formatInterviewTime(props.interviewTime)}
         </div>
-      ) : (
+      ) : (// in find talents page
         <div className="flex justify-between">
-          <div className="font-semibold text-mine-shaft-200">
+          <div className="font-semibold text-secondary">
             Experience : {props.totalExp?props.totalExp:0} Years
           </div>
-          <div className="flex gap-1 text-xs items-center text-mine-shaft-300">
+          <div className="flex gap-1 text-xs items-center text-mine-secondary">
             <IconMapPin stroke={1.5} className="h-5 w-5" />
             {profile.location}
           </div>
         </div>
       )}
 
-      <Divider size="xs" color={theme.colors.mineShaft[7]} />
+      <Divider size="xs" color="brand" />
 
       {/* Actions */}
       <div className="flex [&>*]:w-1/2 [&>*]:p-2">
+      {/* not invited view profile & shedule or message */}
         {!props.invited && (
           <>
             <Link to={`/talent-profile/${profile?.id}`}>
               <Button
-                color={theme.colors.brightSun[4]}
+                color="brand"
                 fullWidth
                 variant="outline"
               >
@@ -146,7 +168,7 @@ const TalentCards = (props) => {
                 <Button
                   onClick={open}
                   rightSection={<IconCalendarMonth className="w-5 h-5" />}
-                  color={theme.colors.brightSun[4]}
+                  color="brand"
                   fullWidth
                   variant="light"
                 >
@@ -155,7 +177,7 @@ const TalentCards = (props) => {
                 </Button>
               ) : (
                 <Button
-                  color={theme.colors.brightSun[4]}
+                  color="brand"
                   fullWidth
                   variant="light"
                 >
@@ -166,30 +188,32 @@ const TalentCards = (props) => {
             </div>
           </>
         )}
+        {/* if invited --- accept or  reject */}
         {props.invited && (
           <>
             <div>
               <Button onClick={()=> handleOffer("OFFERED")} 
-              color={theme.colors.brightSun[4]} fullWidth variant="outline">                {" "}
+              color="brand" fullWidth variant="outline">                {" "}
                 Accept
               </Button>
             </div>
             <div>
               <Button onClick={()=> handleOffer("REJECTED")} 
-               color={theme.colors.brightSun[4]} fullWidth  variant="light">
+               color="brand" fullWidth  variant="light">
                 Reject
               </Button>
             </div>
           </>
         )}
       </div>
+      {/* Shown only when employer is involved. */}
       { (props.invited || props.posted) &&
-        <Button onClick={openApp} color={theme.colors.brightSun[4]} fullWidth autoContrast variant="filled">
+        <Button onClick={openApp} color="brand" fullWidth autoContrast variant="filled">
            View Application 
         </Button>
       }
 
-      {/* Modal */}
+      {/* Modal  for sheduling interview */}
       <Modal opened={opened} onClose={close} title="Schedule Interview" centered>
         <div className="flex flex-col gap-3">
           {/* <DateInput
@@ -204,26 +228,26 @@ const TalentCards = (props) => {
             ref={ref}
             onClick={() => ref.current?.showPicker()}
           /> */}
-          <Button onClick={()=> handleOffer("INTERVIEWING")} color={theme.colors.brightSun[4]} fullWidth variant="light">
+          <Button onClick={()=> handleOffer("INTERVIEWING")} color="brand" fullWidth variant="light">
             Schedule
           </Button>
         </div>
       </Modal>
-            {/*  */}
+            {/* Application model  */}
       <Modal opened={app} onClose={closeApp} title="Application" centered>
         <div className="flex flex-col gap-3">
           <div>Email: &emsp; 
-            <a href={`mailto:${props.email}`} className="text-bright-sun-400 text-center hover:underline cursor-pointer">
+            <a href={`mailto:${props.email}`} className="text-[var(--blue-600)] text-center hover:underline cursor-pointer">
               {props.email}
             </a>
           </div>
           <div>website: &emsp; 
-            <a target="_blank" href={props.website} className="text-bright-sun-400 text-center hover:underline cursor-pointer">
+            <a target="_blank" href={props.website} className="text-[var(--blue-600)] text-center hover:underline cursor-pointer">
               {props.website}
             </a>
           </div>
           <div>Resume: &emsp; 
-            <span onClick={()=>openBase64PDF(props.resume)} className="text-bright-sun-400 text-center hover:underline cursor-pointer">
+            <span onClick={()=>openBase64PDF(props.resume)} className="text-[var(--blue-600)] text-center hover:underline cursor-pointer">
               {props.name}
             </span>
           </div>

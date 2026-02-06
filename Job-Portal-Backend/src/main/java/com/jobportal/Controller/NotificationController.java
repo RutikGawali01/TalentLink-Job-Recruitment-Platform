@@ -1,6 +1,7 @@
 package com.jobportal.Controller;
 
 import com.jobportal.DTO.ResponseDTO;
+import com.jobportal.Exception.JobPortalException;
 import com.jobportal.Service.NotificationService;
 import com.jobportal.entity.Notification;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ public class NotificationController {
     }
 
     @PutMapping("/read/{id}")
-    public ResponseEntity<ResponseDTO> readNotification(@PathVariable Long id ){
+    public ResponseEntity<ResponseDTO> readNotification(@PathVariable Long id ) throws JobPortalException {
         notificationService.readNotifications(id);
         return  new ResponseEntity<>(new ResponseDTO("Success"), HttpStatus.OK);
     }

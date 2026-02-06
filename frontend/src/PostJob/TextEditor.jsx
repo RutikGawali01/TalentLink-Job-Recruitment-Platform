@@ -38,7 +38,7 @@ const TextEditor = (props) => {
 
   return (
     <RichTextEditor editor={editor}>
-      <RichTextEditor.Toolbar bg={theme.colors.mineShaft[9]} sticky  stickyOffset="var(--docs-header-height)">
+      <RichTextEditor.Toolbar bg="var(--blue-100)" sticky  stickyOffset="var(--docs-header-height)">
         <RichTextEditor.ControlsGroup>
           <RichTextEditor.Bold />
           <RichTextEditor.Italic />
@@ -80,7 +80,7 @@ const TextEditor = (props) => {
         </RichTextEditor.ControlsGroup>
       </RichTextEditor.Toolbar>
 
-      <RichTextEditor.Content bg={theme.colors.mineShaft[9]} />
+      <RichTextEditor.Content  className='bg-tertiary' />
     </RichTextEditor>
   );
 }

@@ -10,25 +10,28 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
-@RequestMapping("/jobs")
-@CrossOrigin
-@Validated
+    @RequestMapping("/jobs")
+    @CrossOrigin
+    @Validated
 public class JobsController {
     @Autowired
     private JobService jobService;
 
+
+
+    // post new job
     @PostMapping("/post")
     public ResponseEntity<JobDTO> postJob(@RequestBody @Valid JobDTO jobDTO) throws JobPortalException {
-
         return new ResponseEntity<>(jobService.postJob(jobDTO), HttpStatus.CREATED);
     }
 
     @GetMapping("/getAll")
     public ResponseEntity<List<JobDTO>> getAllJobs() throws Exception{
-
         return new ResponseEntity<>( jobService.getAllJobs(), HttpStatus.OK);
     }
 
@@ -55,10 +58,5 @@ public class JobsController {
         jobService.changeAppliStatus(application);
         return new ResponseEntity<>(new ResponseDTO("Application Status change Successfully!"), HttpStatus.OK);
     }
-
-
-
-
-
 
 }

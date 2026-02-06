@@ -9,4 +9,6 @@ import java.util.List;
 public interface OTPRepository extends MongoRepository<OTP, String> {
 
     List<OTP> findByCreationTimeBefore(LocalDateTime expiry);
+
+    void deleteByEmail(String email);
 }

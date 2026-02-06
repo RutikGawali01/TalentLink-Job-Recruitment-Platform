@@ -1,5 +1,6 @@
 package com.jobportal.Service;
 
+import com.jobportal.DTO.ProfileCompletionDTO;
 import com.jobportal.DTO.ProfileDTO;
 import com.jobportal.Exception.JobPortalException;
 
@@ -13,4 +14,6 @@ public interface ProfileService {
     public ProfileDTO updateProfile(ProfileDTO profileDTO) throws  JobPortalException;
 
     public List<ProfileDTO> getAllProfile();
+
+    ProfileCompletionDTO getApplicantProfileCompletion(Long id);
 }

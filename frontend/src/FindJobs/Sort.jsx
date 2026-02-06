@@ -61,18 +61,18 @@ const Sort = (props)=> {
           {/* <Button onClick={() => combobox.toggleDropdown()}>
             Pick item
           </Button> */}
-          <div onClick={() => combobox.toggleDropdown()} className='cursor-pointer border border-bright-sun-400 flex items-center px-2 py-1 gap-2 text-sm rounded-xl '>
-            {selectedItem} <IconAdjustments  className='h-5 w-5  text-bright-sun-400 ' />
+          <div onClick={() => combobox.toggleDropdown()} className='cursor-pointer border border-accent flex items-center px-2 py-1 gap-2 text-sm rounded-xl '>
+            {selectedItem} <IconAdjustments  className='h-5 w-5  text-[var(--blue-600)]' />
           </div>
         </Combobox.Target>
 
-        <Combobox.Dropdown >
+        <Combobox.Dropdown className='rounded-3xl border-4' >
           {/* <Combobox.Search
             value={search}
             onChange={(event) => setSearch(event.currentTarget.value)}
             placeholder="Search groceries"
           /> */}
-          <Combobox.Options>
+          <Combobox.Options className=''>
             {options.length > 0 ? options : (
               <Combobox.Empty>Nothing found</Combobox.Empty>
             )}

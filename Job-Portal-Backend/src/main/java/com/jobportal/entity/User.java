@@ -33,6 +33,7 @@ public class User {
 
     private String password;
     private AccountType accountType;
+    private boolean emailVerified;
 
     private Long profileId;
 

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -12,6 +13,6 @@ import java.time.LocalDateTime;
 public class Certification {
     private String name;
     private String issuer;
-    private LocalDateTime issueDate;
+    private LocalDate issueDate;
     private String certificateId;
 }

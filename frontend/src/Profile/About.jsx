@@ -1,80 +1,113 @@
-import { useState, useEffect } from "react";
-import { IconMapPin,IconCheck, IconPencil, IconPlus, IconX,} from "@tabler/icons-react";
-import {Divider,Avatar, useMantineTheme, ActionIcon,Textarea, TagsInput} from "@mantine/core";
-import fields from "../assets/Data/Profile";
-import {useSelector, useDispatch} from "react-redux";
-import {changeProfile} from "../Slice/ProfileSlice"
-import {successNotification} from "../Services/NotificationService";
+import {
+  ActionIcon,
+  Textarea,
+} from "@mantine/core";
+import {
+  IconPencil,
+  IconCheck,
+  IconX,
+} from "@tabler/icons-react";
+import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
+import { changeProfile } from "../Slice/ProfileSlice";
+import {
+  successNotification,
+  errorNotification,
+} from "../Services/NotificationService";
 
 const About = () => {
-    const dispatch = useDispatch();
-    const user = useSelector((state)=> state.user);
-    const theme = useMantineTheme();
-    const profile  = useSelector((state)=> state.profile);
-    const [about, setAbout] = useState("");
-    const select = fields;
-    const [edit, setEdit] = useState(false); // ← initially false
-    
-    const handleClick = () => {
-        if(!edit){
-            setEdit(true);
-            setAbout(profile.about);
-            
-        }else{
-            setEdit(false);
-    
-        }
-        //setEdit((prev) => !prev); // toggle edit
-    };
+  /* ---------------- REDUX ---------------- */
+  const dispatch = useDispatch();
+  const profile = useSelector((state) => state.profile);
 
-    const handleSave = ()=>{
-        setEdit(false);
-        let updatedProfile = {...profile, about: about};
-        dispatch(changeProfile(updatedProfile));
-        //console.log(updatedProfile);
-        successNotification("Success", "Profile updated successfully");
+  /* ---------------- STATE ---------------- */
+  const [edit, setEdit] = useState(false);
+  const [about, setAbout] = useState(profile.about || "");
 
+  /* ---------------- HANDLERS (SAME LOGIC) ---------------- */
+  const handleEdit = () => {
+    setEdit(true);
+    setAbout(profile.about || "");
+  };
+
+  const handleCancel = () => {
+    setEdit(false);
+    setAbout(profile.about || "");
+  };
+
+  const handleSave = async () => {
+    try {
+      const updatedProfile = {
+        ...profile,
+        about,
+      };
+
+      await dispatch(changeProfile(updatedProfile));
+      setEdit(false);
+      successNotification("Success", "About section updated successfully");
+    } catch (err) {
+      console.log(err);
+      errorNotification("Error", "Failed to update about section");
     }
+  };
 
+  /* ---------------- UI ---------------- */
   return (
-    <div className="px-3 ">
-        <div className=" text-2xl font-semibold mb-3 flex justify-between ">
-          about{" "}
-          <div>
-          { edit && 
-            <ActionIcon
-            size="lg"
-            variant="subtle"
-            color="green.8"
-            onClick={handleSave}
-          >
-              <IconCheck className="h-4/5 w-4/5" />  
-          </ActionIcon>
-          }
-          <ActionIcon
-            size="lg"
-            variant="subtle"
-            color={edit ? "red.8": `${theme.colors.brightSun[4]}`}
-            onClick={handleClick}          // FIXED
-          >
-            { edit ? (
-              <IconX className="h-4/5 w-4/5" />  // Save when editing
-            ) : (
-              <IconPencil className="h-4/5 w-4/5" />
-            )}
-          </ActionIcon>        
-        </div>
-        </div>
-        {
-          edit ? <Textarea
-          value={about} autosize minRows={3} placeholder="Enter about yourself "
-          onChange={(event) => setAbout(event.currentTarget.value)}
-        /> : <div className="text-sm text-mine-shaft-300 text-justify">
-          {profile?.about}
-        </div>
-        }
-      </div>
-  )
-}
+    <div className="bg-white rounded-2xl shadow-sm p-6 border-default">
+      {/* ===== Header ===== */}
+      <div className="flex justify-between items-center mb-4 pb-3 border-b-2 border-slate-200">
+        <h2 className="text-xl font-bold text-slate-900">About</h2>
 
-export default About
+        {!edit ? (
+          <ActionIcon
+            variant="subtle"
+            color="brand"
+            onClick={handleEdit}
+          >
+            <IconPencil size={20} />
+          </ActionIcon>
+        ) : (
+          <div className="flex gap-2">
+            <ActionIcon
+              variant="subtle"
+              color="green.8"
+              onClick={handleSave}
+            >
+              <IconCheck size={20} />
+            </ActionIcon>
+
+            <ActionIcon
+              variant="subtle"
+              color="red.8"
+              onClick={handleCancel}
+            >
+              <IconX size={20} />
+            </ActionIcon>
+          </div>
+        )}
+      </div>
+
+      {/* ===== Content ===== */}
+      {edit ? (
+        <Textarea
+          placeholder="Enter about yourself"
+          value={about}
+          onChange={(e) => setAbout(e.currentTarget.value)}
+          minRows={4}
+          autosize
+          className="w-full"
+        />
+      ) : (
+        <p
+          className={`text-sm leading-relaxed ${
+            profile.about ? "text-slate-600" : "text-slate-400"
+          }`}
+        >
+          {profile.about || "Add information about yourself..."}
+        </p>
+      )}
+    </div>
+  );
+};
+
+export default About;

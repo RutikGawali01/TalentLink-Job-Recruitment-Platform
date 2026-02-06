@@ -1,5 +1,6 @@
 package com.jobportal.Service;
 
+import com.jobportal.DTO.ProfileCompletionDTO;
 import com.jobportal.DTO.ProfileDTO;
 import com.jobportal.Exception.JobPortalException;
 import com.jobportal.Repository.ProfileRepository;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 @Service("profileService")
@@ -30,12 +32,11 @@ public class ProfileServiceImpl implements ProfileService{
         profile.setSkills(new ArrayList<>());
         profile.setExperiences(new ArrayList<>());
         profile.setCertifications(new ArrayList<>());
+        profile.setEducations(new ArrayList<>());
+        profile.setPortfolio(null);
         profileRepository.save(profile);
 
         return profile.getId();
-
-
-
     }
 
     @Override
@@ -44,28 +45,99 @@ public class ProfileServiceImpl implements ProfileService{
                 .orElseThrow(() -> new JobPortalException("PROFILE_NOT_FOUND"));
 
         return profile.toDTO();   // returning DTO using constructor conversion
+        // here bcz of file type conversion - thats why  we did not prefer model mapper
     }
 
 
     @Override
     public ProfileDTO updateProfile(ProfileDTO profileDTO) throws JobPortalException {
 
-        // check profile exists before updating
-        profileRepository.findById(profileDTO.getId())
+        Profile profile = profileRepository.findById(profileDTO.getId())
                 .orElseThrow(() -> new JobPortalException("PROFILE_NOT_FOUND"));
 
-        // Convert DTO -> Entity using constructor
-        Profile profile = profileDTO.toEntity();
+        /* ---------- BASIC INFO ---------- */
+        profile.setJobTitle(profileDTO.getJobTitle());
+        profile.setCompany(profileDTO.getCompany());
+        profile.setLocation(profileDTO.getLocation());
+        profile.setTotalExp(profileDTO.getTotalExp());
+        profile.setAbout(profileDTO.getAbout());
+        profile.setPortfolio(profileDTO.getPortfolio());
 
-        profileRepository.save(profile);
+        /* ---------- PROFILE PICTURE (IMPORTANT) ---------- */
+        if (profileDTO.getPicture() != null) {
+            profile.setPicture(Base64.getDecoder().decode(profileDTO.getPicture()));
+        }
 
-        // return updated data using Entity → DTO conversion
-        return profile.toDTO();
+        /* ---------- BANNER ---------- */
+//        if (profileDTO.getBanner() != null) {
+//            profile.setBanner(Base64.getDecoder().decode(profileDTO.getBanner()));
+//        }
+
+        /* ---------- SKILLS ---------- */
+        if (profileDTO.getSkills() != null) {
+            profile.setSkills(profileDTO.getSkills());
+        }
+
+        /* ---------- EXPERIENCE ---------- */
+        if (profileDTO.getExperiences() != null) {
+            profile.setExperiences(profileDTO.getExperiences());
+        }
+
+        /* ---------- EDUCATION (FIXED) ---------- */
+        if (profileDTO.getEducations() != null) {
+            profile.setEducations(profileDTO.getEducations());
+        }
+
+        /* ---------- CERTIFICATIONS ---------- */
+        if (profileDTO.getCertifications() != null) {
+            profile.setCertifications(profileDTO.getCertifications());
+        }
+
+        Profile saved = profileRepository.save(profile);
+        return saved.toDTO();
     }
+
 
     @Override
     public List<ProfileDTO> getAllProfile() {
-       return profileRepository.findAll().stream().map((x)-> x.toDTO()).toList();
+       return profileRepository.findAll()
+               .stream()
+               .map((x)->
+                       x.toDTO()).toList();
     }
+
+    @Override
+    public ProfileCompletionDTO getApplicantProfileCompletion(Long applicantId) {
+
+        Profile p = profileRepository.findById(applicantId)
+                .orElseThrow(() -> new RuntimeException("Profile not found"));
+
+        List<String> missing = new ArrayList<>();
+
+        if (!notEmpty(p.getName())) missing.add("name");
+        if (!notEmpty(p.getJobTitle())) missing.add("jobTitle");
+        if (!notEmpty(p.getLocation())) missing.add("location");
+        if (!notEmpty(p.getAbout())) missing.add("about");
+        if (p.getSkills() == null || p.getSkills().isEmpty()) missing.add("skills");
+        if (p.getTotalExp() == null) missing.add("totalExperience");
+
+        int totalFields = 6;
+        int completedFields = totalFields - missing.size();
+        int percentage = (completedFields * 100) / totalFields;
+
+        boolean completed = percentage == 100;
+
+        if (p.getProfileCompleted() == null || p.getProfileCompleted() != completed) {
+            p.setProfileCompleted(completed);
+            profileRepository.save(p);
+        }
+
+        return new ProfileCompletionDTO(completed, percentage, missing);
+    }
+
+    private boolean notEmpty(String s) {
+        return s != null && !s.trim().isEmpty();
+    }
+
 
 }
