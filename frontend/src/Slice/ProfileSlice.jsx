@@ -12,11 +12,11 @@ const ProfileSlice = createSlice({
         setProfile:(state, action)=>{
             state=action.payload;
             return state;
-           
-        }
+        },
+        clearProfile: ()=> null
 
     }
 });
 
-export const {changeProfile, setProfile} = ProfileSlice.actions;
+export const {changeProfile, setProfile, clearProfile} = ProfileSlice.actions;
 export default ProfileSlice.reducer;

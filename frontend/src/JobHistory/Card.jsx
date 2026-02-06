@@ -26,30 +26,30 @@ const profile = useSelector((state)=>state.profile);
   };
   return (
     <div
-      className="bg-mine-shaft-900 cursor-pointer  flex flex-col gap-3 rounded-xl p-4 w-80 hover:shadow-[0_0_5px_1px_yellow] !shadow-mine-shaft-600 "
+      className="bg-secondary border-default cursor-pointer  flex flex-col gap-3 rounded-xl p-4 w-80 hover:shadow-[0_0_5px_1px_blue]/20  "
     >
       <div className="flex justify-between ">
         <div className="flex gap-2 items-center ">
-          <div className="p-2 rounded-md  bg-mine-shaft-800 ">
+          <div className="p-2 rounded-md  bg-[var(--blue-100)] ">
             <img className="h-7 " src={`/Icons/${props.company}.png`} alt="" />
           </div>
 
           <div>
             <div className="font-semibold">{props.jobTitle}</div>
-            <div className="text-xs text-mine-shaft-300">
+            <div className="text-xs text-tertiary">
               {props.company} &#x2022; {props.applicants ? props.applicants.length:0} Applicants
             </div>
           </div>
         </div>
 
         { profile.savedJobs?.includes(props.id)? 
-                    <IconBookmarkFilled onClick={handleSaveJob} className='text-bright-sun-400 cursor-pointer ' /> :
-                    <IconBookmark onClick={handleSaveJob} className='text-mines-shaft-300 cursor-pointer hover:text-bright-sun-400' />}
+                    <IconBookmarkFilled onClick={handleSaveJob} className='text-[var(--blue-600)] cursor-pointer ' /> :
+                    <IconBookmark onClick={handleSaveJob} className='text-tertiary cursor-pointer hover:text-[var(--blue-600)]/20 hover:opacity-70' />}
       </div>
 
       <div
-        className="flex gap-5 [&>div]:py-1 [&>div]:px-2 [&>div]:border [&>div]:border-mine-shaft-600 
-       = [&>div]:text-bright-sun-400 [&>div]:rounded-lg text-xs "
+        className="flex gap-5 [&>div]:py-1 [&>div]:px-2 [&>div]:border [&>div]:border-[var(--blue-600)] 
+       = [&>div]:text-secondary [&>div]:rounded-lg text-xs "
       >
         <div>{props.experience}</div>
         <div>{props.jobType}</div>
@@ -57,42 +57,42 @@ const profile = useSelector((state)=>state.profile);
       </div>
 
       <Text
-        className="!text-xs text-justify text-mine-shaft-300 "
+        className="!text-xs text-justify text-tertiary "
         lineClamp={3}
       >
         {props.about}
       </Text>
 
-      <Divider size="xs" color={theme.colors.mineShaft[7]} />
+      <Divider size="xs" color="" />
 
       <div className="flex justify-between ">
-        <div className="font-semibold text-mine-shaft-200 ">
+        <div className="font-semibold text-[var(--blue-600)] ">
           &#8377; {props.packageOffered} LPA
         </div>
-        <div className="flex gap-1 text-xs items-center text-mine-shaft-300">
+        <div className="flex gap-1 text-xs items-center text-tertiary">
           <IconClockHour3 stroke={1.5} className="h-5 w-5" />
           {props.applied || props.interviewing?"Applied":props.offered?"Interviewed":"Posted"}
            {timeAgo(props.postTime)}
         </div>
       </div>
       {
-        (props.offered || props.interviewing) && <Divider size="xs" color={theme.colors.mineShaft[7]} />
+        (props.offered || props.interviewing) && <Divider size="xs" color="gray.7" />
 
       }
       {
         props.offered && <div className="flex gap-2">
-            <Button color={theme.colors.brightSun[4]} fullWidth variant="outline"> Accept </Button>
-            <Button color={theme.colors.brightSun[4]} fullWidth variant="light"> Reject </Button>
+            <Button color="brand" fullWidth variant="outline"> Accept </Button>
+            <Button color="brand" fullWidth variant="light"> Reject </Button>
         </div>
       }
       {
         props.interviewing && <div className="flex gap-1  text-sm items-center">
-            <IconCalendarMonth className="text-bright-sun-400 w-5 h-5" stroke={1.5} />
-            Sunday, 23 December &bull; <span className="text-mine-shaft-400">10:00 AM</span>
+            <IconCalendarMonth className="text-[var(--blue-600)] w-5 h-5" stroke={1.5} />
+            Sunday, 23 December &bull; <span className="text-[var(--blue-600)]">10:00 AM</span>
           </div>
       }
       <Link to={`/jobs/${props.id}`}> 
-                <Button fullWidth  color={theme.colors.brightSun[4]} variant='light'  >
+                <Button fullWidth  color="brand" variant='filled'  >
                 View Job
               </Button>
             </Link>

@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 public class UserDTO {
 
     private Long id;
-    @NotBlank(message = "{user.name.absent}")
+
     private  String name;
 
     @NotBlank(message = "{user.email.absent}")
@@ -27,6 +27,9 @@ public class UserDTO {
     @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,15}$", message = "{user.password.invalid}")
     private String password;
     private AccountType accountType;
+
+    private boolean emailVerified;
+
     private Long profileId;
 
 

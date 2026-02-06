@@ -8,7 +8,7 @@ import {
   Overlay,
   TagsInput,
 } from "@mantine/core";
-import {useHover} from "@mantine/hooks";
+import { useHover } from "@mantine/hooks";
 import { IconPencil, IconEdit } from "@tabler/icons-react";
 import fields from "../assets/Data/Profile";
 import { useSelector, useDispatch } from "react-redux";
@@ -19,14 +19,16 @@ import About from "./About";
 import Skills from "./Skills";
 import Experience from "./Experience";
 import Certification from "./Certification";
-import {changeProfile} from "../Slice/ProfileSlice"
-import {successNotification} from "../Services/NotificationService";
-import {getBase64} from "../Services/Utilities";
+import { changeProfile } from "../Slice/ProfileSlice"
+import { successNotification } from "../Services/NotificationService";
+import { getBase64 } from "../Services/Utilities";
+import Education from "./Education";
+import PortfolioLinks from "./PortfolioLinks";
 
 
 const ProfileComp = (props) => {
   const dispatch = useDispatch();
-  
+
 
   //const user = useSelector((state) => state.user);
   const profile = useSelector((state) => state.profile);
@@ -44,10 +46,10 @@ const ProfileComp = (props) => {
   //     });
   // }, []);
 
-  const handleFileChange = async (image)=>{
+  const handleFileChange = async (image) => {
     let picture = await getBase64(image);
     console.log(picture);
-    let updatedProfile={...profile, picture: picture.split(',')[1]};
+    let updatedProfile = { ...profile, picture: picture.split(',')[1] };
     dispatch(changeProfile(updatedProfile));
     successNotification("Success", "Profile Picture  updated successfully");
 
@@ -55,62 +57,52 @@ const ProfileComp = (props) => {
   }
 
   const theme = useMantineTheme();
-  
-  const {hovered, ref} = useHover();
+
+  const { hovered, ref } = useHover();
   return (
-    <div className="w-4/5 mx-auto">
-      <div className="relative">
-        <img className="rounded-t-2xl" src="/Profile/banner.jpg" alt="" />
-        <div ref={ref} className="absolute  flex items-center justify-center -bottom-1/3 left-3">
-          {/* <Indicator
-            className="[&_.mantine-Indicator-indicator]:!border-4 [&_img]:hover:opacity-80"
-            autoContrast
-            inline
-            offset={30}
-            label={
-              <IconPencil
-                className="w-4/5
-          h-4/5"
-              />
-            }
-            size={45}
-            position="bottom-end"
-            color={theme.colors.brightSun[4]}
-            withBorder
-          > */}
-            <Avatar
-              className="!w-48 !h-48 border-mine-shaft-950 border-8 rounded-full"
-              src={profile.picture ? `data:image/jpeg;base64,${profile.picture}`:"/avatar.png"}
-              alt=""
-            />
-            {hovered && <Overlay className="!rounded-full"    color="#000" backgroundOpacity={0.75} />}
-            {hovered && <IconEdit className="absolute z-[300] !h-16 !w-16 "  /> }
-            { hovered && <FileInput onChange={handleFileChange}
-              className="absolute bottom-2 right-2 z-[301] [&_*]:!rounded-full [&_*]:!h-full !h-full w-full"
-              accept="image/png, image/jpeg" variant="transparent"
-            /> }
-          {/* </Indicator> */}
-        </div>
-      </div>
+    <div className="w-4/5 mx-auto  pb-5">
 
       <div className="px-3 mt-19  ">
-        <Info {...props} />
+        <Info  {...props} />
       </div>
 
-      <Divider mx="xs" my="xl" />
+      <Divider mx="xs" my="xl" color="brand" />
 
-      <About />
+      <div className="px-3 ">
+        <About />
+      </div>
 
-      <Divider mx="xs" my="xl" />
+      <Divider mx="xs" my="xl" color="brand" />
 
-      <Skills />
+      <div className="px-3">
+        <Education />
+      </div>
 
-      <Divider mx="xs" my="xl" />
+      <Divider mx="xs" my="xl" color="brand" />
 
-      <Experience />
+      <div className="px-3 w-1/2" >
+        <Skills />
+      </div>
 
-      <Divider mx="xs" my="xl" />
-      <Certification />
+
+      <Divider mx="xs" my="xl" color="brand" />
+
+      <div className="px-3">
+        <Experience />
+      </div>
+
+      <Divider mx="xs" my="xl" color="brand" />
+
+      <div className="px-3">
+        <Certification />
+      </div>
+
+      <Divider mx="xs" my="xl" color="brand" />
+
+      <div className="px-3">
+        < PortfolioLinks />
+      </div>
+
     </div>
   );
 };

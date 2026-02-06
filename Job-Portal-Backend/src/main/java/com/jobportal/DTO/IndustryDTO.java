@@ -1,0 +1,15 @@
+package com.jobportal.DTO;
+
+public enum IndustryDTO {
+    INFORMATION_TECHNOLOGY,
+    HEALTHCARE,
+    FINANCE,
+    EDUCATION,
+    ECOMMERCE,
+    MANUFACTURING,
+    REAL_ESTATE,
+    MARKETING,
+    TELECOMMUNICATION,
+    STARTUP,
+    OTHER
+}

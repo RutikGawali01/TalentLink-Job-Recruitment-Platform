@@ -4,9 +4,9 @@ import {companies} from "../assets/Data/Data";
 
 const CompaniesPage = () => {
   return (
-    <div className='mt-20 pb-5'>
-        <div className='text-4xl mb-10 text-center font-semibold text-mine-shaft-100'>
-            Trusted by <span className='text-bright-sun-400'>1000+</span> companies
+    <div className='mt-20 pb-5 bg-primary'>
+        <div className='text-4xl mb-10 text-center font-semibold text-primary'>
+            Trusted by <span className='text-[var(--blue-600)]'>1000+</span> companies
         </div>
         <Marquee pauseOnHover={true} >
             {

@@ -1,24 +1,29 @@
-import React from 'react'
+import React from "react";
 import { Link, useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const NavLinks = () => {
+  const location = useLocation();
+  const user = useSelector((state) => state.user);
 
-  const links = [
-    { name: "Find jobs", URL: "find-jobs" },
-    { name: "Find Talent", URL: "find-talent" },
-    { name: "Post jobs", URL: "post-job/0" },
-    { name: "Posted Job", URL: "posted-jobs/0" },
+  const applicantLinks = [
+    { name: "Find Jobs", URL: "find-jobs" },
     { name: "Job History", URL: "job-history" },
-    // { name: "Sign Up", URL: "signup" },
-
+    { name: "Companies", URL: "all-company"}
   ];
 
-  const location = useLocation();
+  const employerLinks = [
+    { name: "Find Talent", URL: "find-talent" },
+    { name: "Post Job", URL: "post-job/0" },
+    { name: "Posted Jobs", URL: "posted-jobs/0" },
+  ];
+
+  const links =
+    user?.accountType === "EMPLOYER" ? employerLinks : applicantLinks;
 
   return (
     <div className="flex gap-5 h-full items-center text-mine-shaft-300">
-      {
-        links.map((link, index) => {
+      {links.map((link, index) => {
         const isActive = location.pathname === `/${link.URL}`;
 
         return (
@@ -31,18 +36,14 @@ const NavLinks = () => {
                 : "border-transparent"}
             `}
           >
-            <Link to={`/${link.URL}`} className='border m-4 px-6 rounded-sm'
-             >
+            <Link to={`/${link.URL}`} className="border m-4 px-6 rounded-sm">
               {link.name}
             </Link>
           </div>
         );
-        })
-      }
+      })}
     </div>
-
-    
   );
-};
+};  
 
 export default NavLinks;

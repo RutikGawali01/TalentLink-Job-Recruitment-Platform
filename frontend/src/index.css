@@ -13,30 +13,103 @@
   }
 }
 
-@theme {
-  /* mine-shaft palette */
-  --color-mine-shaft-50: #f6f6f6;
-  --color-mine-shaft-100: #e7e7e7;
-  --color-mine-shaft-200: #d1d1d1;
-  --color-mine-shaft-300: #b0b0b0;
-  --color-mine-shaft-400: #888888;
-  --color-mine-shaft-500: #6d6d6d;
-  --color-mine-shaft-600: #5d5d5d;
-  --color-mine-shaft-700: #4f4f4f;
-  --color-mine-shaft-800: #454545;
-  --color-mine-shaft-900: #3d3d3d;
-  --color-mine-shaft-950: #2d2d2d;
+ /* ============================= */
+/* 🌞 JOB PORTAL – LIGHT THEME */
+/* ============================= */
 
-  /* bright-sun palette */
-  --color-bright-sun-50: #fffbeb;
-  --color-bright-sun-100: #fff3c6;
-  --color-bright-sun-200: #ffe588;
-  --color-bright-sun-300: #ffd149;
-  --color-bright-sun-400: #ffbd20;
-  --color-bright-sun-500: #f99b07;
-  --color-bright-sun-600: #dd7302;
-  --color-bright-sun-700: #b75006;
-  --color-bright-sun-800: #943c0c;
-  --color-bright-sun-900: #7a330d;
-  --color-bright-sun-950: #461902;
+:root {
+  /* Primary Colors */
+  --blue-400: #60A5FA;
+  --blue-500: #3B82F6;
+  --blue-600: #2563EB;
+  --purple-600: #4d57ec;
+
+  --blue-100: #e5f2ff;
+  --blue-200: #99bfee;
+
+  /* Gradients */
+  --gradient-primary: linear-gradient(to right, #3B82F6, #9333EA);
+
+  /* Backgrounds */
+  --bg-primary: #FFFFFF;
+  --bg-secondary: #F9FAFB;
+  --bg-tertiary: #F3F4F6;
+
+  /* Text */
+  --text-primary: #111827;
+  --text-secondary: #232424;
+  --text-accent: #2563EB;
+  --text-tertiary: #323232;
+
+  /* Borders */
+  --border-default: #d6d8dd;
+  --border-accent: #466cbd;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+  --shadow-blue: 0 10px 15px rgba(54, 126, 243, 0.3);
+}
+
+/* Global base styles */
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+}
+
+/* ============================= */
+/* 🎨 REUSABLE UI UTILITIES */
+/* ============================= */
+
+.bg-primary {
+  background-color: var(--bg-primary);
+}
+
+.bg-secondary {
+  background-color: var(--bg-secondary);
+}
+
+.bg-tertiary {
+  background-color: var(--bg-tertiary);
+}
+
+.text-primary {
+  color: var(--text-primary);
+}
+
+.text-secondary {
+  color: var(--text-secondary);
+}
+.text-tertiary{
+  color: var(--text-tertiary);
+}
+
+.text-accent {
+  color: var(--text-accent);
+}
+
+.border-default {
+  border: 1px solid var(--border-default);
+}
+
+.border-accent {
+  border: 2px solid var(--border-accent);
+}
+
+.shadow-card {
+  box-shadow: var(--shadow-lg);
+}
+
+.shadow-blue {
+  box-shadow: var(--shadow-blue);
+}
+
+.gradient-primary {
+  background: var(--gradient-primary);
+  color: white;
+}
+.gradient-text{
+  color: var(--gradient-primary);
 }

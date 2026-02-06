@@ -25,10 +25,10 @@ const JobDescriptionPage = () => {
     
    const theme = useMantineTheme();
   return (
-    <div className="min-h-[100vh] bg-mine-shaft-950 font-['poppins'] p-4">
+    <div className="min-h-[100vh] bg-[var(--blue-100)] font-['poppins'] p-4">
       
       <Link className="my-5 inline-block" to= "/find-jobs">
-          <Button leftSection={<IconArrowLeft size={20}  />} color={theme.colors.brightSun[4]}  variant='light' >Back </Button>
+          <Button leftSection={<IconArrowLeft size={20}  />} color="brand"  variant='light' >Back </Button>
         </Link>
         <div className="flex gap-5 justify-around ">
             <JobDescr {...job} />
