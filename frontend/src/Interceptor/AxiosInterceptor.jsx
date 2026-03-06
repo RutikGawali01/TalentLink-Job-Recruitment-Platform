@@ -5,7 +5,8 @@ import { removeUser } from "../Slice/UserSlice";
 import { clearProfile } from "../Slice/ProfileSlice";
 
 const axiosInstance = axios.create({
-    baseURL: 'http://localhost:9090'
+    // baseURL: 'http://localhost:9090'
+    baseURL:'https://job-portal-full-stack-project.onrender.com'
 });
 axiosInstance.interceptors.request.use(
     (config) => {
