@@ -1,25 +1,29 @@
-import {createSlice} from "@reduxjs/toolkit";
-import {getItem, setItem, removeItem} from "../Services/LocalStorageService";
-const UserSlice = createSlice({
-    name:"user",
-    initialState:getItem("user"),
-    reducers:{
-        // state - user data
-        setUser:(state, action)=>{
-            setItem("user", action.payload);// action.payload - whole obj set in localstorage
-            state=getItem("user");
-            return state; // this is important for updation of state in other component
-        },
-        removeUser:(state)=>{
-            removeItem("user");
-            state=null;
-            return state;
-            // see changes by removing above return state. 
-            // login and then logout but it will not update directly until u refresh page
-        }
+import { createSlice } from "@reduxjs/toolkit";
+import { getItem, setItem, removeItem } from "../Services/LocalStorageService";
 
-    }
+const initialState = getItem("user") || null;
+
+const UserSlice = createSlice({
+  name: "user",
+  initialState,
+  reducers: {
+    setUser: (state, action) => {
+      setItem("user", action.payload);
+      return action.payload;   // simply replace state
+    },
+
+    updateUser: (state, action) => {
+      const updatedUser = { ...state, ...action.payload };
+      setItem("user", updatedUser);
+      return updatedUser;
+    },
+
+    removeUser: () => {
+      removeItem("user");
+      return null;
+    },
+  },
 });
 
-export const {setUser, removeUser} = UserSlice.actions;
-export default UserSlice.reducer; 
+export const { setUser, updateUser, removeUser } = UserSlice.actions;
+export default UserSlice.reducer;

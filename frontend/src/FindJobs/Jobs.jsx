@@ -89,14 +89,14 @@ const Jobs = () => {
 
   return (
     <div className="p-5 ">
-      <div className="mx-34">
-            <div className="flex justify-between">
-          <div className="text-2xl font-semibold ">Recommended Jobs</div>
+
+      <div className="mt-5 flex flex-wrap justify-between">
+
+          <div className="text-2xl  max-[475px]:text-xl font-semibold ">Recommended Jobs</div>
             <Sort sort="job" />
         </div>
-      </div>
 
-      <div className="flex mt-10 flex-wrap gap-5 justify-center">
+      <div className="flex mt-10 flex-wrap gap-5 ">
         {filteredJobs.map((job, index) => (
           <JobCard key={index} {...job} />
         ))}

@@ -1,10 +1,6 @@
 import SelectInput from "./SelectInput";
 import fields from "../assets/Data/Profile";
-import {
-  Textarea,
-  Checkbox,
-  Button,
-} from "@mantine/core";
+import { Textarea, Checkbox, Button } from "@mantine/core";
 import { MonthPickerInput } from "@mantine/dates";
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
@@ -13,11 +9,10 @@ import { changeProfile } from "../Slice/ProfileSlice";
 import { successNotification } from "../Services/NotificationService";
 
 const ExpInput = (props) => {
-  const profile = useSelector((state) => state.profile);
+  const profile = useSelector((state) => state.profile.data);
   const dispatch = useDispatch();
   const select = fields;
 
-  /* ---------------- FORM ---------------- */
   const form = useForm({
     mode: "controlled",
     validateInputOnChange: true,
@@ -38,7 +33,6 @@ const ExpInput = (props) => {
     },
   });
 
-  /* ---------------- PREFILL (EDIT MODE) ---------------- */
   useEffect(() => {
     if (!props.add) {
       form.setValues({
@@ -53,75 +47,53 @@ const ExpInput = (props) => {
     }
   }, []);
 
-
   const normalizeDate = (value) => {
-  if (!value) return null;
-
-  // already a string → return as is
-  if (typeof value === "string") return value;
-
-  // Date object → convert to ISO
-  if (value instanceof Date) return value.toISOString();
-
-  return null;
-};
-
-
-  /* ---------------- SAVE ---------------- */
- const handleSave = () => {
-  form.validate();
-  if (!form.isValid()) return;
-
-  const values = form.getValues();
-
-  const formattedExp = {
-    ...values,
-    startDate: normalizeDate(values.startDate),
-    endDate: values.working
-      ? null
-      : normalizeDate(values.endDate),
+    if (!value) return null;
+    if (typeof value === "string") return value;
+    if (value instanceof Date) return value.toISOString();
+    return null;
   };
 
-  let exp = [...(profile?.experiences || [])];
+  const handleSave = () => {
+    form.validate();
+    if (!form.isValid()) return;
 
-  if (props.add) {
-    exp.push(formattedExp);
-  } else {
-    exp[props.index] = formattedExp;
-  }
+    const values = form.getValues();
 
-  const updatedProfile = {
-    ...profile,
-    experiences: exp,
+    const formattedExp = {
+      ...values,
+      startDate: normalizeDate(values.startDate),
+      endDate: values.working ? null : normalizeDate(values.endDate),
+    };
+
+    let exp = [...(profile?.experiences || [])];
+
+    if (props.add) exp.push(formattedExp);
+    else exp[props.index] = formattedExp;
+
+    dispatch(changeProfile({ ...profile, experiences: exp }));
+    props.setEdit(false);
+
+    successNotification(
+      "Success",
+      `Experience ${props.add ? "added" : "updated"} successfully`
+    );
   };
 
-  props.setEdit(false);
-  dispatch(changeProfile(updatedProfile));
-
-  successNotification(
-    "Success",
-    `Experience ${props.add ? "added" : "updated"} successfully`
-  );
-};
-
-
-  /* ---------------- UI ---------------- */
   return (
-    <div className="flex flex-col gap-4">
-      <h3 className="text-lg font-semibold">
+    <div className="flex flex-col gap-6">
+      <h3 className="text-lg sm:text-xl font-semibold">
         {props.add ? "Add Experience" : "Edit Experience"}
       </h3>
 
-      {/* Job Title + Company */}
-      <div className="flex gap-6 [&>*]:w-1/2">
+      {/* Grid Layout */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <SelectInput form={form} name="title" {...select[0]} />
         <SelectInput form={form} name="company" {...select[1]} />
       </div>
 
-      {/* Location */}
       <SelectInput form={form} name="location" {...select[2]} />
 
-      {/* Summary */}
       <Textarea
         withAsterisk
         label="Summary"
@@ -131,30 +103,26 @@ const ExpInput = (props) => {
         {...form.getInputProps("description")}
       />
 
-      {/* Dates */}
-      <div className="flex gap-6 [&>*]:w-1/2">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <MonthPickerInput
           withAsterisk
           label="Start Date"
-          placeholder="Select start date"
           value={form.values.startDate}
-          onChange={(value) => form.setFieldValue("startDate", value)}
+          onChange={(v) => form.setFieldValue("startDate", v)}
           maxDate={new Date()}
         />
 
         <MonthPickerInput
           withAsterisk={!form.values.working}
           label="End Date"
-          placeholder="Select end date"
           value={form.values.endDate}
-          onChange={(value) => form.setFieldValue("endDate", value)}
+          onChange={(v) => form.setFieldValue("endDate", v)}
           disabled={form.values.working}
           minDate={form.values.startDate || undefined}
           maxDate={new Date()}
         />
       </div>
 
-      {/* Currently Working */}
       <Checkbox
         label="Currently working here"
         checked={form.values.working}
@@ -166,15 +134,23 @@ const ExpInput = (props) => {
         }}
       />
 
-      {/* Actions */}
-      <div className="flex gap-4 mt-2">
-        <Button color="green.8" variant="light" onClick={handleSave}>
+      <div className="flex flex-col sm:flex-row gap-4 mt-2">
+        <Button
+          color="green.8"
+          variant="filled"
+          onClick={handleSave}
+          fullWidth
+          className="sm:w-auto"
+        >
           Save
         </Button>
+
         <Button
           color="red.8"
-          variant="outline"
+          variant="light"
           onClick={() => props.setEdit(false)}
+          fullWidth
+          className="sm:w-auto"
         >
           Cancel
         </Button>

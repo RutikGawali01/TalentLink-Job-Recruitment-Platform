@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 public class Notification {
     private Long id;
     private Long userId;
+
     private String message;
     private String action;
     private String route;

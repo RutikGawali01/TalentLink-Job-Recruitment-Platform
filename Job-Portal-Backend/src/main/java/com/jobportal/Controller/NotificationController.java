@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/notification")
-@CrossOrigin
+@CrossOrigin(origins = "*")
 @Validated
 public class NotificationController {
 

@@ -17,8 +17,11 @@ import java.util.Base64;
 @Document(collection = "applicants")
 public class Applicant {
     private Long applicantId;
-//     private Long jobId;     // reference only
-//    private Long userId;
+    private Long jobId;     // reference only
+
+    private Long userId;
+    private Long ProfileId;
+
     private String name;
     private String email;
     private Long phone;
@@ -32,6 +35,9 @@ public class Applicant {
     public ApplicantDTO toDTO() {
         return new ApplicantDTO(
                 applicantId,
+                jobId,
+                userId,
+                ProfileId,
                 name,
                 email,
                 phone,

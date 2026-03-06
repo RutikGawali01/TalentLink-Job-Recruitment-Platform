@@ -1,14 +1,13 @@
 package com.jobportal.entity;
 
 import com.jobportal.DTO.CompanyDTO;
-import com.jobportal.DTO.EmployerProfileDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.annotation.Id;
 
-import java.time.LocalDate;
 import java.util.Base64;
 
 
@@ -19,9 +18,14 @@ import java.util.Base64;
 public class Company {
 
     @Id
-    private String id;
+    private Long id;
 
+    @Indexed(unique = true)
     private String name;
+
+    @Indexed(unique = true)
+    private String email;
+
     private String tagline;
 
     private String industry;
@@ -32,11 +36,13 @@ public class Company {
     private String companySize;
     private String workModel;
 
+    @Indexed(unique = true)
     private String website;
+
     private Integer foundedYear;
     private byte[] logo;
 
-    private Long EmployerId;
+    private Long employerId;
 
     private boolean profileCompleted;
     private boolean verified;
@@ -46,6 +52,7 @@ public class Company {
         return new CompanyDTO(
                 id,
                 name,
+                email,
                 tagline,
                 industry,
                 location,
@@ -56,7 +63,7 @@ public class Company {
                 website,
                 foundedYear,
                 logo != null ? Base64.getEncoder().encodeToString(logo) : null,
-                EmployerId,
+                employerId,
                 profileCompleted,
                 verified
         );

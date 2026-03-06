@@ -4,17 +4,17 @@ import ApplicantNavLinks from "./ApplicantNavLinks";
 import EmployerNavLinks from "./EmployerNavLinks";
 
 
-const NavLinksController = () => {
+const NavLinksController = (props) => {
   const user = useSelector((state) => state.user);
 
-  if (!user) return <PublicNavLinks />;
+  if (!user) return <PublicNavLinks {...props }/>;
 
   if (user.accountType === "APPLICANT") {
-    return <ApplicantNavLinks />;
+    return <ApplicantNavLinks  {...props } />;
   }
 
   if (user.accountType === "EMPLOYER") {
-    return <EmployerNavLinks />;
+    return <EmployerNavLinks {...props } />;
   }
 
   return null;

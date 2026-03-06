@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/employer/profile")
-@CrossOrigin
+@CrossOrigin(origins = "*")
 public class EmployerProfileController {
 
     @Autowired

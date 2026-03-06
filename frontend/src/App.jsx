@@ -4,6 +4,7 @@ import { Provider } from "react-redux";
 import Store from "./Store.jsx";
 import AppRoutes from "./pages/AppRoutes.jsx";
 import { DatesProvider } from "@mantine/dates";
+import { BrowserRouter } from "react-router-dom";
 
 function App() {
   // 🎨 Mantine Theme for Job Portal (Light)
@@ -84,7 +85,9 @@ return (
         {/* ✅ ADD THIS */}
         <DatesProvider settings={{ locale: "en" }}>
           <Notifications position="top-center" zIndex={1000} />
-          <AppRoutes />
+         <BrowserRouter>
+            <AppRoutes />
+          </BrowserRouter>
         </DatesProvider>
       </MantineProvider>
     </Provider>

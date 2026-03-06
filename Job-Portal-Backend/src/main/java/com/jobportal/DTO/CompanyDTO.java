@@ -1,7 +1,6 @@
 package com.jobportal.DTO;
 
 import com.jobportal.entity.Company;
-import com.jobportal.entity.EmployerProfile;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,9 +11,10 @@ import java.util.Base64;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CompanyDTO {
-    private String id;
+    private Long id;
 
     private String name;
+    private String email;
     private String tagline;
 
     private String industry;
@@ -29,7 +29,7 @@ public class CompanyDTO {
     private Integer foundedYear;
     private String logo;
 
-    private Long EmployerId;
+    private Long employerId;
 
     private boolean profileCompleted;
     private boolean verified;
@@ -38,6 +38,7 @@ public class CompanyDTO {
         return new Company(
                 id,
                 name,
+                email,
                 tagline,
                 industry,
                 location,
@@ -48,7 +49,7 @@ public class CompanyDTO {
                 website,
                 foundedYear,
                 logo != null ? Base64.getDecoder().decode(logo) : null,
-                EmployerId,
+                employerId,
                 profileCompleted,
                 verified
         );

@@ -1,60 +1,93 @@
-import {useMantineTheme, Button } from "@mantine/core";
-import {useState} from "react"
+import { Button } from "@mantine/core";
+import { useState } from "react";
+import { formateDate } from "../Services/Utilities";
+import { useSelector, useDispatch } from "react-redux";
+import { changeProfile } from "../Slice/ProfileSlice";
+import { successNotification } from "../Services/NotificationService";
 import ExpInput from "./ExpInput";
-import {formateDate} from "../Services/Utilities";
-import {useSelector, useDispatch} from "react-redux";
-import {changeProfile} from "../Slice/ProfileSlice"
-import {successNotification} from "../Services/NotificationService";
 
 const ExperienceCard = (props) => {
   const dispatch = useDispatch();
-    const theme = useMantineTheme();
-    const [edit, setEdit] = useState(false);
-    const profile  = useSelector((state)=> state.profile);
+  const profile = useSelector((state) => state.profile.data);
+  const [editMode, setEditMode] = useState(false);
 
-    const handleDelete =()=>{
-      let exp = [...profile.experiences];
-      exp.splice(props.index, 1);
-      let updatedProfile = {...profile, experiences: exp};
-      dispatch(changeProfile(updatedProfile));
-        successNotification("Success", "Experience deleted successfully");
-      
-    }
+  const handleDelete = () => {
+    let exp = [...profile.experiences];
+    exp.splice(props.index, 1);
+
+    dispatch(changeProfile({ ...profile, experiences: exp }));
+    successNotification("Success", "Experience deleted successfully");
+  };
+
+  if (editMode) {
+    return <ExpInput {...props} setEdit={setEditMode} />;
+  }
+
   return (
-     !edit ? <div className='flex flex-col gap-2'>
-         <div className='flex justify-between '>
-          <div className='flex gap-2 items-center '>
-              <div className='p-2 rounded-md  bg-mine-shaft-800 '> 
-                <img className='h-7 ' src={`/Icons/${props.company}.png`} alt="" /> 
-              </div>
+    <div className="flex flex-col gap-4">
 
-              <div className='flex flex-col  '>
-                 <div className='font-semibold'>{props.title}
-                  </div>
-                  <div className='text-sm text-mine-shaft-300'>
-                      {props.company} &#x2022; {props.location}
-                  </div>
-              </div>
+      {/* Top Row */}
+      <div className="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-3">
+
+        <div className="flex gap-3 items-start">
+          <div className="p-2 rounded-md bg-mine-shaft-800">
+            <img
+              className="h-6 sm:h-7"
+              src={`/Icons/${props.company}.png`}
+              alt=""
+            />
           </div>
 
-          <div className='text-sm text-mine-shaft-300 '>
-            {formateDate(props.startDate)} - {props.working ? "present":formateDate(props.endDate)}
+          <div>
+            <div className="font-semibold text-base sm:text-lg">
+              {props.title}
+            </div>
+
+            <div className="text-sm text-mine-shaft-300">
+              {props.company} • {props.location}
+            </div>
           </div>
-       </div>
+        </div>
 
+        <div className="text-sm text-mine-shaft-300">
+          {formateDate(props.startDate)} –{" "}
+          {props.working ? "Present" : formateDate(props.endDate)}
+        </div>
+      </div>
 
-       <div className='text-sm text-mine-shaft-300 text-justify  '>
-            {props.description}    
-       </div>
-       { props.edit && 
-        <div className="flex gap-5 " >
-            <Button onClick={() => setEdit(true)} color="brand" variant="outline">Edit </Button>
-            <Button color="red.8" onClick={handleDelete} variant="outline">Delete </Button>
-        </div>   
-        }   
+      {/* Description */}
+      <div className="text-sm sm:text-base text-mine-shaft-300 leading-relaxed">
+        {props.description}
+      </div>
 
-    </div>: <ExpInput   {...props} setEdit ={setEdit} />
-  )
-}
+      {/* Actions */}
+      {props.edit && (
+        <div className="flex flex-col sm:flex-row gap-3 mt-2">
+          <Button
+            onClick={() => setEditMode(true)}
+            color="brand"
+            variant="outline"
+            size="sm"
+            fullWidth
+            className="sm:w-auto"
+          >
+            Edit
+          </Button>
 
-export default ExperienceCard
+          <Button
+            color="red.8"
+            onClick={handleDelete}
+            variant="outline"
+            size="sm"
+            fullWidth
+            className="sm:w-auto"
+          >
+            Delete
+          </Button>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default ExperienceCard;

@@ -1,11 +1,14 @@
 package com.jobportal.Service;
 
+import com.jobportal.DTO.AccountType;
 import com.jobportal.DTO.EmployerProfileDTO;
 import com.jobportal.DTO.ProfileCompletionDTO;
 import com.jobportal.DTO.ProfileDTO;
 import com.jobportal.Exception.JobPortalException;
 import com.jobportal.Repository.EmployerProfileRepository;
+import com.jobportal.Repository.UserRepository;
 import com.jobportal.entity.EmployerProfile;
+import com.jobportal.entity.User;
 import com.jobportal.utility.Utilities;
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,15 +23,47 @@ public class EmployerProfileServiceImpl implements EmployerProfileService {
     @Autowired
     private EmployerProfileRepository employerProfileRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
+
     @Override
     public EmployerProfileDTO saveOrUpdateProfile(EmployerProfileDTO dto) throws JobPortalException {
-        employerProfileRepository.findById(dto.getId())
+
+        EmployerProfile profile = employerProfileRepository.findById(dto.getId())
                 .orElseThrow(() -> new JobPortalException("PROFILE_NOT_FOUND"));
 
-        EmployerProfile profile = dto.toEntity();
+        // ---------- Map DTO → Entity ----------
+//        profile.setFullName(dto.getFullName());
+//        profile.setRole(dto.getRole());
+//        profile.setPhone(dto.getPhone());
+//        profile.setProfilePicture(dto.getProfilePicture());
+//        profile.setBanner(dto.getBanner());
+
+         profile = dto.toEntity();
+
         employerProfileRepository.save(profile);
+
+        // ---------- 🔥 FETCH USER ----------
+        User user = userRepository.findByEmail(profile.getEmail())
+                .orElseThrow(() -> new JobPortalException("USER_NOT_FOUND"));
+
+        // ---------- UPDATE USER ONBOARDING ----------
+        user.setProfileId(profile.getId());
+        user.setProfileCompleted(true);   // profile saved → mark true
+
+        if (user.getAccountType() == AccountType.EMPLOYER) {
+            user.setProfileCompleted(true);
+            user.setOnboardingStep(2);
+            userRepository.save(user);
+        }
+
+
+        userRepository.save(user);
+
         return profile.toDTO();
     }
+
 
     @Override
     public EmployerProfileDTO getEmployerProfile(Long id) {
@@ -76,13 +111,11 @@ public class EmployerProfileServiceImpl implements EmployerProfileService {
         List<String> missing = new ArrayList<>();
 
         if (!notEmpty(p.getFullName())) missing.add("Recruiter Name");
-        //if(!notEmpty(p.getEmail())) missing.add("email");
-        if (p.getRole() == null) {
-            missing.add("Role");
-        }
-            if (!notEmpty(p.getPhone())) missing.add("phone");
-        if (p.getProfilePicture() == null || p.getProfilePicture().length == 0) missing.add("ProfilePicture");
-        if(p.getCompanyId() == null) missing.add("company id");
+        if (p.getRole() == null) missing.add("Role");
+        if (!notEmpty(p.getPhone())) missing.add("phone");
+        if (p.getProfilePicture() == null || p.getProfilePicture().length == 0)
+            missing.add("ProfilePicture");
+        if (p.getCompanyId() == null) missing.add("company id");
 
         int totalFields = 5;
         int completedFields = totalFields - missing.size();
@@ -90,16 +123,25 @@ public class EmployerProfileServiceImpl implements EmployerProfileService {
 
         boolean completed = percentage == 100;
 
-        // 🔥 sync boolean with DB (important)
+        // ---------- UPDATE EMPLOYER PROFILE ----------
         if (p.isProfileCompleted() != completed) {
             p.setProfileCompleted(completed);
             employerProfileRepository.save(p);
         }
 
+        // ---------- 🔥 SYNC WITH USER TABLE ----------
+        User user = userRepository.findByEmail(p.getEmail())
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
+        if (user.isProfileCompleted() != completed) {
+            user.setProfileCompleted(completed);
+            user.setProfileId(p.getId());
+            userRepository.save(user);
+        }
 
         return new ProfileCompletionDTO(completed, percentage, missing);
     }
+
 
 
 //    private int calculateProfileCompletion(EmployerProfile p) {

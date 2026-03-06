@@ -4,19 +4,24 @@ import {
   Input,
   RangeSlider,
   useMantineTheme,
+  Button,
+  Collapse,
 } from "@mantine/core";
 import React, { useState } from "react";
 import { searchFields } from "../assets/Data/TalentData";
 import { IconUserCircle } from "@tabler/icons-react";
 import { useDispatch } from "react-redux";
 import { updateFilter } from "../Slice/FilterSlice";
+import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 
 const SearchBar = () => {
+  const matches = useMediaQuery("(max-width: 550px)");
   const theme = useMantineTheme();
   const dispatch = useDispatch();
 
-  const [value, setValue] = useState([0, 40]); // exp range
-  const [name, setName] = useState(""); // talent name
+  const [opened, { toggle }] = useDisclosure(false);
+  const [value, setValue] = useState([0, 40]); // Experience range
+  const [name, setName] = useState(""); // Talent name
 
   const handleChange = (type, event) => {
     if (type === "exp") {
@@ -29,57 +34,103 @@ const SearchBar = () => {
   };
 
   return (
-    <div className="grid grid-cols-5 bg-white rounded-2xl px-4 py-4 gap-3">
-
-      {/* TALENT NAME */}
-      <div className="flex items-center gap-2 px-4 bg-tertiary rounded-2xl">
-        <div className="text-[var(--blue-600)] p-2">
-          <IconUserCircle size={25} />
-        </div>
-        <Input
-          value={name}
-          onChange={(e) => handleChange("name", e)}
-          className="[&_input]:!placeholder-gray-500"
-          variant="unstyled"
-          placeholder="Talent Name"
-        />
+    <div>
+      {/* Toggle Button For Mobile */}
+      <div className="flex justify-end">
+        {matches && (
+          <Button onClick={toggle} variant="filled" m="xs" radius="lg">
+            {opened ? "Close" : "Apply Filters"}
+          </Button>
+        )}
       </div>
 
-      {/* DROPDOWNS */}
-      {searchFields.map((item, idx) => (
-        <div
-          key={idx}
-          className="flex items-center px-3 py-3 bg-tertiary rounded-2xl"
-        >
-          <MultiInput {...item} />
-        </div>
-      ))}
+      {/* Collapse for mobile */}
+      <Collapse in={opened || !matches}>
+        <div className="flex flex-wrap items-stretch gap-4 px-5 py-6 bg-white rounded-2xl">
+          
+          {/* TALENT NAME */}
+          <div
+            className="
+              w-[19%] 
+              max-xl:w-[23%]
+              max-lg:w-[30%]
+              max-md:w-[48%]
+              max-sm:w-full
+              flex items-center gap-2 
+              px-4 py-3
+              bg-tertiary rounded-2xl
+            "
+          >
+            <div className="text-[var(--blue-600)]">
+              <IconUserCircle size={24} />
+            </div>
 
-      {/* EXPERIENCE */}
-      <div className="flex flex-col justify-center px-4 bg-tertiary rounded-2xl gap-2">
-        <div className="flex justify-between text-xs">
-          <span>Experience (Years)</span>
-          <span>
-            {value[0]} - {value[1]}
-          </span>
-        </div>
+            <Input
+              value={name}
+              onChange={(e) => handleChange("name", e)}
+              variant="unstyled"
+              placeholder="Talent Name"
+              className="flex-1 [&_input]:!placeholder-gray-500"
+            />
+          </div>
 
-        <RangeSlider
-          min={0}
-          max={40}
-          minRange={1}
-          value={value}
-          onChange={setValue}
-          onChangeEnd={(e) => handleChange("exp", e)}
-          color="brand"
-          size="xs"
-          labelTransitionProps={{
-            transition: "skew-down",
-            duration: 150,
-            timingFunction: "linear",
-          }}
-        />
-      </div>
+          {/* DROPDOWNS */}
+          {searchFields.map((item, idx) => (
+            <div
+              key={idx}
+              className="
+                w-[19%] 
+                max-xl:w-[23%]
+                max-lg:w-[30%]
+                max-md:w-[48%]
+                max-sm:w-full
+                flex items-center 
+                px-3 py-3 
+                bg-tertiary rounded-2xl
+              "
+            >
+              <MultiInput {...item} />
+            </div>
+          ))}
+
+          {/* EXPERIENCE */}
+          <div
+            className="
+              w-[19%] 
+              max-xl:w-[23%]
+              max-lg:w-[30%]
+              max-md:w-[48%]
+              max-sm:w-full
+              flex flex-col justify-center
+              px-4 py-3
+              bg-tertiary rounded-2xl
+            "
+          >
+            <div className="flex justify-between text-xs mb-2">
+              <span className="font-medium">Experience</span>
+              <span className="text-gray-600">
+                {value[0]} - {value[1]} Years
+              </span>
+            </div>
+
+            <RangeSlider
+              min={0}
+              max={40}
+              minRange={1}
+              value={value}
+              onChange={setValue}
+              onChangeEnd={(e) => handleChange("exp", e)}
+              color="brand"
+              size="xs"
+              labelTransitionProps={{
+                transition: "skew-down",
+                duration: 150,
+                timingFunction: "linear",
+              }}
+            />
+          </div>
+        </div>
+      </Collapse>
     </div>
   );
 };

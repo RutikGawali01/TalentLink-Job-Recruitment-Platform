@@ -1,66 +1,91 @@
-import React from "react";
+import React, { useRef } from "react";
 import { Carousel } from "@mantine/carousel";
-import {IconArrowRight , IconArrowLeft} from "@tabler/icons-react"
+import { IconArrowRight, IconArrowLeft } from "@tabler/icons-react";
+import Autoplay from "embla-carousel-autoplay";
 import { jobCategory } from "../assets/Data/Data";
 
 const JobCategory = () => {
+  const autoplay = useRef(
+    Autoplay({
+      delay: 2500,
+      stopOnInteraction: false,
+      stopOnMouseEnter: true,
+    }),
+  );
+
   return (
-    <div className="mt-20 py-10 bg-[var(--blue-100)]">
-      <div className="text-4xl mb-3 text-center font-semibold text-primary">
-        Browse <span className="text-[var(--blue-600)]">job </span> Category
+    <div className="w-full bg-[var(--blue-100)] py-16">
+      {/* Heading */}
+      <div className="text-center mb-6 px-4">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-primary">
+          Browse <span className="text-[var(--blue-600)]">job </span> Category
+        </h2>
       </div>
-      <div className="text-lg mb-10 mx-auto text-secondary text-center w-1/2 ">
+
+      {/* Subheading */}
+      <div className="text-sm sm:text-base md:text-lg mb-12 text-secondary text-center max-w-2xl mx-auto px-4">
         Explore diverse job opportunities tailored to your skills. Start your
         career journey today!
       </div>
 
-      <Carousel slideSize="22%" slideGap="md" loop={true} 
-        className="focus-visible:[&_button]:!outline-none  
-            [&_button]:!bg-[var(--blue-600)] [&_button]:!border-none 
-            [&_button]:hover:opacity-75 [&_button]:opacity-0
-            hover:[&_button]:opacity-100   "
-          nextControlIcon={<IconArrowRight className="h-8 w-8" />}
-          previousControlIcon={<IconArrowLeft className="h-8 w-8 " />}
+      {/* Carousel */}
+      <Carousel
+        plugins={[autoplay.current]}
+        align="start"
+        loop
+        slideGap="lg"
+        slideSize="25%" // Default for large screens (4 cards)
+        breakpoints={[
+          { maxWidth: 1024, slideSize: "33.333%" }, // ≤1024px → 3 cards
+          { maxWidth: 768, slideSize: "50%" }, // ≤768px → 2 cards
+          { maxWidth: 640, slideSize: "100%" }, // ≤640px → 1 card
+        ]}
+        className="px-4 sm:px-8 lg:px-20"
       >
-        {
-          jobCategory.map((category, index) => (
+        {jobCategory.map((category, index) => (
           <Carousel.Slide key={index}>
-
             <div
               className="
-                flex flex-col items-center w-64 gap-3 p-5 my-5
-                rounded-xl border-default bg-primary
-                shadow-sm transition-all duration-300 ease-in-out
-                hover:-translate-y-1 
-                hover:!shadow-blue hover:!border-accent
-                cursor-pointer"
+                  flex flex-col items-center justify-between
+                  rounded-xl max-w-[280px]
+                  border border-default
+                  bg-primary
+                  shadow-sm
+                  transition-all duration-300
+                  hover:-translate-y-1
+                  hover:shadow-lg
+                  hover:border-accent
+                  cursor-pointer
+                  min-w-[200px]
+
+                  h-[220px]           /* Mobile height */
+                  sm:h-[260px]        /* Tablet */
+                  lg:h-[280px]        /* Desktop */
+
+                  p-4                 /* Mobile padding */
+                  sm:p-6              /* Larger screens */
+                  "
             >
-                {/* Icon */}
-                <div className="p-3 rounded-full bg-[var(--blue-500)] hover:opacity-85 shadow-md">
-                  <img
-                    className="h-8 w-8"
-                    src={`/Category/${category.name}.png`}
-                    alt={category.name}
-                  />
-                </div>
+              <div className="p-4 rounded-full bg-[var(--blue-500)] shadow-md">
+                <img
+                  className="h-6 w-6 sm:h-8 sm:w-8 object-contain"
+                  src={`/Category/${category.name}.png`}
+                  alt={category.name}
+                />
+              </div>
 
-                {/* Title */}
-                <div className="text-xl font-semibold text-primary">
-                  {category.name}
-                </div>
+              <div className="text-lg font-semibold text-primary text-center">
+                {category.name}
+              </div>
 
-                {/* Description */}
-                <div className="text-sm text-center text-secondary leading-relaxed">
-                  {category.desc}
-                </div>
+              <div className="text-sm text-center text-secondary line-clamp-3">
+                {category.desc}
+              </div>
 
-                {/* Jobs Count */}
-                <div className="text-accent text-sm font-medium">
-                  {category.jobs}+ new jobs posted
-                </div>
-        </div>
-
-
+              <div className="text-accent text-sm font-medium">
+                {category.jobs}+ new jobs posted
+              </div>
+            </div>
           </Carousel.Slide>
         ))}
       </Carousel>

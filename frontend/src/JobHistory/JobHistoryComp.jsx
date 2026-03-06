@@ -1,84 +1,108 @@
-import { IconMapPin, IconBriefcase } from "@tabler/icons-react";
-import { Divider, Avatar, useMantineTheme, Tabs } from "@mantine/core";
+import { Tabs } from "@mantine/core";
 import Card from "./Card";
-import { getAllJobs } from "../Services/JobService";
 import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchAllJobs } from "../Slice/JobSlice";
 
 const JobHistoryComp = () => {
-  const profile = useSelector((state) => state.profile);
+  const dispatch = useDispatch();
+
+  const jobs = useSelector((state) => state.jobs.data);
+  const profile = useSelector((state) => state.profile.data);
   const user = useSelector((state) => state.user);
+
   const [activeTab, setActiveTab] = useState("APPLIED");
-  const [jobList, setJobList] = useState([]);
   const [showList, setShowList] = useState([]);
 
   useEffect(() => {
-
-    getAllJobs()
-      .then((res) => {
-
-        setJobList(res);
-        setShowList(res.filter((job)=>{
-        let found = false;
-        job.applicants?.forEach((applicant)=>{
-          if(applicant.applicantId == user.id && applicant.applicationStatus == "APPLIED"){
-            found = true;
-          }
-        })
-        return found;
-      }));
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
-
-  const handleTabChange = (value) => {
-    setActiveTab(value);
-    if (value == "SAVED") {
-      setShowList(jobList.filter((job) => profile.savedJobs?.includes(job.id)));
-    } else {
-      setShowList(jobList.filter((job)=>{
-        let found = false;
-        job.applicants?.forEach((applicant)=>{
-          if(applicant.applicantId == user.id && applicant.applicationStatus == value){
-            found = true;
-          }
-        })
-        return found;
-      }));
+    if (!jobs || jobs.length === 0) {
+      dispatch(fetchAllJobs());
     }
-  };
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (!jobs || jobs.length === 0) {
+      setShowList([]);
+      return;
+    }
+
+    if (activeTab === "SAVED") {
+      const saved = jobs.filter((job) =>
+        profile?.savedJobs?.includes(Number(job?.id)),
+      );
+      setShowList(saved);
+      return;
+    }
+
+    const filtered = jobs.filter((job) =>
+      job.applicants?.some(
+        (applicant) =>
+          Number(applicant.userId) === Number(user?.id) &&
+          applicant.applicationStatus === activeTab,
+      ),
+    );
+
+    setShowList(filtered);
+  }, [jobs, activeTab, profile, user]);
 
   return (
-    <div>
-      <div className="text-2xl font-semibold mb-5  "> Jobs history</div>
+    <div className="px-4 sm:px-6 lg:px-12 py-6">
+      <div className="max-w-7xl mx-auto">
+        {/* Title */}
+        <div className="text-xl sm:text-2xl font-semibold mb-6">
+          Jobs History
+        </div>
+
         <Tabs
           value={activeTab}
-          onChange={handleTabChange}
+          onChange={setActiveTab}
           variant="outline"
           radius="lg"
         >
+          {/* Scrollable Tabs for Mobile */}
           <Tabs.List
-            className="[&_button]:!text-lg font-semibold 
-                      [&_button[data-active='true']]:!text-[var(--blue-600)] mb-5"
+            className="
+              overflow-x-auto
+              whitespace-nowrap
+              [&_button]:!text-sm sm:[&_button]:!text-lg
+              font-semibold
+              [&_button[data-active='true']]:!text-[var(--blue-600)]
+              mb-6
+            "
           >
             <Tabs.Tab value="APPLIED">Applied</Tabs.Tab>
-            <Tabs.Tab value="SAVED"> Saved</Tabs.Tab>
-            <Tabs.Tab value="OFFERED"> offered</Tabs.Tab>
-            <Tabs.Tab value="INTERVIEWING"> Interviewing</Tabs.Tab>
+            <Tabs.Tab value="SAVED">Saved</Tabs.Tab>
+            <Tabs.Tab value="INTERVIEWING">Interviewing</Tabs.Tab>
+            <Tabs.Tab value="OFFERED">Offered</Tabs.Tab>
           </Tabs.List>
 
           <Tabs.Panel value={activeTab}>
-            <div className="flex mt-10 flex-wrap gap-5 justify-center">
-              {
-                showList.map((job, index) => (
-                  <Card key={index} {...job} {...{[activeTab.toLowerCase()]:true}} />
-                ))
-              }
-            </div>
+            {showList.length === 0 ? (
+              <div className="text-gray-500 mt-10 text-center text-lg sm:text-xl md:text-2xl lg:text-3xl px-4">
+                No jobs found
+              </div>
+            ) : (
+              <div
+                className="
+                  grid
+                  grid-cols-1
+                  sm:grid-cols-2
+                  lg:grid-cols-3
+                  gap-6
+                "
+              >
+                {showList.map((job) => (
+                  <Card
+                    key={job.id}
+                    {...job}
+                    {...{ [activeTab.toLowerCase()]: true }}
+                  />
+                ))}
+              </div>
+            )}
           </Tabs.Panel>
         </Tabs>
+      </div>
     </div>
   );
 };

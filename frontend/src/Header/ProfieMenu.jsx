@@ -10,56 +10,76 @@ import {
   IconMoonStars,
 } from "@tabler/icons-react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import {useDispatch, useSelector} from "react-redux"
-import {removeUser} from "../Slice/UserSlice"
-import {clearProfile} from "../Slice/ProfileSlice";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { removeUser } from "../Slice/UserSlice";
+import { clearProfile } from "../Slice/ProfileSlice";
 
-import {removeJwt} from "../Slice/JwtSlice"
+import { removeJwt } from "../Slice/JwtSlice";
 
 const ProfileMenu = () => {
-
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   // for state look up in userSLices
-  const user = useSelector((state)=> state.user);
-  
+  const user = useSelector((state) => state.user);
+
   const [checked, setChecked] = useState(false);
   const [opened, setOpened] = useState(false);
 
- const handleLogOut = () => {
-   dispatch(removeJwt());
-   dispatch(removeUser());
-   dispatch(clearProfile()); // if exists
-   localStorage.clear(); // optional but strong
-   //navigate("/login");
-};
+  const handleLogOut = () => {
+    dispatch(removeJwt());
+    dispatch(removeUser());
+    dispatch(clearProfile()); // if exists
+    localStorage.clear(); // optional but strong
+    navigate("/");
+  };
 
   const profile = useSelector((state) => state.profile);
-  const employerProfile = useSelector((state)=>state.employerProfile)
+  const employerProfile = useSelector((state) => state.employerProfile);
+  const getProfileRoute = () => {
+    if (user.accountType === "APPLICANT") {
+      return "/applicant/profile";
+    }
+
+    if (user.accountType === "EMPLOYER") {
+      if (user.onboardingStep === 1) {
+        return `/employer/profile/${user.profileId}`;
+      } else {
+        return `/employer/company-profile/${user.profileId}`;
+      }
+    }
+
+    return "/";
+  };
+
   return (
     <Menu shadow="md" width={200} opened={opened} onChange={setOpened}>
       <Menu.Target>
         <div className="cursor-pointer flex items-center gap-2">
-          <div>{user.name}</div>
-          <Avatar src={profile?.picture ? `data:image/jpeg;base64,${profile?.picture}`:"/avatar.png"} alt="it's me" />
+          <div className="max-[476px]:">{user.name}</div>
+          <Avatar
+            src={
+              profile?.picture
+                ? `data:image/jpeg;base64,${profile?.picture}`
+                : "/avatar.png"
+            }
+            alt="it's me"
+          />
         </div>
       </Menu.Target>
 
       <Menu.Dropdown onChange={() => setOpened(true)}>
-        
-        <Link to={user.accountType === "EMPLOYER"
-            ? "/employer/profile"
-            : "/applicant/profile"}
-          >
+        <Link to={getProfileRoute()}>
           <Menu.Item leftSection={<IconUserCircle size={14} />}>
             Profile
           </Menu.Item>
         </Link>
-
         <Menu.Item leftSection={<IconMessageCircle size={14} />}>
           Messages
         </Menu.Item>
-        <Menu.Item leftSection={<IconFileText size={14} />}>Resume</Menu.Item>
+        {user?.accountType === "APPLICANT" && (
+          <Menu.Item leftSection={<IconFileText size={14} />}>Resume</Menu.Item>
+        )}{" "}
         <Menu.Item
           leftSection={<IconMoon size={14} />}
           rightSection={
@@ -69,11 +89,7 @@ const ProfileMenu = () => {
               size="md"
               color="brand"
               onLabel={
-                <IconSun
-                  size={16}
-                  stroke={2.5}
-                  color="var(--blue-500)"
-                />
+                <IconSun size={16} stroke={2.5} color="var(--blue-500)" />
               }
               offLabel={
                 <IconMoonStars
@@ -87,9 +103,12 @@ const ProfileMenu = () => {
         >
           Dark mode
         </Menu.Item>
-
         <Menu.Divider />
-        <Menu.Item onClick={handleLogOut} color="red" leftSection={<IconLogout2 size={14} />}>
+        <Menu.Item
+          onClick={handleLogOut}
+          color="red"
+          leftSection={<IconLogout2 size={14} />}
+        >
           Log Out
         </Menu.Item>
       </Menu.Dropdown>

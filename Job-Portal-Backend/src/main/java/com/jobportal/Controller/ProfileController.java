@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "*")
 @RequestMapping("/profiles")
 @Validated
 public class ProfileController {
@@ -25,7 +25,7 @@ public class ProfileController {
     @Autowired
     private ProfileService profileService;
 
-    // get profile by id
+    // get profile by id {profile id}
     @GetMapping("/get/{id}")
     public ResponseEntity<ProfileDTO> getProfile(@PathVariable Long id) throws Exception{
         //profileService.getProfile(id);

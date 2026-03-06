@@ -20,7 +20,7 @@ const CommpanyPage = () => {
         my="md"
         onClick={() => navigate(-1)}
         leftSection={<IconArrowLeft size={20} />}
-        color={theme.colors.brightSun[4]}
+        color={"brand.4"}
         variant="light"
       >
         Back{" "}

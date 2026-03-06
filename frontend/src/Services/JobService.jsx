@@ -25,7 +25,7 @@ const applyJob = async (id, applicant) =>{
 
 }
 const getJobPostedBy= async (id)=>{
-    return axiaxiosInstanceos.get(`/jobs/postedBy/${id}`)
+    return axiosInstance.get(`/jobs/postedBy/${id}`)
     .then(result => result.data)
     .catch(error => {throw error});
 }

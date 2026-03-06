@@ -12,6 +12,7 @@ const TalentProfilePage = () => {
   const navigate = useNavigate();
    const theme = useMantineTheme();
    const [talents , setTalents] = useState([]);
+   
    useEffect(() => {
     getAllProfile().then((res)=>{
       setTalents(res);
@@ -23,10 +24,10 @@ const TalentProfilePage = () => {
   return (
     <div className="min-h-[100vh] bg-mine-shaft-950 font-['poppins'] p-4">
       
-          <Button my={"sm"} onClick={()=> navigate(-1)} leftSection={<IconArrowLeft size={20}  />} color={theme.colors.brightSun[4]}  variant='light' >Back </Button>
+          <Button my={"sm"} onClick={()=> navigate(-1)} leftSection={<IconArrowLeft size={20}  />} color={"brand.4"}  variant='light' >Back </Button>
     
         {/* <Divider  size="xs"   /> */}
-        <div className="flex gap-5 ">
+        <div className="flex gap-5 px-25 py-5 mb-15">
           <Profile {...profile} />
           <RecommendTalent talents ={talents}  />
 

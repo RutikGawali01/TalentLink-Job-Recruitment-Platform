@@ -1,57 +1,112 @@
-import React from 'react'
-import {work} from "../assets/Data/Data";
-import {Avatar} from "@mantine/core";
+import React from "react";
+import { work } from "../assets/Data/Data";
+import { Avatar } from "@mantine/core";
 import avatar1 from "/avatar1.png";
 
 const Working = () => {
   return (
-    <div className="mt-20 pb-5">
-      <div className="text-4xl mb-3 text-center font-semibold text-primary">
-        How it <span className="text-[var(--blue-600)]">works </span> 
+    <div className="py-16">
+
+      {/* Heading */}
+      <div className="text-center mb-4 px-4">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-primary">
+          How it <span className="text-[var(--blue-600)]">works</span>
+        </h2>
       </div>
-      <div className="text-lg mb-10 mx-auto text-secondary text-center w-1/2 ">
-        Effortlessly navigate through the process and 
-        land your dream job.
+
+      {/* Subheading */}
+      <div className="text-sm sm:text-base md:text-lg mb-12 text-secondary text-center max-w-xl mx-auto px-4">
+        Effortlessly navigate through the process and land your dream job.
       </div>
 
-      <div className='flex px-16 justify-between items-center'>
-        <div className='relative'>
-            <img className='w-[30rem] ' src="/Working/Girl.png" alt="girl" />
+      {/* Main Section */}
+      <div className="flex flex-col lg:flex-row items-center lg:items-start gap-12 px-6 sm:px-10 lg:px-20">
 
-            <div className='w-36 flex flex-col top-[10%] right-0 absolute items-center gap border border-accent
-            rounded-xl py-3 px-1 backdrop-blur-md   '>
-              <Avatar className='!h-16 !w-16 '
-              src={avatar1} alt="it's me" />
-              <div className='text-sm font-semibold text-seconadary text-center '>
-                Complete Your Profile 
-              </div>
-              <div className='text-xs text-[var(--blue-600)]  '>
-                70% Completed
-              </div>
+        {/* IMAGE SECTION */}
+        <div className="relative flex justify-center w-full lg:w-1/2">
 
+          <img
+            className="w-[16rem] sm:w-[20rem] md:w-[24rem] lg:w-[30rem]"
+            src="/Working/Girl.png"
+            alt="girl"
+          />
+
+          {/* Floating Card */}
+          <div
+            className="
+            absolute
+            top-[8%]
+            right-[8%]
+            w-28 sm:w-32
+            flex flex-col items-center
+            border border-accent
+            rounded-xl
+            py-3 px-2
+            bg-white/90
+            backdrop-blur-md
+            shadow-md
+            "
+          >
+            <Avatar
+              className="!h-10 !w-10 sm:!h-14 sm:!w-14"
+              src={avatar1}
+              alt="profile"
+            />
+
+            <div className="text-xs sm:text-sm font-semibold text-secondary text-center mt-2">
+              Complete Your Profile
             </div>
-        </div>
-        <div className='flex flex-col gap-10 '>
-            {
-                work.map((item, index)=> 
-                    <div key={index} className='flex items-center gap-4 border-default p-4 rounded-lg bg-blue-100'>
-                        <div className='p-2.5 bg-[var(--blue-400)] hover:opacity-85 text-[--bg-primary] rounded-full'>
-                            <img className='h-12 w-12' src={`/Working/${item.name}.png`} alt={item.name} />
-                        </div>
 
-                        <div className=''>
-                            <div className='text-xl text-primary font-semibold '>{item.name}</div>
-                            <div className='text-secondary '>{item.desc}</div>
-                        </div>
-                  </div>
-                )
-            }
+            <div className="text-[10px] sm:text-xs text-[var(--blue-600)]">
+              70% Completed
+            </div>
+          </div>
+          
+        </div>
+
+        {/* STEPS SECTION */}
+        <div className="flex flex-col gap-6 w-full lg:w-1/2">
+
+          {work.map((item, index) => (
+            <div
+              key={index}
+              className="
+              flex flex-col sm:flex-row
+              items-center sm:items-start
+              text-center sm:text-left
+              gap-4
+              p-4
+              rounded-lg
+              bg-[var(--blue-100)]
+              border border-default
+              shadow-sm
+              "
+            >
+              {/* Icon */}
+              <div className="p-2.5 bg-[var(--blue-400)] rounded-full flex items-center justify-center">
+                <img
+                  className="h-8 w-8 sm:h-10 sm:w-10"
+                  src={`/Working/${item.name}.png`}
+                  alt={item.name}
+                />
+              </div>
+
+              {/* Text */}
+              <div>
+                <div className="text-base sm:text-xl text-primary font-semibold">
+                  {item.name}
+                </div>
+                <div className="text-sm sm:text-base text-secondary">
+                  {item.desc}
+                </div>
+              </div>
+            </div>
+          ))}
+
         </div>
       </div>
-      
     </div>
-  )
-}
+  );
+};
 
-export default Working
- 
+export default Working;

@@ -10,13 +10,15 @@ import {useLocation} from "react-router-dom";
 const FooterComp = () => {
   const location = useLocation();
   return (
-    location.pathname != "/applicant/signup" && location.pathname != "/employer/signup" &&
-    location.pathname != "/applicant/login" && location.pathname != "/employer/login" &&
-    <div className="pt-20 pb-5 flex gap-5 justify-around bg-[var(--blue-100)] font-['poppins] ">
-      <div className="w-1/4 flex flex-col gap-4 ">
+    location.pathname != "/signup" && 
+    location.pathname != "/login" && 
+    <div className="pt-20 pb-5 flex flex-wrap gap-8 justify-around bg-[var(--blue-100)] font-['poppins] ">
+      
+      <div className="w-1/4 max-[640px]:w-1/3 max-[475px]:w-1/2 max-[350px]:w-full flex flex-col gap-4 ">
+
         <div className="flex gap-1 items-center text-bright-sun-400">
           <IconAnchor className="h-6 w-6 " stroke={2.25} />
-          <div className="text-xl font-semibold">Find Job</div>
+          <div className="text-xl font-semibold">HireFlow</div>
         </div>
         <div className="text-sm text-mine-shaft-300 ">
           Job portal with user profiles, skill updates, certifications, work
@@ -42,10 +44,10 @@ const FooterComp = () => {
         {
             footerLinks.map((item,index) => 
                 <div key={index} className="">
-                    <div className="text-lg font-semibold mb-4 text-bright-sun-400">{item.title}</div>
+                    <div className="text-lg font-semibold mb-4 text-[var(--blue-500)]">{item.title}</div>
                     {
                         item.links.map((link, index) => 
-                        <div key={index} className="text-mine-shaft-300 text-sm 
+                        <div key={index} className="text-primary text-sm 
                         hover:text-bright-sun-400 cursor-pointer mb-1 hover:translate-x-2 transition duration-300 ease-in-out">
                             {link}
                         </div> )

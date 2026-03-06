@@ -25,9 +25,14 @@ public class ProfileServiceImpl implements ProfileService{
     private final ModelMapper modelMapper;
 
     @Override
-    public Long createProfile(String email) throws JobPortalException {
+    public Long createProfile(Long userId, String email ,String name) throws JobPortalException {
         Profile profile = new Profile();
+
         profile.setId(Utilities.getNextSequence("profiles"));
+
+
+        profile.setUserId(userId);
+        profile.setName(name);
         profile.setEmail(email);
         profile.setSkills(new ArrayList<>());
         profile.setExperiences(new ArrayList<>());
@@ -39,8 +44,10 @@ public class ProfileServiceImpl implements ProfileService{
         return profile.getId();
     }
 
+    //
     @Override
     public ProfileDTO getProfile(Long id) throws JobPortalException {
+
         Profile profile = profileRepository.findById(id)
                 .orElseThrow(() -> new JobPortalException("PROFILE_NOT_FOUND"));
 
@@ -62,6 +69,9 @@ public class ProfileServiceImpl implements ProfileService{
         profile.setTotalExp(profileDTO.getTotalExp());
         profile.setAbout(profileDTO.getAbout());
         profile.setPortfolio(profileDTO.getPortfolio());
+        profile.setSavedJobs(profileDTO.getSavedJobs());
+
+
 
         /* ---------- PROFILE PICTURE (IMPORTANT) ---------- */
         if (profileDTO.getPicture() != null) {
@@ -69,9 +79,9 @@ public class ProfileServiceImpl implements ProfileService{
         }
 
         /* ---------- BANNER ---------- */
-//        if (profileDTO.getBanner() != null) {
-//            profile.setBanner(Base64.getDecoder().decode(profileDTO.getBanner()));
-//        }
+        if (profileDTO.getBanner() != null) {
+            profile.setBanner(Base64.getDecoder().decode(profileDTO.getBanner()));
+        }
 
         /* ---------- SKILLS ---------- */
         if (profileDTO.getSkills() != null) {

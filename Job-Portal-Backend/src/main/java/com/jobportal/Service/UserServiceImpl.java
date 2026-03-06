@@ -59,33 +59,38 @@ public class UserServiceImpl implements UserService{
     @Transactional(rollbackFor = JobPortalException.class)
     // this is bcz transcation does not roll back for job portal exception it only roll back for runtime exec
     public UserDTO registerUser(UserDTO userDTO) throws JobPortalException {
-        //Optional<User> avoids NullPointerException
+
         Optional<User> optionalUser = userRepository.findByEmail(userDTO.getEmail());
 
-        // if user present -- stop registration
-        if(optionalUser.isPresent())
+        if (optionalUser.isPresent())
             throw new JobPortalException("USER_FOUND");
+        Long userId = Utilities.getNextSequence("users");
+        userDTO.setId(userId);
 
-        // creates profile at the time of signup
-        if(userDTO.getAccountType() == AccountType.APPLICANT){
-            userDTO.setProfileId(
-                    profileService.createProfile(userDTO.getEmail())
-            );
-        }else if(userDTO.getAccountType() == AccountType.EMPLOYER){
+
+        // ---------- CREATE PROFILE BASED ON ROLE ----------
+        if (userDTO.getAccountType() == AccountType.APPLICANT) {
+
+            Long profileId = profileService.createProfile(userId, userDTO.getEmail(), userDTO.getName());
+            userDTO.setProfileId(profileId);
+            userDTO.setOnboardingStep(4);
+        }
+        else if (userDTO.getAccountType() == AccountType.EMPLOYER) {
             userDTO.setProfileId(
                     employerProfileService.createProfile(userDTO.getEmail())
             );
+
+            // Employer must complete onboarding
+            userDTO.setOnboardingStep(1);
         }
 
-        userDTO.setId(Utilities.getNextSequence("users"));
+
         userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-        //User user = userDTO.toEntity();
 
         User user = modelMapper.map(userDTO, User.class);
-//        System.out.println("DTO profileId = " + userDTO.getProfileId());
-//        System.out.println("Entity profileId before save = " + user.getProfileId());
 
-        user =  userRepository.save(user);
+        user = userRepository.save(user);
+
         return modelMapper.map(user, UserDTO.class);
     }
 

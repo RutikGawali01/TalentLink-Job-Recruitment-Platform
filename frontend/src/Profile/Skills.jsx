@@ -1,27 +1,17 @@
 import { useState } from "react";
-import {
-  ActionIcon,
-  TagsInput,
-} from "@mantine/core";
-import {
-  IconPencil,
-  IconCheck,
-  IconX,
-} from "@tabler/icons-react";
+import { ActionIcon, TagsInput } from "@mantine/core";
+import { IconPencil, IconCheck, IconX } from "@tabler/icons-react";
 import { useSelector, useDispatch } from "react-redux";
 import { changeProfile } from "../Slice/ProfileSlice";
 import { successNotification } from "../Services/NotificationService";
 
 const Skills = () => {
-  /* ---------------- REDUX ---------------- */
   const dispatch = useDispatch();
-  const profile = useSelector((state) => state.profile);
+  const profile = useSelector((state) => state.profile.data);
 
-  /* ---------------- STATE ---------------- */
   const [edit, setEdit] = useState(false);
   const [skills, setSkills] = useState([]);
 
-  /* ---------------- HANDLERS (SAME LOGIC) ---------------- */
   const handleEdit = () => {
     setEdit(true);
     setSkills(profile.skills || []);
@@ -32,28 +22,48 @@ const Skills = () => {
     setSkills(profile.skills || []);
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     const updatedProfile = {
       ...profile,
       skills,
     };
 
-    dispatch(changeProfile(updatedProfile));
+    await dispatch(changeProfile(updatedProfile)).unwrap();
     setEdit(false);
     successNotification("Success", "Skills updated successfully");
   };
 
-  /* ---------------- UI ---------------- */
+  if (!profile) {
+    return (
+      <div className="p-6 text-center text-gray-500">
+        Loading profile...
+      </div>
+    );
+  }
+
   return (
-    <div className="bg-white rounded-2xl shadow-sm p-6 border-default">
+    <div
+      className="
+        bg-white 
+        rounded-2xl 
+        shadow-sm 
+        border-default
+        p-4 
+        sm:p-6 
+        md:p-8
+      "
+    >
       {/* ===== Header ===== */}
-      <div className="flex justify-between items-center mb-4 pb-3 border-b-2 border-slate-200">
-        <h2 className="text-xl font-bold text-slate-900">Skills</h2>
+      <div className="flex justify-between items-center mb-6 pb-3 border-b-2 border-slate-200">
+        <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-slate-900">
+          Skills
+        </h2>
 
         {!edit ? (
           <ActionIcon
             variant="subtle"
             color="brand"
+            size="lg"
             onClick={handleEdit}
           >
             <IconPencil size={20} />
@@ -63,6 +73,7 @@ const Skills = () => {
             <ActionIcon
               variant="subtle"
               color="green.8"
+              size="lg"
               onClick={handleSave}
             >
               <IconCheck size={20} />
@@ -71,6 +82,7 @@ const Skills = () => {
             <ActionIcon
               variant="subtle"
               color="red.8"
+              size="lg"
               onClick={handleCancel}
             >
               <IconX size={20} />
@@ -81,27 +93,50 @@ const Skills = () => {
 
       {/* ===== Content ===== */}
       {edit ? (
-        <TagsInput
-          value={skills}
-          onChange={setSkills}
-          placeholder="Add skills"
-          splitChars={[",", " ", "|"]}
-          className="w-full"
-        />
+        <div className="max-w-3xl">
+          <TagsInput
+            value={skills}
+            onChange={setSkills}
+            placeholder="Add skills (Press Enter or comma)"
+            splitChars={[",", " ", "|"]}
+            className="w-full text-sm sm:text-base"
+          />
+        </div>
       ) : (
-        <div className="flex flex-wrap gap-2">
+        <div
+          className="
+            flex 
+            flex-wrap 
+            gap-2 
+            sm:gap-3
+          "
+        >
           {profile?.skills?.length > 0 ? (
             profile.skills.map((skill, index) => (
               <span
                 key={index}
-                className="px-3 py-1 rounded-full text-sm font-medium 
-                  bg-slate-100 text-slate-800 border border-slate-200"
+                className="
+                  px-3 
+                  py-1 
+                  sm:px-4 
+                  sm:py-1.5
+                  rounded-full 
+                  text-xs 
+                  sm:text-sm 
+                  font-medium
+                  bg-slate-100 
+                  text-slate-800 
+                  border 
+                  border-slate-200
+                  hover:bg-slate-200
+                  transition
+                "
               >
                 {skill}
               </span>
             ))
           ) : (
-            <p className="text-sm text-slate-400">
+            <p className="text-sm sm:text-base text-slate-400">
               No skills added yet
             </p>
           )}

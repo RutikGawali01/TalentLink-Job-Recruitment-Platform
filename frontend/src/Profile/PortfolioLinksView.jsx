@@ -10,12 +10,28 @@ const LinkCard = ({ Icon, label, url }) => (
     href={url}
     target="_blank"
     rel="noopener noreferrer"
-    className="flex items-center gap-3 p-4 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 transition"
+    className="
+      flex 
+      items-center 
+      gap-3 
+      p-4 
+      sm:p-5
+      rounded-xl 
+      border 
+      border-slate-200 
+      bg-slate-50 
+      hover:bg-slate-100 
+      transition
+      hover:shadow-sm
+    "
   >
     <Icon className="text-slate-700" size={22} />
+
     <div className="min-w-0">
-      <div className="text-xs text-slate-500">{label}</div>
-      <div className="text-sm font-medium text-slate-900 truncate">
+      <div className="text-xs tracking-wide text-slate-500">
+        {label}
+      </div>
+      <div className="text-sm sm:text-base font-medium text-slate-900 truncate">
         {url}
       </div>
     </div>
@@ -30,14 +46,23 @@ const PortfolioLinksView = ({ portfolio }) => {
     !portfolio?.other
   ) {
     return (
-      <p className="text-sm text-slate-400">
+      <p className="text-sm sm:text-base text-slate-400">
         No portfolio links added yet
       </p>
     );
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+    <div
+      className="
+        grid 
+        grid-cols-1 
+        sm:grid-cols-2 
+        lg:grid-cols-3 
+        xl:grid-cols-4 
+        gap-4
+      "
+    >
       {portfolio?.website && (
         <LinkCard
           Icon={IconWorld}

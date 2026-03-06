@@ -34,7 +34,7 @@ const Profile = (props) => {
       <div className="px-3 mt-16  ">
         <div className="text-3xl font-semibold flex justify-between ">
           {profile?.name}
-          <Button color={theme.colors.brightSun[4]} variant="light">
+          <Button color={"brand.4"} variant="light">
             Messege{" "}
           </Button>
         </div>
