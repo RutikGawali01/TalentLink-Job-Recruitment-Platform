@@ -39,7 +39,15 @@ public class AppConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();// object that store CORS rules.
 
-        config.setAllowedOrigins(List.of("http://localhost:5173"));// only react app can call api
+//        config.setAllowedOrigins(List.of("http://localhost:5173"));// only react app can call api
+//        config.setAllowedOrigins(List.of(
+//                "http://localhost:5173",
+//                "https://job-portal-frontend.onrender.com"
+//        ));
+
+        config.setAllowedOriginPatterns(List.of("*"));
+
+
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setExposedHeaders(List.of("Authorization"));//Allows frontend to read JWT from response headers
