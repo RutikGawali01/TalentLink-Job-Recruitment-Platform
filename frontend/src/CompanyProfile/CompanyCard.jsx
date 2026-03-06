@@ -21,7 +21,7 @@ const CompanyCard = (props) => {
               </div>
 
           </div>
-          <ActionIcon color={theme.colors.brightSun[4]} variant="subtle" >
+          <ActionIcon color={"brand.4"} variant="subtle" >
             <IconExternalLink   />
           </ActionIcon>
             

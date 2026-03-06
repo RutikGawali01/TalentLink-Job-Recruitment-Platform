@@ -1,13 +1,6 @@
 import { useState } from "react";
-import {
-  ActionIcon,
-  TextInput,
-} from "@mantine/core";
-import {
-  IconPencil,
-  IconCheck,
-  IconX,
-} from "@tabler/icons-react";
+import { ActionIcon, TextInput } from "@mantine/core";
+import { IconPencil, IconCheck, IconX } from "@tabler/icons-react";
 import { useDispatch, useSelector } from "react-redux";
 import { changeProfile } from "../Slice/ProfileSlice";
 import {
@@ -18,7 +11,7 @@ import { PortfolioLinksView } from "./PortfolioLinksView";
 
 const PortfolioLinks = () => {
   const dispatch = useDispatch();
-  const profile = useSelector((state) => state.profile);
+  const profile = useSelector((state) => state.profile.data);
 
   const [edit, setEdit] = useState(false);
   const [form, setForm] = useState({
@@ -28,7 +21,6 @@ const PortfolioLinks = () => {
     other: "",
   });
 
-  /* ---------------- EDIT ---------------- */
   const handleEdit = () => {
     setForm({
       website: profile.portfolio?.website || "",
@@ -39,7 +31,6 @@ const PortfolioLinks = () => {
     setEdit(true);
   };
 
-  /* ---------------- SAVE ---------------- */
   const handleSave = async () => {
     try {
       await dispatch(
@@ -57,43 +48,69 @@ const PortfolioLinks = () => {
       setEdit(false);
       successNotification("Success", "Portfolio links updated");
     } catch (err) {
-        console.log(err);
       errorNotification("Error", "Failed to update portfolio links");
     }
   };
 
-  /* ---------------- CANCEL ---------------- */
-  const handleCancel = () => {
-    setEdit(false);
-  };
+  if (!profile) {
+    return (
+      <div className="p-6 text-center text-gray-500">
+        Loading profile...
+      </div>
+    );
+  }
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm p-6 border-default">
-      {/* ===== Header ===== */}
-      <div className="flex justify-between items-center mb-4 pb-3 border-b-2 border-slate-200">
-        <h2 className="text-xl font-bold text-slate-900">
+    <div
+      className="
+        bg-white 
+        rounded-2xl 
+        shadow-sm 
+        border-default
+        p-4 
+        sm:p-6 
+        md:p-8
+      "
+    >
+      {/* Header */}
+      <div className="flex justify-between items-center mb-6 pb-3 border-b-2 border-slate-200">
+        <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-slate-900">
           Portfolio & Links
         </h2>
 
         {!edit ? (
-          <ActionIcon variant="subtle" color="brand" onClick={handleEdit}>
+          <ActionIcon
+            variant="subtle"
+            color="brand"
+            size="lg"
+            onClick={handleEdit}
+          >
             <IconPencil size={20} />
           </ActionIcon>
         ) : (
           <div className="flex gap-2">
-            <ActionIcon variant="subtle" color="green.8" onClick={handleSave}>
+            <ActionIcon
+              variant="subtle"
+              color="green.8"
+              size="lg"
+              onClick={handleSave}
+            >
               <IconCheck size={20} />
             </ActionIcon>
-            <ActionIcon variant="subtle" color="red.8" onClick={handleCancel}>
+            <ActionIcon
+              variant="subtle"
+              color="red.8"
+              size="lg"
+              onClick={() => setEdit(false)}
+            >
               <IconX size={20} />
             </ActionIcon>
           </div>
         )}
       </div>
 
-      {/* ===== Edit Mode ===== */}
       {edit ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 max-w-4xl">
           <TextInput
             label="Website"
             placeholder="https://yourwebsite.com"

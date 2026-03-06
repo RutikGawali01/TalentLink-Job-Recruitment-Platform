@@ -11,9 +11,10 @@ const getProfile = async (id)=>{
 }
 
 const updateProfile = async (profile)=>{
+    
     return axiosInstance.put(`/profiles/update`, profile)
     .then(res=> res.data)
-    .catch(error=> {throw error;});
+    .catch(error=> {throw error;}); 
 }
 
 const getAllProfile = async ()=>{

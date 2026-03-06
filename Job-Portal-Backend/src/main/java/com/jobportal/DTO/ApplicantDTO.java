@@ -15,6 +15,11 @@ import java.util.Base64;
 public class ApplicantDTO {
 
     private Long applicantId;
+    private Long jobId;     // reference only
+
+    private Long userId;
+    private Long ProfileId;
+
     private String name;
     private String email;
     private Long phone;
@@ -28,6 +33,9 @@ public class ApplicantDTO {
     public Applicant toEntity() {
         return new Applicant(
                 applicantId,
+                jobId,
+                userId,
+                ProfileId,
                 name,
                 email,
                 phone,

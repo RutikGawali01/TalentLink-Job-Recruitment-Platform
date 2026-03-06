@@ -13,7 +13,7 @@ import java.io.PrintWriter;
 @Component
 //This class is responsible for handling unauthenticated access to secured endpoints.
 //AuthenticationEntryPoint → mandatory interface for handling authentication failures
-public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
+public class    JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
 //    This method is automatically called by Spring Security filter chain when:
         //❌ User is not authenticated

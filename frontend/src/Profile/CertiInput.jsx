@@ -6,21 +6,9 @@ import { successNotification } from "../Services/NotificationService";
 import SelectInput from "./SelectInput";
 import fields from "../assets/Data/Profile";
 
-const normalizeDate = (value) => {
-  if (!value) return null;
-
-  if (typeof value === "string") {
-    if (value.length === 10) return `${value}T00:00:00`;
-    return value;
-  }
-
-  if (value instanceof Date) return value.toISOString();
-  return null;
-};
-
 const CertiInput = ({ add, setEdit }) => {
   const dispatch = useDispatch();
-  const profile = useSelector((state) => state.profile);
+  const profile = useSelector((state) => state.profile.data);
   const select = fields;
 
   const form = useForm({
@@ -35,7 +23,6 @@ const CertiInput = ({ add, setEdit }) => {
     validate: {
       name: isNotEmpty("Name is required"),
       issuer: isNotEmpty("Issuer is required"),
-      issueDate: isNotEmpty("Issue date is required"),
       certificateId: isNotEmpty("Certificate ID is required"),
     },
   });
@@ -44,15 +31,8 @@ const CertiInput = ({ add, setEdit }) => {
     form.validate();
     if (!form.isValid()) return;
 
-    const values = form.getValues();
-
-    const formattedCert = {
-      ...values,
-      issueDate: normalizeDate(values.issueDate),
-    };
-
     let certs = [...(profile.certifications || [])];
-    certs.push(formattedCert);
+    certs.push(form.getValues());
 
     dispatch(
       changeProfile({
@@ -66,34 +46,50 @@ const CertiInput = ({ add, setEdit }) => {
   };
 
   return (
-    <div className="flex flex-col gap-4">
-      <h3 className="text-lg font-semibold">Add Certificate</h3>
+    <div className="flex flex-col gap-6">
+      <h3 className="text-lg sm:text-xl font-semibold">
+        Add Certificate
+      </h3>
 
-      <div className="flex gap-6 [&>*]:w-1/2">
+      {/* Responsive Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <TextInput
           {...form.getInputProps("name")}
           withAsterisk
           label="Title"
-          placeholder="Enter certificate title"
         />
-        <SelectInput form={form} name="issuer" {...select[1]} />
-      </div>
 
-      <div className="flex gap-6 [&>*]:w-1/2">
-        {/* Use MonthPickerInput later if needed */}
-        <TextInput
-          {...form.getInputProps("certificateId")}
-          withAsterisk
-          label="Certificate ID"
-          placeholder="Enter ID"
+        <SelectInput
+          form={form}
+          name="issuer"
+          {...select[1]}
         />
       </div>
 
-      <div className="flex gap-4">
-        <Button color="green.8" variant="light" onClick={handleSave}>
+      <TextInput
+        {...form.getInputProps("certificateId")}
+        withAsterisk
+        label="Certificate ID"
+      />
+
+      <div className="flex flex-col sm:flex-row gap-4">
+        <Button
+          color="green.8"
+          variant="filled"
+          onClick={handleSave}
+          fullWidth
+          className="sm:w-auto"
+        >
           Save
         </Button>
-        <Button color="red.8" variant="outline" onClick={() => setEdit(false)}>
+
+        <Button
+          color="red.8"
+          variant="light"
+          onClick={() => setEdit(false)}
+          fullWidth
+          className="sm:w-auto"
+        >
           Cancel
         </Button>
       </div>

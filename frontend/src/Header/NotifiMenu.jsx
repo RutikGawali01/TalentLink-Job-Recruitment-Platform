@@ -25,7 +25,7 @@ const NotifiMenu = () => {
 
     console.log("NotifiMenu profileId:", user.profileId);
 
-    getNotifications(user.profileId)
+    getNotifications()
       .then((res) => {
         setNotifications(res);   // 🔥 missing line
       })

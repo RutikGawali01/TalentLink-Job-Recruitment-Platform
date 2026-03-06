@@ -10,6 +10,11 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ],
+  // server: {
+  //   allowedHosts: [
+  //     'rescue-johns-pmid-pharmaceuticals.trycloudflare.com'
+  //   ]
+  // },
   resolve: {
   dedupe: ['react', 'react-dom'],
 }

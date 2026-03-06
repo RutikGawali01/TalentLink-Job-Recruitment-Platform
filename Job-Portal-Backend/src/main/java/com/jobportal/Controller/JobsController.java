@@ -16,7 +16,7 @@ import java.util.Map;
 
 @RestController
     @RequestMapping("/jobs")
-    @CrossOrigin
+@CrossOrigin(origins = "*")
     @Validated
 public class JobsController {
     @Autowired
@@ -41,6 +41,7 @@ public class JobsController {
         return new ResponseEntity<>( jobService.getJob(id), HttpStatus.OK);
     }
 
+    // id  -- job id
     @PostMapping("/apply/{id}")
     public ResponseEntity<ResponseDTO> applyJob(@RequestBody ApplicantDTO applicantDTO, @PathVariable Long id) throws JobPortalException {
         jobService.applyJob(applicantDTO, id);

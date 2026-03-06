@@ -37,6 +37,13 @@ public class User {
 
     private Long profileId;
 
+    private boolean profileCompleted;   // default false
+    private Long companyId;
+
+    private Integer onboardingStep = 1;
+
+
+
 
     // no need of this bcz model mapper is used
 //    public UserDTO toDTO(){

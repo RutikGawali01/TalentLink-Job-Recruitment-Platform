@@ -1,35 +1,51 @@
-import { useMantineTheme, Tabs } from "@mantine/core";
+import { Tabs } from "@mantine/core";
 import PostedJobCard from "./PostedJobCard";
-import { activeJobs } from "../assets/Data/PostedJob";
 import { useState, useEffect } from "react";
-// props contain job , joblist and job id 
+
 const PostedJobComp = (props) => {
   const [activeTab, setActiveTab] = useState("ACTIVE");
+
   useEffect(() => {
     setActiveTab(props.job?.jobStatus || "ACTIVE");
   }, [props.job]);
 
   return (
-    <div className="w-1/5 mt-5">
-      <div className="text-2xl font-semibold mb-5 ">Posted Jobs</div>
-      <div>
-        <Tabs autoContrast value={activeTab} onChange={setActiveTab} variant="pills">
-          <Tabs.List className="[&_button[aria-selected='false']]:!bg-mine-shaft-900 font-medium">
-            <Tabs.Tab value="ACTIVE">Active [{props.jobList
-          ?.filter((job) => job?.jobStatus == "ACTIVE").length}]</Tabs.Tab>
-            <Tabs.Tab value="DRAFT"> Drafts [{props.jobList
-          ?.filter((job) => job?.jobStatus == "DRAFT").length}]</Tabs.Tab>
-          <Tabs.Tab value="CLOSED"> Closed [{props.jobList
-          ?.filter((job) => job?.jobStatus == "CLOSED").length}]</Tabs.Tab>
-          </Tabs.List>
-        </Tabs>
+    <div>
+      <div className="text-xl sm:text-2xl font-semibold mb-6">
+        Posted Jobs
       </div>
 
-      <div className="flex flex-col flex-wrap mt-5 gap-5">
+      <Tabs
+        value={activeTab}
+        onChange={setActiveTab}
+        variant="pills"
+      >
+        <Tabs.List className="overflow-x-auto whitespace-nowrap font-medium mb-6">
+          <Tabs.Tab value="ACTIVE">
+            Active [
+            {props.jobList?.filter((j) => j.jobStatus == "ACTIVE").length}
+            ]
+          </Tabs.Tab>
+
+          <Tabs.Tab value="DRAFT">
+            Drafts [
+            {props.jobList?.filter((j) => j.jobStatus == "DRAFT").length}
+            ]
+          </Tabs.Tab>
+
+          <Tabs.Tab value="CLOSED">
+            Closed [
+            {props.jobList?.filter((j) => j.jobStatus == "CLOSED").length}
+            ]
+          </Tabs.Tab>
+        </Tabs.List>
+      </Tabs>
+
+      <div className="flex flex-col gap-4">
         {props.jobList
-          ?.filter((job) => job?.jobStatus == activeTab)
-          .map((item, index) => (
-            <PostedJobCard key={index} {...item} />
+          ?.filter((job) => job.jobStatus == activeTab)
+          .map((item) => (
+            <PostedJobCard key={item.id} {...item} />
           ))}
       </div>
     </div>

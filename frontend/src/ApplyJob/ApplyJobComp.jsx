@@ -32,7 +32,7 @@ const ApplyJobComp = (props) => {
             </div>
           </div>
         </div>
-        <Divider my="xl" />
+        <Divider my="sm" />
         <ApplicationForm />
 
       </div>

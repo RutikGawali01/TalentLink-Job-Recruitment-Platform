@@ -14,6 +14,7 @@ import java.util.List;
 public class ProfileDTO {
 
     private Long id;
+    private Long userId;
     private  String name;
     private String email;
     private String jobTitle;
@@ -22,6 +23,7 @@ public class ProfileDTO {
     private String about;
 
     private String picture;    // Base64 String from UI
+    private String banner;
     private Long totalExp;
     private List<String> skills;
     private List<Experience> experiences;
@@ -36,6 +38,7 @@ public class ProfileDTO {
     public Profile toEntity() {
         return new Profile(
                 id,
+                userId,
                 name,
                 email,
                 jobTitle,
@@ -43,6 +46,7 @@ public class ProfileDTO {
                 location,
                 about,
                 picture!=null ? Base64.getDecoder().decode(picture) : null,
+                banner!=null ? Base64.getDecoder().decode(banner) : null,
                 totalExp,
                 skills,
                 experiences,

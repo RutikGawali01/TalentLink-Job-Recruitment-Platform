@@ -2,17 +2,16 @@ import {
   TextInput,
   PasswordInput,
   Button,
-  Anchor,
   Checkbox,
+  LoadingOverlay,
 } from "@mantine/core";
 import {
   IconAt,
   IconLock,
   IconUserCircle,
 } from "@tabler/icons-react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { LoadingOverlay } from "@mantine/core";
-import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 
 import { registerUser } from "../Services/UserService";
 import { signupValidation } from "../Services/FormValidation";
@@ -22,194 +21,227 @@ import {
 } from "../Services/NotificationService";
 
 const SignUp = () => {
-  const form = {
+  const navigate = useNavigate();
+
+  const [accountType, setAccountType] = useState("APPLICANT");
+
+  const [data, setData] = useState({
     name: "",
     email: "",
     password: "",
     confirmPassword: "",
-    accountType: "",
-  };
+  });
 
-  const [formError, setFormError] = useState(form);
-  const [data, setData] = useState(form);
-  const navigate = useNavigate();
+  const [formError, setFormError] = useState({});
   const [loading, setLoading] = useState(false);
-  const location = useLocation();
-
-  const isEmployer = location.pathname === "/employer/signup";
-
-  // controlled input
+  useEffect(() => {
+  window.scrollTo(0, 0);
+}, []);
+  // ================= HANDLE CHANGE =================
   const handleChange = (event) => {
-    let name = event.target.name,
-      value = event.target.value;
+    const { name, value } = event.target;
 
-    setData({ ...data, [name]: value });
+    const updatedData = { ...data, [name]: value };
+    setData(updatedData);
 
-    setFormError({ ...formError, [name]: signupValidation(name, value) });
+    let errorMessage = signupValidation(name, value);
 
-    // password match logic
-    if (name === "password" && data.confirmPassword !== "") {
-      let err = "";
-      if (data.confirmPassword !== value) err = "Passwords do not match.";
-
-      setFormError({
-        ...formError,
-        [name]: signupValidation(name, value),
-        confirmPassword: err,
-      });
+    // 🔥 Live password match validation
+    if (name === "password" && updatedData.confirmPassword) {
+      if (value !== updatedData.confirmPassword) {
+        setFormError((prev) => ({
+          ...prev,
+          password: errorMessage,
+          confirmPassword: "Passwords do not match",
+        }));
+        return;
+      }
     }
 
     if (name === "confirmPassword") {
-      if (data.password !== value)
-        setFormError({ ...formError, confirmPassword: "Passwords do not match." });
-      else setFormError({ ...formError, confirmPassword: "" });
+      if (value !== updatedData.password) {
+        errorMessage = "Passwords do not match";
+      }
     }
+
+    setFormError((prev) => ({
+      ...prev,
+      [name]: errorMessage,
+      ...(name === "password" && {
+        confirmPassword:
+          updatedData.confirmPassword &&
+          updatedData.confirmPassword !== value
+            ? "Passwords do not match"
+            : "",
+      }),
+    }));
   };
 
+  // ================= HANDLE SUBMIT =================
   const handleSubmit = () => {
     let valid = true;
-    let newFormError = {};
+    let newErrors = {};
 
     for (let key in data) {
-      if (isEmployer && key === "name") continue; // skip name for employer
-
-      if (key !== "confirmPassword") {
-        newFormError[key] = signupValidation(key, data[key]);
-      } else if (data.confirmPassword !== data.password) {
-        newFormError[key] = "Passwords do not match.";
-      }
-
-      if (newFormError[key]) valid = false;
+      newErrors[key] = signupValidation(key, data[key]);
+      if (newErrors[key]) valid = false;
     }
 
-    setFormError(newFormError);
-    if (!valid) return;
+    if (data.password !== data.confirmPassword) {
+      newErrors.confirmPassword = "Passwords do not match";
+      valid = false;
+    }
 
-    const payload = {
-      ...data,
-      ...(isEmployer && { name: undefined }), // remove name for employer
-      accountType: isEmployer ? "EMPLOYER" : "APPLICANT",
-    };
+    setFormError(newErrors);
+    if (!valid) return;
 
     setLoading(true);
 
-    registerUser(payload)
+    registerUser({ ...data, accountType })
       .then(() => {
-        successNotification(
-          "Registered Successfully",
-          "Redirecting to login..."
-        );
-
-        setTimeout(() => {
-          setLoading(false);
-          navigate(
-            isEmployer ? "/employer/login" : "/applicant/login"
-          );
-        }, 2000);
+        successNotification("Registered Successfully", "Redirecting...");
+        setTimeout(() => navigate("/login"), 1200);
       })
       .catch((err) => {
-        setLoading(false);
         errorNotification(
           "Registration Failed",
           err?.response?.data?.errorMessage || "Something went wrong"
         );
+        setLoading(false);
       });
   };
 
   return (
-    <>
-      <LoadingOverlay
-        visible={loading}
-        zIndex={1000}
-        className="translate-x-1/2"
-        overlayProps={{ radius: "sm", blur: 2 }}
-        loaderProps={{ color: "blue", type: "bars" }}
-      />
+    <div className="min-h-screen bg-tertiary flex items-center justify-center px-4 ">
+      <LoadingOverlay visible={loading} overlayProps={{ blur: 2 }} />
 
-      <div className="w-1/2 px-20 flex flex-col justify-center gap-3">
-        <div className="text-2xl font-semibold">Create Account</div>
-        <div>
-          {isEmployer ? "Hire Best Candidates" : "Search & apply to jobs"}
+      <div className="w-full max-w-5xl bg-white rounded-2xl shadow-xl overflow-hidden grid md:grid-cols-2 ">
+
+        {/* LEFT SIDE */}
+        <div className="hidden md:flex flex-col justify-center items-center bg-[var(--blue-100)] p-12 text-center">
+          <h2 className="text-4xl font-bold text-indigo-600 mb-4">
+            Join Us Today
+          </h2>
+          <p className="text-gray-600">
+            Create your account and start your journey
+          </p>
         </div>
 
-        {/* Name field only for Applicant */}
-        {!isEmployer && (
+        {/* RIGHT SIDE FORM */}
+        <div className="p-10 space-y-6">
+
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">
+              Create Account
+            </h1>
+            <p className="text-gray-500 text-sm mt-1">
+              Choose your account type
+            </p>
+          </div>
+
+          {/* ACCOUNT TYPE */}
+          <div className="grid grid-cols-2 gap-4">
+            {["APPLICANT", "EMPLOYER"].map((type) => (
+              <div
+                key={type}
+                onClick={() => setAccountType(type)}
+                className={`p-5 rounded-xl border cursor-pointer transition
+                  ${
+                    accountType === type
+                      ? "border-[var(--blue-500)] bg-indigo-50 shadow-md"
+                      : "border-gray-200 hover:shadow-sm"
+                  }`}
+              >
+                <div className="font-semibold text-gray-800">
+                  {type === "APPLICANT" ? "👤 Applicant" : "🏢 Employer"}
+                </div>
+                <div className="text-sm text-gray-500 mt-1">
+                  {type === "APPLICANT"
+                    ? "Search & apply to jobs"
+                    : "Hire top candidates"}
+                </div>
+              </div>
+            ))}
+          </div>
+
           <TextInput
             label="Full Name"
-            placeholder="Your name"
+            placeholder="Enter your full name"
             name="name"
             value={data.name}
             error={formError.name}
             leftSection={<IconUserCircle size={16} />}
             onChange={handleChange}
+            radius="md"
+            classNames={{ input: "h-12" }}
             withAsterisk
           />
-        )}
 
-        <TextInput
-          error={formError.email}
-          value={data.email}
-          withAsterisk
-          onChange={handleChange}
-          name="email"
-          leftSection={<IconAt size={16} />}
-          label={isEmployer ? "Work Email" : "Email"}
-          placeholder={isEmployer ? "you@company.com" : "your@email.com"}
-        />
+          <TextInput
+            label="Email"
+            placeholder="your@email.com"
+            name="email"
+            value={data.email}
+            error={formError.email}
+            leftSection={<IconAt size={16} />}
+            onChange={handleChange}
+            radius="md"
+            classNames={{ input: "h-12" }}
+            withAsterisk
+          />
 
-        <PasswordInput
-          error={formError.password}
-          value={data.password}
-          name="password"
-          withAsterisk
-          onChange={handleChange}
-          leftSection={<IconLock size={18} stroke={1.5} />}
-          label="Password"
-          placeholder="Password"
-        />
+          <PasswordInput
+            label="Password"
+            placeholder="Enter strong password"
+            name="password"
+            value={data.password}
+            error={formError.password}
+            leftSection={<IconLock size={16} />}
+            onChange={handleChange}
+            radius="md"
+            classNames={{ input: "h-12" }}
+            withAsterisk
+          />
 
-        <PasswordInput
-          error={formError.confirmPassword}
-          name="confirmPassword"
-          value={data.confirmPassword}
-          withAsterisk
-          onChange={handleChange}
-          leftSection={<IconLock size={18} stroke={1.5} />}
-          label="Confirm Password"
-          placeholder="Confirm Password"
-        />
+          <PasswordInput
+            label="Confirm Password"
+            placeholder="Re-enter password"
+            name="confirmPassword"
+            value={data.confirmPassword}
+            error={formError.confirmPassword}
+            leftSection={<IconLock size={16} />}
+            onChange={handleChange}
+            radius="md"
+            classNames={{ input: "h-12" }}
+            withAsterisk
+          />
 
-        <Checkbox
-          autoContrast
-          label={
-            <>
-              I accept <Anchor>terms & conditions</Anchor>
-            </>
-          }
-        />
+          <Checkbox
+            label="I accept terms & conditions"
+            size="sm"
+          />
 
-        <Button
-          loading={loading}
-          onClick={handleSubmit}
-          autoContrast
-          variant="filled"
-        >
-          Sign up
-        </Button>
-
-        <div className="mx-auto">
-          Have an account?{" "}
-          <span
-            onClick={() =>
-              navigate(isEmployer ? "/employer/login" : "/applicant/login")
-            }
-            className="cursor-pointer text-[var(--blue-600)] hover:underline"
+          <Button
+            onClick={handleSubmit}
+            fullWidth
+            radius="md"
+            className="h-12 bg-indigo-600 hover:bg-indigo-700 transition"
           >
-            Login
-          </span>
+            Get Started
+          </Button>
+
+          <div className="text-center text-sm text-gray-600">
+            Already have an account?{" "}
+            <span
+              onClick={() => navigate("/login")}
+              className="text-indigo-600 font-medium cursor-pointer hover:underline"
+            >
+              Login
+            </span>
+          </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

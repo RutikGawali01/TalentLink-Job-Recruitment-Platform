@@ -9,7 +9,7 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
     const token = useSelector((state) => state.jwt);
    // if no token - not logged -in
     if (!token) {
-        return <Navigate to="/applicant/login" />
+        return <Navigate to="/login" />
     }
     // decode jwt
     const decoded = jwtDecode(token);
