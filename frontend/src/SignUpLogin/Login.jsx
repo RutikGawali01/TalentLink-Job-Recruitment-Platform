@@ -82,12 +82,13 @@ const Login = () => {
               navigate("/");
             }
           } else {
-            navigate("/find-jobs");
+            navigate("/applicant/profile");
           }
         }, 1000);
       })
       .catch((err) => {
         setLoading(false);
+        console.log(err);
         errorNotification(
           "Login Failed",
           err?.response?.data?.errorMessage || "Invalid credentials",

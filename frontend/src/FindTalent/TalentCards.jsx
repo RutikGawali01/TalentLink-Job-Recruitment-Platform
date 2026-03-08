@@ -23,8 +23,8 @@ const TalentCards = (props) => {
   // console.log(props);
   const profileId = props.profileId ?? props.id; //
 
-  console.log(props);
-  
+  // console.log(props);
+
   // talent profile id
 
   // Find Talents page
@@ -71,9 +71,24 @@ const TalentCards = (props) => {
     }
   }, [props]);
 
+  const openBase64PDF = (base64) => {
+  const byteCharacters = atob(base64);
+  const byteNumbers = new Array(byteCharacters.length);
+
+  for (let i = 0; i < byteCharacters.length; i++) {
+    byteNumbers[i] = byteCharacters.charCodeAt(i);
+  }
+
+  const byteArray = new Uint8Array(byteNumbers);
+  const blob = new Blob([byteArray], { type: "application/pdf" });
+
+  const blobUrl = URL.createObjectURL(blob);
+  window.open(blobUrl, "_blank");
+};
+
   const handleOffer = (status) => {
     let interview = {
-      jobId: Number(id), 
+      jobId: Number(id),
       applicantId: props.applicantId,
       applicationStatus: status,
     };
@@ -118,8 +133,10 @@ const TalentCards = (props) => {
     // Posted Jobs → Applicants
     // Interviewed candidates
     // Offered / Rejected candidates
-    <div className="bg-white cursor-pointer flex flex-col border  border-gray-300
-        gap-3 rounded-xl p-4 w-96 max-[900px]:w-[48%] max-[767px]:w-full hover:shadow-[0_0_5px_1px_blue] !shadow-[var(--blue-600)]">
+    <div
+      className="bg-white cursor-pointer flex flex-col border  border-gray-300
+        gap-3 rounded-xl p-4 w-96 max-[900px]:w-[48%] max-[767px]:w-full hover:shadow-[0_0_5px_1px_blue] !shadow-[var(--blue-600)]"
+    >
       {/* Header */}
       <div className="flex justify-between">
         <div className="flex gap-2 items-center">
@@ -138,7 +155,7 @@ const TalentCards = (props) => {
           <div>
             <div className="font-semibold text-lg">{props.name}</div>
             <div className="text-sm text-[var(--blue-600)]">
-              {profile?.jobTitle} &#x2022; {profile?.company}
+              {profile?.headline}
             </div>
           </div>
         </div>
@@ -308,12 +325,16 @@ const TalentCards = (props) => {
           </div>
           <div>
             Resume: &emsp;
-            <span
-              onClick={() => openBase64PDF(props.resume)}
-              className="text-[var(--blue-600)] text-center hover:underline cursor-pointer"
-            >
-              {props.name}
-            </span>
+            {props.resume ? (
+              <span
+                onClick={() => openBase64PDF(props.resume)}
+                className="text-[var(--blue-600)] hover:underline cursor-pointer"
+              >
+                {props.resumeName || "View Resume"}
+              </span>
+            ) : (
+              <span>No Resume Uploaded</span>
+            )}
           </div>
           <div>
             Cover Letter: &emsp;

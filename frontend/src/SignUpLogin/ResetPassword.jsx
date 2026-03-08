@@ -91,7 +91,7 @@ const ResetPassword = (props) => {
       .then((res) => {
         console.log(res);
         successNotification("Password Changed", "Login with new password");
-        props.close();
+        // props.close();
       })
       .then((err) => {
         console.log(err);
@@ -146,7 +146,7 @@ const ResetPassword = (props) => {
           <div className="flex gap-3">
             <Button
               fullWidth
-              color={theme.colors.brightSun[4]}
+              color={"brand.4"}
               size="xs"
               loading={otpSending}
               className="mr-1"

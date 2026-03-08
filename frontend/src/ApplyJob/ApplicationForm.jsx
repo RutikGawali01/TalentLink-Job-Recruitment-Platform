@@ -69,7 +69,7 @@ const ApplicationForm = () => {
         <div className="flex justify-between">
           <span className="font-medium text-gray-600">Website</span>
           <span className="text-gray-900">
-            {profile?.website || "Not available"}
+            {profile?.portfolio?.website || "Not available"}
           </span>
         </div>
 

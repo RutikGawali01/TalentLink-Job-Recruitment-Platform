@@ -23,13 +23,16 @@
         private Long userId;
         private String name;
         private String email;
-        private String jobTitle;
-        private String company;
+        private String headline;
+
         private String location;
         private String about;
 
         private byte[] picture;    // Stored in DB as byte[]
         private byte[] banner;
+        private byte[] resume;
+        private String resumeName;
+        private String resumeUploadDate;
         private Long totalExp;
 
         private List<String> skills;
@@ -49,12 +52,14 @@
                     userId,
                     name,
                     email,
-                    jobTitle,
-                    company,
+                    headline,
                     location,
                     about,
                     picture!=null ? Base64.getEncoder().encodeToString(picture) : null,
                     banner!=null ? Base64.getEncoder().encodeToString(banner) : null,
+                    resume!=null ? Base64.getEncoder().encodeToString(resume) : null,
+                    resumeName,
+                    resumeUploadDate,
                     totalExp,
                     skills,
                     experiences,
