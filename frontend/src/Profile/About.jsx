@@ -123,7 +123,7 @@ const About = () => {
         placeholder="Enter about yourself"
         value={about}
         onChange={(e) => setAbout(e.currentTarget.value)}
-        minRows={4}
+        minRows={3}
         autosize
         className="w-full text-sm sm:text-base"
       />

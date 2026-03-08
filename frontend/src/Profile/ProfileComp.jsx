@@ -19,11 +19,12 @@ import About from "./About";
 import Skills from "./Skills";
 import Experience from "./Experience";
 import Certification from "./Certification";
-import { changeProfile } from "../Slice/ProfileSlice";
-import { successNotification } from "../Services/NotificationService";
-import { getBase64 } from "../Services/Utilities";
+import { useLocation } from "react-router-dom";
 import Education from "./Education";
 import PortfolioLinks from "./PortfolioLinks";
+import Resume from "./Resume";
+
+
 
 const ProfileComp = (props) => {
   const dispatch = useDispatch();
@@ -45,16 +46,16 @@ const ProfileComp = (props) => {
       });
   }, [user?.profileId]);
 
-  // const handleFileChange = async (image) => {
-  //   let picture = await getBase64(image);
-  //   console.log(picture);
-  //   let updatedProfile = { ...profile, picture: picture.split(',')[1] };
-  //   dispatch(changeProfile(updatedProfile));
-  //   successNotification("Success", "Profile Picture  updated successfully");
+ const location = useLocation();
 
-  // }
-
-  const theme = useMantineTheme();
+  useEffect(() => {
+    if (location.hash) {
+      const element = document.querySelector(location.hash);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  }, [location]);
 
   const { hovered, ref } = useHover();
   return (
@@ -78,6 +79,10 @@ const ProfileComp = (props) => {
       {/* About */}
       <div className="px-2 sm:px-3">
         <About />
+      </div>
+<Divider mx="xs" my="xl" color="brand" />
+      <div className="px-2 sm:px-3">
+        < Resume />
       </div>
 
       <Divider mx="xs" my="xl" color="brand" />

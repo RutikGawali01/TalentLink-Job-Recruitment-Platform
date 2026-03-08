@@ -25,6 +25,7 @@ public class ApplicantDTO {
     private Long phone;
     private String website;
     private String resume;
+    private  String resumeName;
     private String coverLetter;
     private LocalDateTime timestamp;
     private ApplicationStatus applicationStatus;
@@ -41,6 +42,7 @@ public class ApplicantDTO {
                 phone,
                 website,
                 resume!=null ? Base64.getDecoder().decode(resume) : null,
+                resumeName,
                 coverLetter,
                 timestamp,
                 applicationStatus,

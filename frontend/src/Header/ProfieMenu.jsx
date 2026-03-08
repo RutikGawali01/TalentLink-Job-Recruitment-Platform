@@ -78,7 +78,11 @@ const ProfileMenu = () => {
           Messages
         </Menu.Item>
         {user?.accountType === "APPLICANT" && (
-          <Menu.Item leftSection={<IconFileText size={14} />}>Resume</Menu.Item>
+          <Link to="/applicant/profile#resume">
+            <Menu.Item leftSection={<IconFileText size={14} />}>
+              Resume
+            </Menu.Item>
+          </Link>
         )}{" "}
         <Menu.Item
           leftSection={<IconMoon size={14} />}

@@ -172,7 +172,10 @@ public class jobServiceImpl implements JobService {
         applicantDTO.setEmail(profile.getEmail());
         ///applicantDTO.setPhone(profile.getPhone());
 //        applicantDTO.setWebsite(profile.getWebsite());
-//        applicantDTO.setResume(profile.getResume());
+       applicantDTO.setResume(profile.toDTO().getResume());
+       applicantDTO.setWebsite(profile.getPortfolio().getWebsite());
+       applicantDTO.setResumeName(profile.getResumeName());
+
 
         applicantDTO.setApplicationStatus(ApplicationStatus.APPLIED);
         applicantDTO.setTimestamp(LocalDateTime.now());

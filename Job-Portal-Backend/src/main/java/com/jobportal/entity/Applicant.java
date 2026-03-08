@@ -27,6 +27,7 @@ public class Applicant {
     private Long phone;
     private String website;// portfolio
     private byte[] resume;
+    private String resumeName;
     private String coverLetter;
     private LocalDateTime timestamp;
     private ApplicationStatus applicationStatus;
@@ -43,6 +44,7 @@ public class Applicant {
                 phone,
                 website,
                 resume!=null ? Base64.getEncoder().encodeToString(resume) : null,
+                resumeName,
                 coverLetter,
                 timestamp,
                 applicationStatus,
