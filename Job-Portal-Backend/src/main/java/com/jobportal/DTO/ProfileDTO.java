@@ -17,13 +17,17 @@ public class ProfileDTO {
     private Long userId;
     private  String name;
     private String email;
-    private String jobTitle;
-    private String company;
+    private String headline;
+
     private String location;
     private String about;
 
     private String picture;    // Base64 String from UI
     private String banner;
+    private String resume;
+    private String resumeName;
+    private String resumeUploadDate;
+
     private Long totalExp;
     private List<String> skills;
     private List<Experience> experiences;
@@ -41,12 +45,14 @@ public class ProfileDTO {
                 userId,
                 name,
                 email,
-                jobTitle,
-                company,
+                headline,
                 location,
                 about,
                 picture!=null ? Base64.getDecoder().decode(picture) : null,
                 banner!=null ? Base64.getDecoder().decode(banner) : null,
+                resume!=null ? Base64.getDecoder().decode(resume) : null,
+                resumeName,
+                resumeUploadDate,
                 totalExp,
                 skills,
                 experiences,

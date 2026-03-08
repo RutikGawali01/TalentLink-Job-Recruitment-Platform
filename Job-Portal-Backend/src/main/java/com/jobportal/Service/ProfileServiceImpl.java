@@ -63,8 +63,8 @@ public class ProfileServiceImpl implements ProfileService{
                 .orElseThrow(() -> new JobPortalException("PROFILE_NOT_FOUND"));
 
         /* ---------- BASIC INFO ---------- */
-        profile.setJobTitle(profileDTO.getJobTitle());
-        profile.setCompany(profileDTO.getCompany());
+
+        profile.setHeadline(profileDTO.getHeadline());
         profile.setLocation(profileDTO.getLocation());
         profile.setTotalExp(profileDTO.getTotalExp());
         profile.setAbout(profileDTO.getAbout());
@@ -82,6 +82,13 @@ public class ProfileServiceImpl implements ProfileService{
         if (profileDTO.getBanner() != null) {
             profile.setBanner(Base64.getDecoder().decode(profileDTO.getBanner()));
         }
+        if(profileDTO.getResume()!=null){
+            profile.setResume(Base64.getDecoder().decode(profileDTO.getResume()));
+        }
+
+        profile.setResumeName(profileDTO.getResumeName());
+        profile.setResumeUploadDate(profileDTO.getResumeUploadDate());
+
 
         /* ---------- SKILLS ---------- */
         if (profileDTO.getSkills() != null) {
@@ -125,7 +132,7 @@ public class ProfileServiceImpl implements ProfileService{
         List<String> missing = new ArrayList<>();
 
         if (!notEmpty(p.getName())) missing.add("name");
-        if (!notEmpty(p.getJobTitle())) missing.add("jobTitle");
+        if (!notEmpty(p.getHeadline())) missing.add("headline");
         if (!notEmpty(p.getLocation())) missing.add("location");
         if (!notEmpty(p.getAbout())) missing.add("about");
         if (p.getSkills() == null || p.getSkills().isEmpty()) missing.add("skills");

@@ -106,7 +106,7 @@ const EduInput = ({ add, setEdit }) => {
           label="End Date"
           value={form.values.endDate}
           onChange={(v) => form.setFieldValue("endDate", v)}
-          maxDate={new Date()}
+          
         />
       </div>
 

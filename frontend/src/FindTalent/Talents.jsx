@@ -42,11 +42,11 @@ const Talents = () => {
       );
 
     // .some -- “Does at least ONE element in this array satisfy the condition?”
-    if (filter["Job Title"] && filter["Job Title"].length > 0) {
+    if (filter["Job Roles"] && filter["Job Roles"].length > 0) {
       filterTalent = filterTalent?.filter((talent) =>
         //condi for partic talent
-        filter["Job Title"]?.some((title) =>
-          talent?.jobTitle?.toLowerCase().includes(title?.toLowerCase()),
+        filter["Job Roles"]?.some((title) =>
+          talent?.headline?.toLowerCase().includes(title?.toLowerCase()),
         ),
       );
     }

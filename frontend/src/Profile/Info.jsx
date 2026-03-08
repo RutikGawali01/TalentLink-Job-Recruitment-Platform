@@ -37,8 +37,7 @@ const Info = () => {
   const form = useForm({
     mode: "controlled",
     initialValues: {
-      jobTitle: "",
-      company: "",
+      headline:"",
       location: "",
       totalExp: 0,
     },
@@ -48,8 +47,7 @@ const Info = () => {
     if (!edit) {
       setEdit(true);
       form.setValues({
-        jobTitle: profile.jobTitle,
-        company: profile.company,
+        headline: profile.headline,
         location: profile.location,
         totalExp: profile.totalExp,
       });
@@ -61,6 +59,7 @@ const Info = () => {
   const handleSave = async () => {
     try {
       const updatedProfile = { ...profile, ...form.getValues() };
+      console.log(updatedProfile);
       await dispatch(changeProfile(updatedProfile)).unwrap();
       setEdit(false);
       successNotification("Success", "Profile updated successfully");
@@ -97,7 +96,6 @@ const Info = () => {
 
   return (
     <div className="bg-white rounded-2xl shadow-sm overflow-hidden border-default">
-
       {/* ================= Banner ================= */}
       <div className="relative">
         <img
@@ -124,12 +122,14 @@ const Info = () => {
         </div>
 
         {/* ================= Avatar ================= */}
-        <div className="
+        <div
+          className="
           absolute 
           -bottom-10 sm:-bottom-14 md:-bottom-20 
           left-1/2 -translate-x-1/2 
           sm:left-6 sm:translate-x-0
-        ">
+        "
+        >
           <div
             className="relative"
             onMouseEnter={() => setHovered(true)}
@@ -155,16 +155,16 @@ const Info = () => {
             {hovered && (
               <>
                 <Overlay
-                  className="!rounded-full"
+                  className="!rounded-full pointer-events-none"
                   color="#000"
                   backgroundOpacity={0.7}
                 />
                 <IconEdit className="absolute inset-0 m-auto text-white !w-8 !h-8 sm:!w-12 sm:!h-12" />
-                <FileInput
-                  onChange={handleFileChange}
-                  className="absolute inset-0 opacity-0 cursor-pointer"
+                <input
+                  type="file"
                   accept="image/png, image/jpeg"
-                  variant="transparent"
+                  onChange={(e) => handleFileChange(e.target.files[0])}
+                  className="absolute inset-0 opacity-0 cursor-pointer z-30"
                 />
               </>
             )}
@@ -174,11 +174,15 @@ const Info = () => {
 
       {/* ================= Content ================= */}
       <div className="px-4 sm:px-6 pt-16 sm:pt-24 md:pt-28 pb-8 relative">
-
         {/* Edit Buttons */}
         <div className="absolute top-4 right-4 flex gap-2">
           {edit && (
-            <ActionIcon size="lg" variant="subtle" color="green.8" onClick={handleSave}>
+            <ActionIcon
+              size="lg"
+              variant="subtle"
+              color="green.8"
+              onClick={handleSave}
+            >
               <IconCheck />
             </ActionIcon>
           )}
@@ -199,7 +203,8 @@ const Info = () => {
 
         {/* ================= View Mode ================= */}
         {!edit && (
-          <div className="
+          <div
+            className="
             mt-4 
             flex 
             flex-col 
@@ -208,10 +213,11 @@ const Info = () => {
             lg:flex-row 
             lg:items-center 
             lg:gap-8
-          ">
+          "
+          >
             <div className="flex items-center gap-2">
               <IconBriefcase size={18} />
-              {profile.jobTitle} • {profile.company}
+              {profile.headline} 
             </div>
 
             <div className="flex items-center gap-2 text-mine-shaft-300">
@@ -227,20 +233,22 @@ const Info = () => {
 
         {/* ================= Edit Mode ================= */}
         {edit && (
-          <div className="
+          <div
+            className="
             mt-6 
             grid 
             grid-cols-1 
             sm:grid-cols-2 
             lg:grid-cols-4 
             gap-4
-          ">
-            <SelectInput form={form} name="jobTitle" {...select[0]} />
-            <SelectInput form={form} name="company" {...select[1]} />
-            <SelectInput form={form} name="location" {...select[2]} />
+          "
+          >
+            <SelectInput form={form} name="headline" {...select[0]} />
+            <SelectInput form={form} name="location" {...select[1]} />
             <NumberInput
               withAsterisk
               label="Experience"
+              placeholder="Enter Current Experience"
               hideControls
               min={0}
               max={40}
