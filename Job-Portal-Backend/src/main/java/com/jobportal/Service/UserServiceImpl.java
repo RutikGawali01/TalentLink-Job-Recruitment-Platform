@@ -77,7 +77,7 @@ public class UserServiceImpl implements UserService{
         }
         else if (userDTO.getAccountType() == AccountType.EMPLOYER) {
             userDTO.setProfileId(
-                    employerProfileService.createProfile(userDTO.getEmail())
+                    employerProfileService.createProfile( userId, userDTO.getEmail(), userDTO.getName())
             );
 
             // Employer must complete onboarding

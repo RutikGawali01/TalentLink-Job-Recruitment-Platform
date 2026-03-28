@@ -13,4 +13,8 @@ public interface CompanyRepository extends MongoRepository<Company, Long> {
 
     boolean existsByName(String companyName);
 
+    Optional<Company> findByDomain(String domain);
+
+
+
 }

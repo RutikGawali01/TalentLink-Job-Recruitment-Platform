@@ -5,6 +5,7 @@ import com.jobportal.DTO.ProfileCompletionDTO;
 import com.jobportal.DTO.ProfileDTO;
 import com.jobportal.Exception.JobPortalException;
 import com.jobportal.Service.EmployerProfileService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/employer/profile")
 @CrossOrigin(origins = "*")
+@Tag(name = "Employer-Profile APIs")
 public class EmployerProfileController {
 
     @Autowired

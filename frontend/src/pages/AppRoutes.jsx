@@ -23,12 +23,19 @@ import ApplicantDashboardPage from "./ApplicantDashboardPage.jsx";
 import ApplicantNavLinks from "../Header/ApplicantNavLinks.jsx";
 import NavLinksController from "../Header/NavLinksController.jsx";
 import CompanyProfileComp from "../CompanyProfile/CompanyProfileComp.jsx";
-
+import Resumeupload from "../Profile/ResumeUpload.jsx";
 import EmployerGuard from "../Security/EmployerGuard.jsx";
 
+import WaitingApproval from "../CompanyProfile/WaitingApproval.jsx";
 import ApplicantGuard from "../Security/ApplicantGuard.jsx";
 
+import ClaimCompany from "../CompanyProfile/ClaimCompany.jsx";
+
+import CompanyDashboard from "../CompanyDashboard/Companydashboard.jsx";
+
 import { useLocation } from "react-router-dom";
+import ResumeSection from "../Profile/Resumesection.jsx";
+
 const AppRoutes = () => {
   const location = useLocation();
 
@@ -52,14 +59,22 @@ const AppRoutes = () => {
           path="/find-jobs"
           element={
             <ProtectedRoute allowedRoles={["APPLICANT"]}>
-              {" "}
-              <FindJobs />{" "}
+                <FindJobs />{" "}
             </ProtectedRoute>
           }
         />
 
         {/* <Route path="/find-talent" element={<ProtectedRoute allowedRoles={["EMPLOYER"]}> <FindTalentPage /> </ProtectedRoute>   } /> */}
-        <Route path="/find-talent" element={<FindTalentPage />} />
+        <Route
+          path="/find-talent"
+          element={
+            <ProtectedRoute allowedRoles={["EMPLOYER"]}>
+              <EmployerGuard>
+                <FindTalentPage />
+              </EmployerGuard>
+            </ProtectedRoute>
+          }
+        />
 
         <Route
           path="/post-job/:id"
@@ -135,25 +150,90 @@ const AppRoutes = () => {
           }
         />
 
-        <Route path="/applicant/profile" element={<ProfilePage />} />
+        <Route
+          path="/company-claim/:profileId"
+          element={
+            <ProtectedRoute allowedRoles={["EMPLOYER"]}>
+              <EmployerGuard>
+                <ClaimCompany />
+              </EmployerGuard>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/company-request-status"
+          element={
+            <ProtectedRoute allowedRoles={["EMPLOYER"]}>
+              <EmployerGuard>
+                <WaitingApproval />
+              </EmployerGuard>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/applicant/profile"
+          element={
+            <ProtectedRoute allowedRoles={["APPLICANT"]}>
+                <ProfilePage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/applicant/resume-upload"
+          element={
+            <ProtectedRoute allowedRoles={["APPLICANT"]}>
+              <ApplicantGuard>
+                <Resumeupload />
+              </ApplicantGuard>
+            </ProtectedRoute>
+          }
+        />
 
         <Route
           path="/employer/profile/:profileId"
           element={
-            <EmployerGuard>
-              <EmployerProfilePage />
-            </EmployerGuard>
+            <ProtectedRoute allowedRoles={["EMPLOYER"]}>
+              <EmployerGuard>
+                <EmployerProfilePage />
+              </EmployerGuard>
+            </ProtectedRoute>
           }
         />
 
+        {/* <Route path="/employer/profile/:profileId" element={<EmployerProfilePage />} /> */}
 
-          {/* <Route path="/employer/profile/:profileId" element={<EmployerProfilePage />} /> */}
+        <Route
+          path="/employer/dashboard"
+          element={
+            <ProtectedRoute allowedRoles={["EMPLOYER"]}>
+              <EmployerGuard>
+                <EmployerDashboardPage />
+              </EmployerGuard>
+            </ProtectedRoute>
+          }
+        />
 
-        <Route path="/employer/dashboard" element={<EmployerDashboardPage />} />
+           <Route
+          path="/resume"
+          element={
+            <ResumeSection />
+          }
+
+          />
+
 
         <Route
           path="/applicant/dashboard"
-          element={<ApplicantDashboardPage />}
+          element={
+            <ProtectedRoute allowedRoles={["APPLICANT"]}>
+               <ApplicantGuard>
+                <ApplicantDashboardPage />
+               </ApplicantGuard>
+            </ProtectedRoute>
+          }
         />
 
         <Route path="*" element={<HomePage />} />

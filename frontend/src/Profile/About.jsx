@@ -9,15 +9,12 @@ import {
 } from "../Services/NotificationService";
 
 const About = () => {
-  /* ---------------- REDUX ---------------- */
   const dispatch = useDispatch();
   const profile = useSelector((state) => state.profile.data);
 
-  /* ---------------- STATE ---------------- */
   const [edit, setEdit] = useState(false);
   const [about, setAbout] = useState(profile?.about || "");
 
-  /* ---------------- HANDLERS (SAME LOGIC) ---------------- */
   const handleEdit = () => {
     setEdit(true);
     setAbout(profile.about || "");
@@ -30,122 +27,84 @@ const About = () => {
 
   const handleSave = async () => {
     try {
-      const updatedProfile = {
-        ...profile,
-        about,
-      };
-
+      const updatedProfile = { ...profile, about };
       await dispatch(changeProfile(updatedProfile)).unwrap();
       setEdit(false);
       successNotification("Success", "About section updated successfully");
     } catch (err) {
-      console.log(err);
       errorNotification("Error", "Failed to update about section");
     }
   };
 
   if (!profile) {
     return (
-      <div className="p-6 text-center text-gray-500">Loading profile...</div>
+      <div className="flex items-center justify-center p-10">
+        <div className="w-8 h-8 rounded-full border-4 border-blue-100 border-t-blue-500 animate-spin" />
+      </div>
     );
   }
 
-  /* ---------------- UI ---------------- */
   return (
-  <div
-    className="
-      bg-white 
-      rounded-2xl 
-      shadow-sm 
-      border-default
-      p-4 
-      sm:p-6 
-      md:p-8
-    "
-  >
-    {/* ===== Header ===== */}
-    <div
-      className="
-        flex 
-        justify-between 
-        items-center 
-        mb-4 
-        pb-3 
-        border-b-2 
-        border-slate-200
-      "
-    >
-      <h2 className="
-        text-lg 
-        sm:text-xl 
-        md:text-2xl 
-        font-bold 
-        text-slate-900
-      ">
-        About
-      </h2>
+    <div className="bg-white rounded-3xl shadow-lg border border-blue-100 p-5 sm:p-7 md:p-8">
 
-      {!edit ? (
-        <ActionIcon
-          variant="subtle"
-          color="brand"
-          size="lg"
-          onClick={handleEdit}
-        >
-          <IconPencil size={20} />
-        </ActionIcon>
-      ) : (
-        <div className="flex gap-2">
-          <ActionIcon
-            variant="subtle"
-            color="green.8"
-            size="lg"
-            onClick={handleSave}
-          >
-            <IconCheck size={20} />
-          </ActionIcon>
-
-          <ActionIcon
-            variant="subtle"
-            color="red.8"
-            size="lg"
-            onClick={handleCancel}
-          >
-            <IconX size={20} />
-          </ActionIcon>
+      {/* Header */}
+      <div className="flex justify-between items-center mb-5 pb-4 border-b border-blue-50">
+        <div className="flex items-center gap-3">
+          <div className="w-1 h-6 rounded-full bg-gradient-to-b from-blue-400 to-blue-600" />
+          <h2 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">About</h2>
         </div>
+
+        {!edit ? (
+          <button
+            onClick={handleEdit}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-50 border border-blue-100 text-blue-600 text-xs font-semibold hover:bg-blue-100 transition-all duration-200"
+          >
+            <IconPencil size={13} /> Edit
+          </button>
+        ) : (
+          <div className="flex gap-2">
+            <button
+              onClick={handleSave}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-semibold hover:bg-emerald-100 transition-all duration-200"
+            >
+              <IconCheck size={13} /> Save
+            </button>
+            <button
+              onClick={handleCancel}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-red-50 border border-red-200 text-red-600 text-xs font-semibold hover:bg-red-100 transition-all duration-200"
+            >
+              <IconX size={13} /> Cancel
+            </button>
+          </div>
+        )}
+      </div>
+
+      {/* Content */}
+      {edit ? (
+        <Textarea
+          placeholder="Write something about yourself..."
+          value={about}
+          onChange={(e) => setAbout(e.currentTarget.value)}
+          minRows={4}
+          autosize
+          styles={{
+            input: {
+              borderRadius: "14px",
+              borderColor: "#bfdbfe",
+              background: "#f8faff",
+              fontSize: "14px",
+              lineHeight: "1.7",
+              padding: "14px 16px",
+            },
+          }}
+        />
+      ) : (
+        <p className={`text-sm sm:text-base leading-relaxed ${profile.about ? "text-slate-600" : "text-slate-400 italic"}`}>
+          {profile.about || "Tell people about your background, interests, and what drives you..."}
+        </p>
       )}
     </div>
-
-    {/* ===== Content ===== */}
-    {edit ? (
-      <Textarea
-        placeholder="Enter about yourself"
-        value={about}
-        onChange={(e) => setAbout(e.currentTarget.value)}
-        minRows={3}
-        autosize
-        className="w-full text-sm sm:text-base"
-      />
-    ) : (
-      <p
-        className={`
-          text-sm 
-          sm:text-base 
-          md:text-lg 
-          leading-relaxed
-          ${
-            profile.about
-              ? "text-slate-600"
-              : "text-slate-400"
-          }
-        `}
-      >
-        {profile.about || "Add information about yourself..."}
-      </p>
-    )}
-  </div>
-);
+  );
 };
 
 export default About;

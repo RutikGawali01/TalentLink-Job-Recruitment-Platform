@@ -1,18 +1,15 @@
 package com.jobportal.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.jobportal.DTO.AccountType;
-import com.jobportal.DTO.UserDTO;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.lang.annotation.Documented;
+import java.time.LocalDateTime;
 
 @Data
 
@@ -31,14 +28,20 @@ public class User {
     @Indexed(unique = true)
     private String email;
 
+    @JsonIgnore
     private String password;
     private AccountType accountType;
     private boolean emailVerified;
 
     private Long profileId;
 
-    private boolean profileCompleted;   // default false
+    //private boolean profileCompleted;   // default false
     private Long companyId;
+
+    private LocalDateTime createdAt;
+
+        private String status;
+
 
     private Integer onboardingStep = 1;
 

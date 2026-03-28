@@ -64,7 +64,9 @@ public class ProfileServiceImpl implements ProfileService{
 
         /* ---------- BASIC INFO ---------- */
 
-        profile.setHeadline(profileDTO.getHeadline());
+        if (profileDTO.getHeadline() != null) {
+            profile.setHeadline(profileDTO.getHeadline());
+        }
         profile.setLocation(profileDTO.getLocation());
         profile.setTotalExp(profileDTO.getTotalExp());
         profile.setAbout(profileDTO.getAbout());

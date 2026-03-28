@@ -4,6 +4,8 @@ import com.jobportal.DTO.ProfileCompletionDTO;
 import com.jobportal.DTO.ProfileDTO;
 import com.jobportal.DTO.ResponseDTO;
 import com.jobportal.Service.ProfileService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,7 @@ import java.util.Map;
 @RestController
 @CrossOrigin(origins = "*")
 @RequestMapping("/profiles")
+@Tag(name = "Applicant-Profile APIs", description = "read , update & delete Profile")
 @Validated
 public class ProfileController {
 
@@ -27,6 +30,7 @@ public class ProfileController {
 
     // get profile by id {profile id}
     @GetMapping("/get/{id}")
+    @Operation(summary = " get profile by id {profile id}")
     public ResponseEntity<ProfileDTO> getProfile(@PathVariable Long id) throws Exception{
         //profileService.getProfile(id);
         return new ResponseEntity<>( profileService.getProfile(id), HttpStatus.OK);

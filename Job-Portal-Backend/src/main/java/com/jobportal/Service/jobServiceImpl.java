@@ -173,7 +173,10 @@ public class jobServiceImpl implements JobService {
         ///applicantDTO.setPhone(profile.getPhone());
 //        applicantDTO.setWebsite(profile.getWebsite());
        applicantDTO.setResume(profile.toDTO().getResume());
-       applicantDTO.setWebsite(profile.getPortfolio().getWebsite());
+       if(profile.getPortfolio() != null){
+           applicantDTO.setWebsite(profile.getPortfolio().getWebsite());
+       }
+
        applicantDTO.setResumeName(profile.getResumeName());
 
 

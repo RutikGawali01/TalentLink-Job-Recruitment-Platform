@@ -26,105 +26,74 @@ import Resume from "./Resume";
 
 
 
-const ProfileComp = (props) => {
+/* ─────────────── ProfileComp ─────────────── */
+const ProfileComp = () => {
   const dispatch = useDispatch();
-
   const user = useSelector((state) => state.user);
   const profile = useSelector((state) => state.profile.data);
-  const select = fields;
-  const [addExp, setAddExp] = useState(false);
 
   useEffect(() => {
     if (!user?.profileId) return;
-
     getProfile(user.profileId)
-      .then((data) => {
-        dispatch(setProfile(data));
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+      .then((data) => dispatch(setProfile(data)))
+      .catch((error) => console.log(error));
   }, [user?.profileId]);
 
- const location = useLocation();
-
+  const location = useLocation();
   useEffect(() => {
     if (location.hash) {
       const element = document.querySelector(location.hash);
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth" });
-      }
+      if (element) element.scrollIntoView({ behavior: "smooth" });
     }
   }, [location]);
 
-  const { hovered, ref } = useHover();
   return (
-    <div
-      className="
-    w-[95%] 
-    sm:w-[90%] 
-    md:w-[85%] 
-    lg:w-4/5 
-    mx-auto 
-    pb-5
-  "
-    >
-      {/* Info */}
-      <div className="px-2 sm:px-3 mt-10 sm:mt-16">
-        <Info {...props} />
-      </div>
+    <div className="w-[95%] sm:w-[90%] md:w-[85%] lg:w-4/5 mx-auto pb-10 pt-6 sm:pt-10">
 
-      <Divider mx="xs" my="xl" color="brand" />
+      {/* Subtle page background gradient */}
+      <div className="fixed inset-0 -z-10 bg-gradient-to-br from-blue-50/60 via-white to-slate-50 pointer-events-none" />
 
-      {/* About */}
-      <div className="px-2 sm:px-3">
+      <div className="flex flex-col gap-6">
+
+        {/* Info */}
+        <Info />
+
+        {/* Divider */}
+        <div className="h-px w-full bg-gradient-to-r from-transparent via-blue-200 to-transparent" />
+
+        {/* About */}
         <About />
-      </div>
-<Divider mx="xs" my="xl" color="brand" />
-      <div className="px-2 sm:px-3">
-        < Resume />
-      </div>
 
-      <Divider mx="xs" my="xl" color="brand" />
+        <div className="h-px w-full bg-gradient-to-r from-transparent via-blue-200 to-transparent" />
 
-      {/* Education */}
-      <div className="px-2 sm:px-3">
+        {/* Resume */}
+        <Resume />
+
+        <div className="h-px w-full bg-gradient-to-r from-transparent via-blue-200 to-transparent" />
+
+        {/* Education */}
         <Education />
-      </div>
 
-      <Divider mx="xs" my="xl" color="brand" />
+        <div className="h-px w-full bg-gradient-to-r from-transparent via-blue-200 to-transparent" />
 
-      {/* Skills */}
-      <div
-        className="
-          px-2 
-          sm:px-3 
-          w-full 
-          md:w-3/4 
-          lg:w-[70%]
-    "
-      >
-        <Skills />
-      </div>
+        {/* Skills */}
+        <div className="w-full md:w-3/4 lg:w-[70%]">
+          <Skills />
+        </div>
 
-      <Divider mx="xs" my="xl" color="brand" />
+        <div className="h-px w-full bg-gradient-to-r from-transparent via-blue-200 to-transparent" />
 
-      {/* Experience */}
-      <div className="px-2 sm:px-3">
+        {/* Experience */}
         <Experience />
-      </div>
 
-      <Divider mx="xs" my="xl" color="brand" />
+        <div className="h-px w-full bg-gradient-to-r from-transparent via-blue-200 to-transparent" />
 
-      {/* Certification */}
-      <div className="px-2 sm:px-3">
+        {/* Certification */}
         <Certification />
-      </div>
 
-      <Divider mx="xs" my="xl" color="brand" />
+        <div className="h-px w-full bg-gradient-to-r from-transparent via-blue-200 to-transparent" />
 
-      {/* Portfolio */}
-      <div className="px-2 sm:px-3">
+        {/* Portfolio */}
         <PortfolioLinks />
       </div>
     </div>

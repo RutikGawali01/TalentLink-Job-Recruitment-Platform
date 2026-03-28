@@ -14,6 +14,7 @@ public class EmployerProfileDTO {
 
     private Long id;
 
+    private Long user_id;
 
     private String fullName;
     private String email;
@@ -30,6 +31,7 @@ public class EmployerProfileDTO {
     public EmployerProfile toEntity() {
         return new EmployerProfile(
                 id,
+                user_id,
                 fullName,
                 email,
                 role,

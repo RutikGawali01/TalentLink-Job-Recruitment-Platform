@@ -12,46 +12,49 @@ const JobDescriptionPage = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-
     getJob(id)
       .then((res) => setJob(res))
       .catch((err) => console.log(err));
   }, [id]);
 
   return (
-    <div className="min-h-screen bg-primary font-['poppins'] py-16 px-14 sm:px-6 lg:px-14">
-
-      {/* ====== Container ====== */}
+    <div className="min-h-screen bg-primary font-['poppins'] pt-20 pb-24 px-5 sm:px-8 lg:px-16">
       <div className="max-w-7xl mx-auto">
 
-        {/* ====== Back Button ====== */}
-        <div className="mb-6">
+        {/* ── Back Button ── */}
+        <div className="mb-8">
           <Link to="/find-jobs">
             <Button
-              leftSection={<IconArrowLeft size={18} />}
+              leftSection={<IconArrowLeft size={16} />}
               color="brand"
-              variant="light"
+              variant="subtle"
+              size="sm"
+              radius="xl"
+              className="!font-medium !tracking-wide"
             >
-              Back
+              Back to Jobs
             </Button>
           </Link>
         </div>
 
-        {/* ====== Layout Section ====== */}
-        <div className="flex flex-col lg:flex-row gap-8">
+        {/* ── Layout ── */}
+        <div className="flex flex-col lg:flex-row gap-8 items-start">
 
-          {/* ====== Main Job Description ====== */}
-          <div className="w-full lg:w-[70%] mb-12">
-            {job && <JobDescr {...job} />}
+          {/* ── Main Card ── */}
+          <div className="w-full lg:w-[68%]">
+            <div className="bg-[var(--white)] rounded-2xl shadow-sm border border-[var(--blue-100)] p-6 sm:p-8 md:p-10">
+              {job && <JobDescr {...job} />}
+            </div>
           </div>
 
-          {/* ====== Sidebar (Recommended Jobs) ====== */}
-          <div className="w-full lg:w-[30%]">
-            <RecommendedJobs />
+          {/* ── Sidebar ── */}
+          <div className="w-full lg:w-[32%] lg:sticky lg:top-24">
+            <div className="bg-[var(--white)] rounded-2xl shadow-sm border border-[var(--blue-100)] p-5 sm:p-6">
+              <RecommendedJobs />
+            </div>
           </div>
 
         </div>
-
       </div>
     </div>
   );

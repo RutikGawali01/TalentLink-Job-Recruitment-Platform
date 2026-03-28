@@ -7,83 +7,66 @@ import EducationCard from "./EducationCard";
 
 const Education = () => {
   const profile = useSelector((state) => state.profile.data);
-
   const [edit, setEdit] = useState(false);
   const [addEdu, setAddEdu] = useState(false);
 
   if (!profile) {
     return (
-      <div className="p-6 text-center text-gray-500">Loading profile...</div>
+      <div className="flex items-center justify-center p-10">
+        <div className="w-8 h-8 rounded-full border-4 border-blue-100 border-t-blue-500 animate-spin" />
+      </div>
     );
   }
 
   return (
-    <div
-      className="
-        bg-white 
-        rounded-2xl 
-        shadow-sm 
-        border-default
-        p-4 
-        sm:p-6 
-        md:p-8
-      "
-    >
-      {/* ===== Header ===== */}
-      <div className="flex justify-between items-center mb-6 pb-3 border-b-2 border-slate-200">
-        <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-slate-900">
-          Education
-        </h2>
+    <div className="bg-white rounded-3xl shadow-lg border border-blue-100 p-5 sm:p-7 md:p-8">
 
+      {/* Header */}
+      <div className="flex justify-between items-center mb-6 pb-4 border-b border-blue-50">
+        <div className="flex items-center gap-3">
+          <div className="w-1 h-6 rounded-full bg-gradient-to-b from-blue-400 to-blue-600" />
+          <h2 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">Education</h2>
+        </div>
         <div className="flex gap-2">
-          <ActionIcon
-            variant="subtle"
-            color="brand"
-            size="lg"
+          <button
             onClick={() => setAddEdu(true)}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-50 border border-blue-100 text-blue-600 text-xs font-semibold hover:bg-blue-100 transition-all duration-200"
           >
-            <IconPlus size={20} />
-          </ActionIcon>
-
-          <ActionIcon
-            variant="subtle"
-            size="lg"
-            color={edit ? "red.8" : "brand"}
+            <IconPlus size={13} /> Add
+          </button>
+          <button
             onClick={() => setEdit((p) => !p)}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-semibold transition-all duration-200 ${
+              edit
+                ? "bg-red-50 border-red-200 text-red-600 hover:bg-red-100"
+                : "bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100"
+            }`}
           >
-            {edit ? <IconX size={20} /> : <IconPencil size={20} />}
-          </ActionIcon>
+            {edit ? <><IconX size={13} /> Done</> : <><IconPencil size={13} /> Edit</>}
+          </button>
         </div>
       </div>
 
-      {/* ===== Content ===== */}
-      <div className="flex flex-col gap-8">
+      {/* Content */}
+      <div className="flex flex-col gap-6">
         {profile?.educations?.length > 0 ? (
           profile.educations.map((edu, index) => (
-            <div
-              key={index}
-              className="
-                relative 
-                pl-6 
-                md:pl-8 
-                border-l-2 
-                border-slate-200
-              "
-            >
-              {/* Timeline Dot */}
-              <span className="absolute -left-[6px] top-2 w-3 h-3 rounded-full bg-blue-600 ring-4 ring-blue-100" />
-
+            <div key={index} className="relative pl-5 md:pl-7 border-l-2 border-blue-100">
+              <span className="absolute -left-[5px] top-2 w-2.5 h-2.5 rounded-full bg-blue-500 ring-4 ring-blue-50" />
               <EducationCard {...edu} index={index} edit={edit} />
             </div>
           ))
         ) : (
-          <p className="text-sm sm:text-base text-slate-400">
-            No education added yet
-          </p>
+          <div className="flex flex-col items-center justify-center py-8 gap-2 text-center">
+            <div className="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center mb-1">
+              <span className="text-2xl">🎓</span>
+            </div>
+            <p className="text-sm text-slate-400">No education added yet</p>
+          </div>
         )}
 
         {addEdu && (
-          <div className="p-4 sm:p-6 rounded-xl border border-slate-200 bg-slate-50">
+          <div className="mt-2 p-5 rounded-2xl border border-blue-100 bg-gradient-to-br from-blue-50/60 to-white">
             <EduInput add setEdit={setAddEdu} />
           </div>
         )}

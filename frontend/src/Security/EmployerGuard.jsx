@@ -1,9 +1,7 @@
- import { useSelector } from "react-redux";
-import { Navigate, useLocation } from "react-router-dom";
-import { matchPath } from "react-router-dom";
-
-
+import { useSelector } from "react-redux";
+import { Navigate, useLocation, matchPath } from "react-router-dom";
 const EmployerGuard = ({ children }) => {
+
   const user = useSelector((state) => state.user);
   const location = useLocation();
 
@@ -12,28 +10,37 @@ const EmployerGuard = ({ children }) => {
   if (user.accountType !== "EMPLOYER")
     return <Navigate to="/" replace />;
 
-  // ---------- STEP 1 ----------
-  if (user.onboardingStep === 1) {
+  // REQUEST PENDING
+  if (user.requestStatus === "PENDING") {
+    if (location.pathname !== "/company-request-status") {
+      return <Navigate to="/company-request-status" replace />;
+    }
+  }
+
+  // PROFILE STEP
+  else if (user.onboardingStep === 1) {
     const correctPath = `/employer/profile/${user.profileId}`;
+
     if (location.pathname !== correctPath) {
       return <Navigate to={correctPath} replace />;
     }
   }
 
-  // ---------- STEP 2 ----------
+  // CLAIM COMPANY
   else if (user.onboardingStep === 2) {
-    const correctPath = `/employer/company-profile/${user.profileId}`;
+    const correctPath = `/company-claim/${user.profileId}`;
+
     if (location.pathname !== correctPath) {
       return <Navigate to={correctPath} replace />;
     }
   }
 
-  // ---------- STEP 3 (Dynamic /post-job/:id) ----------
+  // COMPANY PROFILE
   else if (user.onboardingStep === 3) {
-    const isPostJobRoute = matchPath("/post-job/:id", location.pathname);
+    const correctPath = `/employer/company-profile/${user.profileId}`;
 
-    if (!isPostJobRoute) {
-      return <Navigate to="/post-job/0" replace />;
+    if (location.pathname !== correctPath) {
+      return <Navigate to={correctPath} replace />;
     }
   }
 

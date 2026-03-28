@@ -18,7 +18,7 @@ public interface EmployerProfileService {
 
     List<EmployerProfileDTO> getAllProfile();
 
-    Long createProfile(@NotBlank(message = "{user.email.absent}") @Email(message = "{user.email.invalid}") String email) throws JobPortalException;
+    Long createProfile(Long userId , @NotBlank(message = "{user.email.absent}") @Email(message = "{user.email.invalid}") String email , String Name) throws JobPortalException;
 
     ProfileCompletionDTO getProfileCompletion(Long id);
 }

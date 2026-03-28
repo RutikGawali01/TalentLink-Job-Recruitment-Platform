@@ -1,15 +1,11 @@
-import { Badge, useMantineTheme, Tabs } from "@mantine/core";
+import { Badge, Tabs } from "@mantine/core";
 import JobDescr from "../JobDesc/JobDescr";
 import TalentCards from "../FindTalent/TalentCards";
 import { useState, useEffect } from "react";
 
-// in props  job is coming from posted jobs page
 const PostedJobDesc = (props) => {
-  const theme = useMantineTheme();
   const [tab, setTab] = useState("overview");
-  const [arr, setArr] = useState([]); // arr contains all applicants of this particular job
-
-  // console.log(props);
+  const [arr, setArr] = useState([]);
 
   const handleTabChange = (value) => {
     setTab(value);
@@ -17,164 +13,129 @@ const PostedJobDesc = (props) => {
     if (!props.applicants) return;
 
     if (value === "overview") {
-      setArr(props.applicants); // show all
+      setArr(props.applicants);
     } else if (value === "applicants") {
       setArr(props.applicants.filter((x) => x.applicationStatus === "APPLIED"));
     } else if (value === "invited") {
-      setArr(
-        props.applicants.filter((x) => x.applicationStatus === "INTERVIEWING"),
-      );
+      setArr(props.applicants.filter((x) => x.applicationStatus === "INTERVIEWING"));
     } else if (value === "offered") {
       setArr(props.applicants.filter((x) => x.applicationStatus === "OFFERED"));
     } else if (value === "rejected") {
-      setArr(
-        props.applicants.filter((x) => x.applicationStatus === "REJECTED"),
-      );
+      setArr(props.applicants.filter((x) => x.applicationStatus === "REJECTED"));
     }
   };
+
   useEffect(() => {
     if (props.applicants) {
       handleTabChange("overview");
     }
   }, [props.applicants]);
+
+  const statusStyles = {
+    ACTIVE: "bg-emerald-50 text-emerald-600 border border-emerald-200",
+    CLOSED: "bg-red-50 text-red-500 border border-red-200",
+    DRAFT:  "bg-amber-50 text-amber-600 border border-amber-200",
+  };
+
+  const tabList = [
+    { value: "overview",   label: "Overview" },
+    { value: "applicants", label: "Applicants" },
+    { value: "invited",    label: "Invited" },
+    { value: "offered",    label: "Offered" },
+    { value: "rejected",   label: "Rejected" },
+  ];
+
   return (
-    <div className="mt-5 w-full lg:w-3/4 px-3 sm:px-5">
+    <div className="p-5 sm:p-7 w-full">
       {props.jobTitle ? (
         <>
-          {/* ================= HEADER ================= */}
-          <div className="flex flex-wrap items-center gap-3">
-            <div className="text-xl sm:text-2xl font-semibold">
+          {/* ── Header ── */}
+          <div className="flex flex-wrap items-center gap-3 mb-1">
+            <h2 className="text-xl sm:text-2xl font-bold text-slate-800">
               {props.jobTitle}
+            </h2>
+            <span className={`text-xs font-semibold px-3 py-1 rounded-full ${statusStyles[props.jobStatus] ?? statusStyles.DRAFT}`}>
+              {props.jobStatus}
+            </span>
+          </div>
+
+          <p className="text-sm text-slate-400 font-medium mb-6">{props.location}</p>
+
+          {/* ── Tabs ── */}
+          <div className="mt-2">
+            {/* Custom tab bar */}
+            <div className="flex gap-1 flex-wrap border-b border-blue-100 mb-6">
+              {tabList.map((t) => (
+                <button
+                  key={t.value}
+                  onClick={() => handleTabChange(t.value)}
+                  className={`
+                    px-4 py-2.5 text-sm font-semibold border-b-2 transition-all duration-200
+                    ${tab === t.value
+                      ? "border-[var(--blue-600)] text-[var(--blue-600)]"
+                      : "border-transparent text-slate-400 hover:text-slate-600 hover:border-slate-300"
+                    }
+                  `}
+                >
+                  {t.label}
+                </button>
+              ))}
             </div>
 
-            <Badge size="sm" variant="light" color={"brand.4"}>
-              {props.jobStatus}
-            </Badge>
-          </div>
+            {/* Panels — rendered conditionally to keep Mantine logic-free */}
+            {tab === "overview" && (
+              <div className="w-full">
+                <JobDescr edit={true} {...props} closed={props.jobStatus === "CLOSED"} />
+              </div>
+            )}
 
-          <div className="font-medium text-mine-shaft-300 text-sm sm:text-base mt-1">
-            {props.location}
-          </div>
+            {tab === "applicants" && (
+              <TalentGrid arr={arr} extraProp={{ posted: true }} emptyMsg="No Applicants" />
+            )}
 
-          {/* ================= TABS ================= */}
-          <div className="mt-6">
-            <Tabs
-              value={tab}
-              onChange={handleTabChange}
-              variant="outline"
-              radius="lg"
-            >
-              <Tabs.List
-                className="
-                overflow-x-auto
-                whitespace-nowrap
-                [&_button]:!text-sm sm:[&_button]:!text-lg
-                font-semibold
-                [&_button[data-active='true']]:!text-bright-sun-400
-                mb-5
-              "
-              >
-                <Tabs.Tab value="overview">Overview</Tabs.Tab>
-                <Tabs.Tab value="applicants">Applicants</Tabs.Tab>
-                <Tabs.Tab value="invited">Invited</Tabs.Tab>
-                <Tabs.Tab value="Offered">Offered</Tabs.Tab>
-                <Tabs.Tab value="Rejected">Rejected</Tabs.Tab>
-              </Tabs.List>
+            {tab === "invited" && (
+              <TalentGrid arr={arr} extraProp={{ invited: true }} emptyMsg="No Invited Candidates" />
+            )}
 
-              {/* ================= OVERVIEW ================= */}
-              <Tabs.Panel value="overview" className="[&>div]:w-full">
-                <JobDescr
-                  edit={true}
-                  {...props}
-                  closed={props.jobStatus == "CLOSED"}
-                />
-              </Tabs.Panel>
+            {tab === "offered" && (
+              <TalentGrid arr={arr} extraProp={{ offered: true }} emptyMsg="No Offered Candidates" />
+            )}
 
-              {/* ================= APPLICANTS ================= */}
-              <Tabs.Panel value="applicants">
-                <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
-                  {arr?.length ? (
-                    arr.map(
-                      (talent, index) =>
-                        index < 6 && (
-                          <TalentCards key={index} {...talent} posted={true} />
-                        ),
-                    )
-                  ) : (
-                    <div className="text-lg sm:text-2xl font-semibold col-span-full text-center">
-                      No Applicants
-                    </div>
-                  )}
-                </div>
-              </Tabs.Panel>
-
-              {/* ================= INVITED ================= */}
-              <Tabs.Panel value="invited">
-                <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
-                  {arr?.length ? (
-                    arr.map(
-                      (talent, index) =>
-                        index < 6 && (
-                          <TalentCards key={index} {...talent} invited={true} />
-                        ),
-                    )
-                  ) : (
-                    <div className="text-lg sm:text-2xl font-semibold col-span-full text-center">
-                      No Invited Candidates
-                    </div>
-                  )}
-                </div>
-              </Tabs.Panel>
-
-              {/* ================= OFFERED ================= */}
-              <Tabs.Panel value="Offered">
-                <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
-                  {arr?.length ? (
-                    arr.map(
-                      (talent, index) =>
-                        index < 6 && (
-                          <TalentCards key={index} {...talent} offered={true} />
-                        ),
-                    )
-                  ) : (
-                    <div className="text-lg sm:text-2xl font-semibold col-span-full text-center">
-                      No Offered Candidates
-                    </div>
-                  )}
-                </div>
-              </Tabs.Panel>
-
-              {/* ================= REJECTED ================= */}
-              <Tabs.Panel value="Rejected">
-                <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
-                  {arr?.length ? (
-                    arr.map(
-                      (talent, index) =>
-                        index < 6 && (
-                          <TalentCards
-                            key={index}
-                            {...talent}
-                            rejected={true}
-                          />
-                        ),
-                    )
-                  ) : (
-                    <div className="text-lg sm:text-2xl font-semibold col-span-full text-center">
-                      No Rejected Candidates
-                    </div>
-                  )}
-                </div>
-              </Tabs.Panel>
-            </Tabs>
+            {tab === "rejected" && (
+              <TalentGrid arr={arr} extraProp={{ rejected: true }} emptyMsg="No Rejected Candidates" />
+            )}
           </div>
         </>
       ) : (
-        <div className="text-xl sm:text-2xl min-h-[60vh] font-semibold flex justify-center items-center text-center px-4">
-          No Job Selected
+        <div className="min-h-[60vh] flex flex-col items-center justify-center text-center gap-3 px-4">
+          <div className="w-14 h-14 rounded-2xl bg-[var(--blue-100)] flex items-center justify-center text-3xl">
+            📋
+          </div>
+          <div className="text-lg font-semibold text-slate-600">No Job Selected</div>
+          <div className="text-sm text-slate-400">Select a listing from the sidebar to view details.</div>
         </div>
       )}
     </div>
   );
 };
+
+/* ── Helper: reusable talent grid ── */
+const TalentGrid = ({ arr, extraProp, emptyMsg }) => (
+  <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
+    {arr?.length ? (
+      arr.map(
+        (talent, index) =>
+          index < 6 && <TalentCards key={index} {...talent} {...extraProp} />,
+      )
+    ) : (
+      <div className="col-span-full flex flex-col items-center justify-center py-14 gap-3">
+        <div className="w-12 h-12 rounded-xl bg-[var(--blue-100)] flex items-center justify-center text-2xl">
+          🔍
+        </div>
+        <div className="text-base font-semibold text-slate-400">{emptyMsg}</div>
+      </div>
+    )}
+  </div>
+);
 
 export default PostedJobDesc;

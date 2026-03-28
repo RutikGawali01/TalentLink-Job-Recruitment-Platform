@@ -37,25 +37,25 @@ const EduInput = ({ add, setEdit }) => {
     },
   });
 
+  const inputStyles = {
+    input: { borderRadius: "12px", borderColor: "#bfdbfe", background: "#fff", fontSize: "14px" },
+    label: { fontWeight: 600, color: "#1e3a5f", fontSize: "13px", marginBottom: "4px" },
+  };
+
   const handleSave = async () => {
     form.validate();
     if (!form.isValid()) return;
-
     try {
       const values = form.getValues();
-
       const formattedEdu = {
         ...values,
         cgpa: values.cgpa === "" ? null : Number(values.cgpa),
         startDate: normalizeLocalDate(values.startDate),
         endDate: normalizeLocalDate(values.endDate),
       };
-
       let edu = [...(profile.educations || [])];
       edu.push(formattedEdu);
-
       await dispatch(changeProfile({ ...profile, educations: edu })).unwrap();
-
       setEdit(false);
       successNotification("Success", "Education added successfully");
     } catch (error) {
@@ -64,70 +64,46 @@ const EduInput = ({ add, setEdit }) => {
   };
 
   return (
-    <div className="flex flex-col gap-6">
-      <h3 className="text-lg sm:text-xl font-semibold">Add Education</h3>
+    <div className="flex flex-col gap-5">
+      <h3 className="text-base sm:text-lg font-bold text-slate-900">Add Education</h3>
 
-      {/* Responsive Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <TextInput
-          {...form.getInputProps("degree")}
-          withAsterisk
-          label="Degree"
-        />
-
-        <TextInput
-          {...form.getInputProps("institution")}
-          withAsterisk
-          label="Institution"
-        />
-
-        <TextInput
-          {...form.getInputProps("location")}
-          withAsterisk
-          label="Location"
-        />
-
-        <TextInput
-          {...form.getInputProps("cgpa")}
-          label="CGPA (optional)"
-        />
+        <TextInput withAsterisk label="Degree" {...form.getInputProps("degree")} styles={inputStyles} />
+        <TextInput withAsterisk label="Institution" {...form.getInputProps("institution")} styles={inputStyles} />
+        <TextInput withAsterisk label="Location" {...form.getInputProps("location")} styles={inputStyles} />
+        <TextInput label="CGPA (optional)" {...form.getInputProps("cgpa")} styles={inputStyles} />
       </div>
 
-      {/* Dates */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <MonthPickerInput
           label="Start Date"
           value={form.values.startDate}
           onChange={(v) => form.setFieldValue("startDate", v)}
           maxDate={new Date()}
+          styles={inputStyles}
         />
-
         <MonthPickerInput
           label="End Date"
           value={form.values.endDate}
           onChange={(v) => form.setFieldValue("endDate", v)}
-          
+          styles={inputStyles}
         />
       </div>
 
-      {/* Buttons */}
-      <div className="flex flex-col sm:flex-row gap-4 sm:justify-start">
+      <div className="flex flex-col sm:flex-row gap-3 pt-1">
         <Button
           color="green.8"
           variant="filled"
           onClick={handleSave}
-          fullWidth
-          className="sm:w-auto"
+          styles={{ root: { borderRadius: "12px", fontWeight: 600 } }}
         >
           Save
         </Button>
-
         <Button
           color="red.8"
           variant="light"
           onClick={() => setEdit(false)}
-          fullWidth
-          className="sm:w-auto"
+          styles={{ root: { borderRadius: "12px", fontWeight: 600 } }}
         >
           Cancel
         </Button>

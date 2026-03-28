@@ -5,6 +5,7 @@ import com.jobportal.DTO.ResponseDTO;
 import com.jobportal.DTO.UserDTO;
 import com.jobportal.Exception.JobPortalException;
 import com.jobportal.Service.UserService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins = "*")
 @RequestMapping("/users")
 @Validated
+@Tag(name = "User APIs")
 public class UserController {
 
     @Autowired
@@ -31,11 +33,11 @@ public class UserController {
     }
 
     // login
-    @PostMapping("/login")
-    public ResponseEntity<UserDTO> loginUser(@RequestBody @Valid LoginDTO loginDTO) throws JobPortalException {
-        UserDTO userDTO = userService.loginUser(loginDTO);
-        return new ResponseEntity<>(userDTO, HttpStatus.OK);
-    }
+//    @PostMapping("/login")
+//    public ResponseEntity<UserDTO> loginUser(@RequestBody @Valid LoginDTO loginDTO) throws JobPortalException {
+//        UserDTO userDTO = userService.loginUser(loginDTO);
+//        return new ResponseEntity<>(userDTO, HttpStatus.OK);
+//    }
 
     // send OTP for forgot password
     @PostMapping("/sendOTP/{email}")

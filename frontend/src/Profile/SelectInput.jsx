@@ -1,32 +1,22 @@
-import { Combobox, InputBase, useCombobox, ScrollArea } from '@mantine/core';
-import { useState, useEffect } from 'react';
+import { Combobox, InputBase, useCombobox, ScrollArea } from "@mantine/core";
+import { useState } from "react";
 
-const SelectInput = (props) => {
+const SelectInput = ({ form, name, label, placeholder, options = [], leftSection: Icon }) => {
   const combobox = useCombobox({
     onDropdownClose: () => combobox.resetSelectedOption(),
   });
 
-  const [data, setData] = useState([]);
-  const [value, setValue] = useState('');
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState(form.values[name] || "");
 
-  // 🔥 Will update whenever editing values are inserted
-  useEffect(() => {
-    setData(props.options);
+  const exactOptionMatch = options.some((item) => item === search);
 
-    const currentValue = props.form.values[props.name]; // cleaner access
-    setValue(currentValue || "");
-    setSearch(currentValue || "");
-  }, [props.form.values[props.name]]);   // 👈 runs when form receives values
-
-  const exactOptionMatch = data.some((item) => item === search);
   const filteredOptions = exactOptionMatch
-    ? data
-    : data.filter((item) =>
+    ? options
+    : options.filter((item) =>
         item?.toLowerCase().includes(search?.toLowerCase().trim())
       );
 
-  const options = filteredOptions.map((item) => (
+  const renderedOptions = filteredOptions.map((item) => (
     <Combobox.Option value={item} key={item}>
       {item}
     </Combobox.Option>
@@ -37,48 +27,56 @@ const SelectInput = (props) => {
       store={combobox}
       withinPortal={false}
       onOptionSubmit={(val) => {
-        if (val === '$create') {
-          setData((current) => [...current, search]);
-          setValue(search);
-          props.form.setFieldValue(props.name, search);
-        } else {
-          setValue(val);
-          setSearch(val);
-          props.form.setFieldValue(props.name, val);
-        }
+        const newValue = val === "$create" ? search : val;
+
+        form.setFieldValue(name, newValue);
+        setSearch(newValue);
+
         combobox.closeDropdown();
       }}
     >
       <Combobox.Target>
         <InputBase
-          {...props.form.getInputProps(props.name)}
+          {...form.getInputProps(name)}
+          label={label}
           withAsterisk
-          label={props.label}
-          leftSection={<props.leftSection stroke={1.5} />}
-          rightSection={<Combobox.Chevron />}
+          placeholder={placeholder}
           value={search}
+          leftSection={Icon ? <Icon stroke={1.5} size={16} /> : null}
+          rightSection={<Combobox.Chevron />}
+          rightSectionPointerEvents="none"
           onChange={(event) => {
-            combobox.openDropdown();
-            combobox.updateSelectedOptionIndex();
             setSearch(event.currentTarget.value);
+            combobox.openDropdown();
           }}
           onClick={() => combobox.openDropdown()}
           onFocus={() => combobox.openDropdown()}
-          onBlur={() => {
-            combobox.closeDropdown();
-            setSearch(value || "");
+          styles={{
+            input: {
+              borderRadius: "12px",
+              borderColor: "#bfdbfe",
+              background: "#fff",
+              fontSize: "14px",
+            },
+            label: {
+              fontWeight: 600,
+              color: "#1e3a5f",
+              fontSize: "13px",
+              marginBottom: "4px",
+            },
           }}
-          placeholder={props.placeholder}
-          rightSectionPointerEvents="none"
         />
       </Combobox.Target>
 
       <Combobox.Dropdown>
         <Combobox.Options>
-          <ScrollArea.Autosize mah={200} type="scroll">
-            {options}
-            {!exactOptionMatch && search?.trim()?.length > 0 && (
-              <Combobox.Option value="$create">+ Create {search}</Combobox.Option>
+          <ScrollArea.Autosize mah={200}>
+            {renderedOptions}
+
+            {!exactOptionMatch && search.trim().length > 0 && (
+              <Combobox.Option value="$create">
+                + Create "{search}"
+              </Combobox.Option>
             )}
           </ScrollArea.Autosize>
         </Combobox.Options>

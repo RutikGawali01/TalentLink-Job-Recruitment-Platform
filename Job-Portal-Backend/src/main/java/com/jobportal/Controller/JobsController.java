@@ -3,6 +3,7 @@ package com.jobportal.Controller;
 import com.jobportal.DTO.*;
 import com.jobportal.Exception.JobPortalException;
 import com.jobportal.Service.JobService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,7 @@ import java.util.Map;
     @RequestMapping("/jobs")
 @CrossOrigin(origins = "*")
     @Validated
+@Tag(name = "Jobs APIs")
 public class JobsController {
     @Autowired
     private JobService jobService;

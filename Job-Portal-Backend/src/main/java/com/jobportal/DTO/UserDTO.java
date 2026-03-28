@@ -10,10 +10,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @NoArgsConstructor
 @Data
 @AllArgsConstructor
-public class UserDTO {
+public class   UserDTO {
 
     private Long id;
 
@@ -32,8 +34,12 @@ public class UserDTO {
 
     private Long profileId;
 
-    private boolean profileCompleted;   // default false
+//   / private boolean profileCompleted;   // default false
     private Long companyId;
+
+    private LocalDateTime created_at;
+
+    private String status;
 
     private Integer onboardingStep = 1;
 

@@ -21,7 +21,7 @@ const Jobs = () => {
     getAllJobs()
       .then((res) => {
         setJobList(res.filter((job) => job.jobStatus == "ACTIVE"));
-        console.log(res[0]);
+        // console.log(res[0]);
       })
       .catch((err) => {
         console.log(err);

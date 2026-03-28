@@ -3,129 +3,108 @@ import TalentCards from "./TalentCards";
 import { useState, useEffect } from "react";
 import { getAllProfile } from "../Services/ProfileService";
 import { useSelector, useDispatch } from "react-redux";
-import { resetFilter } from "../Slice/FilterSlice"; //resetFilter → clears filter state when page loads
+import { resetFilter } from "../Slice/FilterSlice";
 
 const Talents = () => {
   const dispatch = useDispatch();
-  const [talents, setTalents] = useState([]); // store all talents
+  const [talents, setTalents] = useState([]);
+  const filter = useSelector((state) => state.filter);
+  const sort = useSelector((state) => state.sort);
+  const [filteredTalents, setFilteredTalents] = useState([]);
 
-  const filter = useSelector((state) => state.filter); //Stores selected filters (name, skills, etc.)
-
-  const sort = useSelector((state) => state.sort); //Stores selected sort option  from dropdown
-  const [filteredTalents, setFilteredTalents] = useState([]); //after filter
-
-  // fetch data when page loads
-  // runs only once
   useEffect(() => {
-    dispatch(resetFilter()); // clear old filters
+    dispatch(resetFilter());
     getAllProfile()
-      .then((res) => {
-        setTalents(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+      .then((res) => setTalents(res))
+      .catch((err) => console.log(err));
   }, []);
 
-  // case insensitive for all filters
-  //This effect runs whenever filters change OR talents change.
   useEffect(() => {
-    // starts with all the talents  and then reduces after apply filter
-    let filterTalent = talents; // all talents
-    // check if name filter exists or not
+    let filterTalent = talents;
 
     if (filter?.name)
-      filterTalent = filterTalent?.filter(
-        (talent) =>
-          talent?.name?.toLowerCase().includes(filter?.name?.toLowerCase()), //filer.name - typed  name Ex .  ru
-        //"rutik".includes("ru") →
+      filterTalent = filterTalent?.filter((talent) =>
+        talent?.name?.toLowerCase().includes(filter?.name?.toLowerCase()),
       );
 
-    // .some -- “Does at least ONE element in this array satisfy the condition?”
-    if (filter["Job Roles"] && filter["Job Roles"].length > 0) {
+    if (filter["Job Roles"] && filter["Job Roles"].length > 0)
       filterTalent = filterTalent?.filter((talent) =>
-        //condi for partic talent
         filter["Job Roles"]?.some((title) =>
           talent?.headline?.toLowerCase().includes(title?.toLowerCase()),
         ),
       );
-    }
 
-    if (filter.Location && filter.Location.length > 0) {
+    if (filter.Location && filter.Location.length > 0)
       filterTalent = filterTalent?.filter((talent) =>
         filter.Location?.some((location) =>
           talent.location?.toLowerCase().includes(location?.toLowerCase()),
         ),
       );
-    }
 
-    // filter.Skills → selected skills
-    //talent.skills → array of skills of talent
-    // trt to debug on paper
-    if (filter.Skills && filter.Skills.length > 0) {
-      filterTalent = filterTalent.filter(
-        (
-          talent, //“Include this talent if---> any selected skill----> exists in any of the talent’s skills”
-        ) =>
-          filter.Skills?.some(
-            (
-              skill, // for selected skill
-            ) =>
-              talent.skills?.some((talentSkill) =>
-                talentSkill?.toLowerCase().includes(skill?.toLowerCase()),
-              ),
+    if (filter.Skills && filter.Skills.length > 0)
+      filterTalent = filterTalent.filter((talent) =>
+        filter.Skills?.some((skill) =>
+          talent.skills?.some((talentSkill) =>
+            talentSkill?.toLowerCase().includes(skill?.toLowerCase()),
           ),
+        ),
       );
-    }
 
-    if (filter.exp && filter.exp.length > 0) {
+    if (filter.exp && filter.exp.length > 0)
       filterTalent = filterTalent.filter(
         (talent) =>
           filter.exp[0] <= talent.totalExp && talent.totalExp <= filter.exp[1],
       );
-    }
+
     setFilteredTalents(filterTalent);
   }, [filter, talents]);
 
-  // sort - talents based on exp
   useEffect(() => {
-    if (sort === "Experience: Low to High") {
-      setTalents((prevTalents) =>
-        [...prevTalents].sort((a, b) => a.totalExp - b.totalExp),
-      );
-    } else if (sort === "Experience: High to Low") {
-      setTalents((prevTalents) =>
-        [...prevTalents].sort((a, b) => b.totalExp - a.totalExp),
-      );
-    }
+    if (sort === "Experience: Low to High")
+      setTalents((prev) => [...prev].sort((a, b) => a.totalExp - b.totalExp));
+    else if (sort === "Experience: High to Low")
+      setTalents((prev) => [...prev].sort((a, b) => b.totalExp - a.totalExp));
   }, [sort]);
 
   return (
-    <div className="p-5 ">
-      <div className="px-6 sm:px-10 lg:px-20 xl:px-32">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 py-6">
-          {/* Title */}
-          <h1 className="text-2xl sm:text-2xl lg:text-4xl font-semibold">
+    <div className="mt-8">
+
+      {/* ── Header Row ── */}
+      <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-7">
+        <div>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">
             Talents
           </h1>
-
-          {/* Sort Section */}
-          <div className="flex justify-start sm:justify-end">
-            <Sort />
-          </div>
+          <p className="text-sm text-blue-500 font-medium mt-1">
+            {filteredTalents.length} profile{filteredTalents.length !== 1 ? "s" : ""} found
+          </p>
+        </div>
+        <div>
+          <Sort />
         </div>
       </div>
 
-      {/*  all talents */}
-      <div className="flex mt-10 flex-wrap gap-6 justify-center">
-        {filteredTalents.length ? (
-          filteredTalents.map((talent, index) => (
+      {/* ── Cards Grid ── */}
+      {filteredTalents.length ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {filteredTalents.map((talent, index) => (
             <TalentCards key={index} {...talent} />
-          ))
-        ) : (
-          <div className="text-3xl font-semibold"> No Talents found</div>
-        )}
-      </div>
+          ))}
+        </div>
+      ) : (
+        <div className="flex flex-col items-center justify-center py-28 gap-4">
+          <div className="p-5 rounded-full bg-blue-50 border-2 border-blue-100 shadow-inner">
+            <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#93c5fd" strokeWidth="1.5">
+              <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+              <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
+            </svg>
+          </div>
+          <div className="text-gray-700 font-semibold text-lg">No Talents Found</div>
+          <div className="text-xs text-blue-400">Try adjusting your search filters</div>
+        </div>
+      )}
+
     </div>
   );
 };

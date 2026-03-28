@@ -32,14 +32,6 @@ public class EmployerProfileServiceImpl implements EmployerProfileService {
 
         EmployerProfile profile = employerProfileRepository.findById(dto.getId())
                 .orElseThrow(() -> new JobPortalException("PROFILE_NOT_FOUND"));
-
-        // ---------- Map DTO → Entity ----------
-//        profile.setFullName(dto.getFullName());
-//        profile.setRole(dto.getRole());
-//        profile.setPhone(dto.getPhone());
-//        profile.setProfilePicture(dto.getProfilePicture());
-//        profile.setBanner(dto.getBanner());
-
          profile = dto.toEntity();
 
         employerProfileRepository.save(profile);
@@ -48,16 +40,14 @@ public class EmployerProfileServiceImpl implements EmployerProfileService {
         User user = userRepository.findByEmail(profile.getEmail())
                 .orElseThrow(() -> new JobPortalException("USER_NOT_FOUND"));
 
-        // ---------- UPDATE USER ONBOARDING ----------
+        // Link profile with user
+        profile.setUserId(user.getId());
+        employerProfileRepository.save(profile);
+
         user.setProfileId(profile.getId());
-        user.setProfileCompleted(true);   // profile saved → mark true
-
         if (user.getAccountType() == AccountType.EMPLOYER) {
-            user.setProfileCompleted(true);
             user.setOnboardingStep(2);
-            userRepository.save(user);
         }
-
 
         userRepository.save(user);
 
@@ -83,18 +73,22 @@ public class EmployerProfileServiceImpl implements EmployerProfileService {
     }
 
     @Override
-    public Long createProfile(String email) throws JobPortalException {
+    public Long createProfile(Long userId, String email, String name) throws JobPortalException {
 
         EmployerProfile employerProfile = new EmployerProfile();
         employerProfile.setId(Utilities.getNextSequence("employer_profile"));
 
-        employerProfile.setFullName(null);
+        employerProfile.setUserId(userId);
+        employerProfile.setFullName(name);
         employerProfile.setEmail(email);
         employerProfile.setRole(null);
         employerProfile.setPhone(null);
         employerProfile.setProfilePicture(null);
         employerProfile.setCompanyId(null);
         employerProfile.setProfileCompleted(false);
+
+
+
 
         employerProfileRepository.save(employerProfile);
 
@@ -123,20 +117,9 @@ public class EmployerProfileServiceImpl implements EmployerProfileService {
 
         boolean completed = percentage == 100;
 
-        // ---------- UPDATE EMPLOYER PROFILE ----------
         if (p.isProfileCompleted() != completed) {
             p.setProfileCompleted(completed);
             employerProfileRepository.save(p);
-        }
-
-        // ---------- 🔥 SYNC WITH USER TABLE ----------
-        User user = userRepository.findByEmail(p.getEmail())
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
-        if (user.isProfileCompleted() != completed) {
-            user.setProfileCompleted(completed);
-            user.setProfileId(p.getId());
-            userRepository.save(user);
         }
 
         return new ProfileCompletionDTO(completed, percentage, missing);

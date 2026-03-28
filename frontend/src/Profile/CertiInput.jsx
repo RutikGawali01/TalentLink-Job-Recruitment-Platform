@@ -27,69 +27,37 @@ const CertiInput = ({ add, setEdit }) => {
     },
   });
 
+  const inputStyles = {
+    input: { borderRadius: "12px", borderColor: "#bfdbfe", background: "#fff", fontSize: "14px" },
+    label: { fontWeight: 600, color: "#1e3a5f", fontSize: "13px", marginBottom: "4px" },
+  };
+
   const handleSave = () => {
     form.validate();
     if (!form.isValid()) return;
-
     let certs = [...(profile.certifications || [])];
     certs.push(form.getValues());
-
-    dispatch(
-      changeProfile({
-        ...profile,
-        certifications: certs,
-      })
-    );
-
+    dispatch(changeProfile({ ...profile, certifications: certs }));
     setEdit(false);
     successNotification("Success", "Certificate added successfully");
   };
 
   return (
-    <div className="flex flex-col gap-6">
-      <h3 className="text-lg sm:text-xl font-semibold">
-        Add Certificate
-      </h3>
+    <div className="flex flex-col gap-5">
+      <h3 className="text-base sm:text-lg font-bold text-slate-900">Add Certificate</h3>
 
-      {/* Responsive Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <TextInput
-          {...form.getInputProps("name")}
-          withAsterisk
-          label="Title"
-        />
-
-        <SelectInput
-          form={form}
-          name="issuer"
-          {...select[1]}
-        />
+        <TextInput withAsterisk label="Title" {...form.getInputProps("name")} styles={inputStyles} />
+        <SelectInput form={form} name="issuer" {...select[1]} />
       </div>
 
-      <TextInput
-        {...form.getInputProps("certificateId")}
-        withAsterisk
-        label="Certificate ID"
-      />
+      <TextInput withAsterisk label="Certificate ID" {...form.getInputProps("certificateId")} styles={inputStyles} />
 
-      <div className="flex flex-col sm:flex-row gap-4">
-        <Button
-          color="green.8"
-          variant="filled"
-          onClick={handleSave}
-          fullWidth
-          className="sm:w-auto"
-        >
+      <div className="flex flex-col sm:flex-row gap-3 pt-1">
+        <Button color="green.8" variant="filled" onClick={handleSave} styles={{ root: { borderRadius: "12px", fontWeight: 600 } }}>
           Save
         </Button>
-
-        <Button
-          color="red.8"
-          variant="light"
-          onClick={() => setEdit(false)}
-          fullWidth
-          className="sm:w-auto"
-        >
+        <Button color="red.8" variant="light" onClick={() => setEdit(false)} styles={{ root: { borderRadius: "12px", fontWeight: 600 } }}>
           Cancel
         </Button>
       </div>

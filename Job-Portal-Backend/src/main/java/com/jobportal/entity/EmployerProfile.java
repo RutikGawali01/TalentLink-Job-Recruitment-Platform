@@ -18,6 +18,7 @@ public class EmployerProfile {
     @Id
     private Long id;
 
+    private Long userId;
 
     private String fullName;
     private String email;
@@ -35,6 +36,7 @@ public class EmployerProfile {
     public EmployerProfileDTO toDTO() {
         return new EmployerProfileDTO(
                 id,
+                userId,
                 fullName,
                 email,
                 role,

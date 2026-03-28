@@ -4,60 +4,114 @@ import {
   IconBrandInstagram,
   IconBrandX,
 } from "@tabler/icons-react";
-import {footerLinks} from "../assets/Data/Data";
-import {useLocation} from "react-router-dom";
+import { footerLinks } from "../assets/Data/Data";
+import { useLocation } from "react-router-dom";
 
 const FooterComp = () => {
   const location = useLocation();
-  return (
-    location.pathname != "/signup" && 
-    location.pathname != "/login" && 
-    <div className="pt-20 pb-5 flex flex-wrap gap-8 justify-around bg-[var(--blue-100)] font-['poppins] ">
-      
-      <div className="w-1/4 max-[640px]:w-1/3 max-[475px]:w-1/2 max-[350px]:w-full flex flex-col gap-4 ">
 
-        <div className="flex gap-1 items-center text-bright-sun-400">
-          <IconAnchor className="h-6 w-6 " stroke={2.25} />
-          <div className="text-xl font-semibold">HireFlow</div>
-        </div>
-        <div className="text-sm text-mine-shaft-300 ">
-          Job portal with user profiles, skill updates, certifications, work
-          experience and admin job postings.
-        </div>
-        <div
-          className="flex gap-3 text-bright-sun-400 
-            [&>div]:bg-mine-shaft-900 [&>div]:p-2 [&>div]:rounded-full [&>div]:cursor-pointer
-            [&>div]:hover:bg-mine-shaft-800"
-        >
+  if (location.pathname === "/signup" || location.pathname === "/login")
+    return null;
+
+  return (
+    <footer className="bg-slate-900 px-4 sm:px-8 lg:px-10 pt-14 pb-8 border-t border-white/5 mt-auto">
+
+      <div className="max-w-6xl mx-auto">
+
+        {/* Top Section */}
+        <div className="grid gap-12 mb-12
+                        grid-cols-1
+                        sm:grid-cols-2
+                        lg:grid-cols-4">
+
+          {/* Logo + Description */}
           <div>
-            <IconBrandFacebook />
+
+            <div className="flex items-center gap-2.5 mb-4">
+
+              <div className="w-9 h-9 bg-gradient-to-br from-blue-600 to-blue-800 rounded-xl flex items-center justify-center text-white">
+                <IconAnchor size={18} />
+              </div>
+
+              <span className="text-xl font-extrabold text-white tracking-tight">
+                Hire<span className="text-blue-400">Flow</span>
+              </span>
+
+            </div>
+
+            <p className="text-slate-500 text-sm leading-relaxed max-w-xs">
+              Job portal with user profiles, skill updates, certifications,
+              work experience and admin job postings.
+            </p>
+
+            {/* Social Icons */}
+            <div className="flex gap-3 mt-5">
+
+              <div className="bg-slate-800 p-2 rounded-full cursor-pointer hover:bg-slate-700 transition">
+                <IconBrandFacebook size={18} className="text-white" />
+              </div>
+
+              <div className="bg-slate-800 p-2 rounded-full cursor-pointer hover:bg-slate-700 transition">
+                <IconBrandInstagram size={18} className="text-white" />
+              </div>
+
+              <div className="bg-slate-800 p-2 rounded-full cursor-pointer hover:bg-slate-700 transition">
+                <IconBrandX size={18} className="text-white" />
+              </div>
+
+            </div>
+
           </div>
-          <div>
-            <IconBrandInstagram />
-          </div>
-          <div>
-            <IconBrandX />
-          </div>
+
+          {/* Footer Links */}
+          {footerLinks.map((item, index) => (
+            <div key={index}>
+
+              <div className="text-white font-bold text-sm mb-4">
+                {item.title}
+              </div>
+
+              {item.links.map((link, i) => (
+                <div
+                  key={i}
+                  className="text-slate-500 text-sm mb-2.5 cursor-pointer hover:text-white transition-colors"
+                >
+                  {link}
+                </div>
+              ))}
+
+            </div>
+          ))}
+
         </div>
+
+        {/* Bottom Bar */}
+        <div className="border-t border-white/5 pt-6 flex flex-col sm:flex-row justify-between items-center gap-4">
+
+          <div className="text-slate-600 text-xs text-center sm:text-left">
+            © 2026 HireFlow. All rights reserved.
+          </div>
+
+          <div className="flex gap-6">
+
+            {["Privacy Policy", "Terms of Service", "Cookie Policy"].map(
+              (item) => (
+                <span
+                  key={item}
+                  className="text-slate-600 text-xs cursor-pointer hover:text-slate-400 transition-colors"
+                >
+                  {item}
+                </span>
+              )
+            )}
+
+          </div>
+
+        </div>
+
       </div>
 
-        {
-            footerLinks.map((item,index) => 
-                <div key={index} className="">
-                    <div className="text-lg font-semibold mb-4 text-[var(--blue-500)]">{item.title}</div>
-                    {
-                        item.links.map((link, index) => 
-                        <div key={index} className="text-primary text-sm 
-                        hover:text-bright-sun-400 cursor-pointer mb-1 hover:translate-x-2 transition duration-300 ease-in-out">
-                            {link}
-                        </div> )
-                    }
-                </div>
-            )
-
-        }
-
-    </div>
+    </footer>
   );
 };
 

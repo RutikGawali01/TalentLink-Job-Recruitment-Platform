@@ -1,7 +1,41 @@
-import { IconBriefcase,  IconMapPin } from "@tabler/icons-react";
+import { IconBriefcase, IconBuilding, IconMapPin } from "@tabler/icons-react";
 
-const fields=[
-    {label:"Headline",placeholder:"Enter Short headline", options:['Full Stack Dev', 'Java Backend Dev', 'React Intern', 'AI Eng.', 'Data Scientist', 'Data Analyst', 'Devops Eng.', 'ML Eng.'],value:"Full Stack Dev.", leftSection:IconBriefcase},
-    {label:"Location",placeholder:"Enter Your Location", options:['Delhi', 'Pune', 'Hydrabad', 'London', 'Mumbai', 'Tokyo', 'New York', ], value:"New York, United States",leftSection:IconMapPin}
-]
+const fields = [
+  {
+    label: "Headline",
+    placeholder: "Enter Short headline",
+    options: [
+      "Software Engineer",
+      "Frontend Developer",
+      "Backend Developer",
+      "Full Stack Developer"
+    ],
+    leftSection: IconBriefcase
+  },
+  {
+    label: "Company",
+    placeholder: "Enter Company",
+    options: [
+      "Google",
+      "Microsoft",
+      "Amazon",
+      "Meta",
+      "Apple"
+    ],
+    leftSection: IconBuilding
+  },
+  {
+    label: "Location",
+    placeholder: "Enter Your Location",
+    options: [
+      "Pune",
+      "Mumbai",
+      "Bangalore",
+      "Delhi",
+      "Hyderabad"
+    ],
+    leftSection: IconMapPin
+  }
+];
+
 export default fields;

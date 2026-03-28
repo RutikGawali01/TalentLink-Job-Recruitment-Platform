@@ -7,7 +7,7 @@ import com.jobportal.Exception.JobPortalException;
 import java.util.List;
 
 public interface ProfileService {
-    public Long createProfile(Long userId, String email, String name) throws JobPortalException;
+    public Long     createProfile(Long userId, String email, String name) throws JobPortalException;
 
     public ProfileDTO getProfile(Long id) throws JobPortalException;
 

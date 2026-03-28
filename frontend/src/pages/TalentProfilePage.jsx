@@ -1,38 +1,52 @@
-import {useState, useEffect} from "react"
-import { Link, useNavigate } from "react-router-dom";
- import { Button, useMantineTheme} from "@mantine/core"
- import {IconArrowLeft} from "@tabler/icons-react";
+import { useState, useEffect } from "react"
+import { useNavigate } from "react-router-dom";
+import { Button } from "@mantine/core"
+import { IconArrowLeft } from "@tabler/icons-react";
 import Profile from "../TalentProfile/Profile";
-import {profile} from "../assets/Data/TalentData";
+import { profile } from "../assets/Data/TalentData";
 import RecommendTalent from "../TalentProfile/RecommendTalent";
-import {getAllProfile} from "../Services/ProfileService"
+import { getAllProfile } from "../Services/ProfileService"
 
 const TalentProfilePage = () => {
-
   const navigate = useNavigate();
-   const theme = useMantineTheme();
-   const [talents , setTalents] = useState([]);
-   
-   useEffect(() => {
-    getAllProfile().then((res)=>{
+  const [talents, setTalents] = useState([]);
+
+  useEffect(() => {
+    getAllProfile().then((res) => {
       setTalents(res);
-    }).catch((err)=>{
+    }).catch((err) => {
       console.log(err);
     })
-   }, [])
-   
+  }, [])
+
   return (
-    <div className="min-h-[100vh] bg-mine-shaft-950 font-['poppins'] p-4">
-      
-          <Button my={"sm"} onClick={()=> navigate(-1)} leftSection={<IconArrowLeft size={20}  />} color={"brand.4"}  variant='light' >Back </Button>
-    
-        {/* <Divider  size="xs"   /> */}
-        <div className="flex gap-5 px-25 py-5 mb-15">
-          <Profile {...profile} />
-          <RecommendTalent talents ={talents}  />
+    <div
+      className="min-h-[100vh] font-['poppins'] p-4"
+      style={{
+        background: "linear-gradient(160deg, #f0f7ff 0%, #e8f3ff 40%, #ddeeff 100%)",
+      }}
+    >
+      <Button
+        my="sm"
+        onClick={() => navigate(-1)}
+        leftSection={<IconArrowLeft size={18} />}
+        variant="subtle"
+        style={{
+          color: "#1e6fcc",
+          background: "rgba(30,111,204,0.07)",
+          border: "1px solid rgba(30,111,204,0.18)",
+          borderRadius: "10px",
+          fontFamily: "poppins",
+          fontWeight: 500,
+        }}
+      >
+        Back
+      </Button>
 
-        </div>
-
+      <div className="flex gap-6 px-6 py-5">
+        <Profile {...profile} />
+        <RecommendTalent talents={talents} />
+      </div>
     </div>
   )
 }

@@ -1,6 +1,10 @@
 package com.jobportal.utility;
 
+
 import com.jobportal.Exception.JobPortalException;
+
+
+import com.jobportal.utility.ErrorInfo;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,56 +17,81 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
-
-@RestControllerAdvice //This is a global exception handler for all controllers
+@RestControllerAdvice
 public class ExceptionControllerAdvice {
 
-    //used to access environment variables
     @Autowired
     private Environment environment;
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorInfo> generalException(Exception exception){
-        ErrorInfo error = new ErrorInfo(exception.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                LocalDateTime.now());
 
-        return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-
+    // =====================================================
+    // HANDLE CUSTOM BUSINESS EXCEPTION
+    // =====================================================
     @ExceptionHandler(JobPortalException.class)
-    public ResponseEntity<ErrorInfo> generalException(JobPortalException exception){
-        String msg = environment.getProperty(exception.getMessage());
+    public ResponseEntity<Map<String,Object>> handleJobPortalException(JobPortalException ex){
 
-        ErrorInfo error = new ErrorInfo(msg, HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                LocalDateTime.now());
+        Map<String,Object> error = new HashMap<>();
 
-        return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+        error.put("errorMessage", ex.getMessage());
+        error.put("errorCode", HttpStatus.CONFLICT.value());
+        error.put("timeStamp", LocalDateTime.now());
+
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(error);
     }
 
+
+    // =====================================================
+    // VALIDATION ERRORS
+    // =====================================================
     @ExceptionHandler({MethodArgumentNotValidException.class, ConstraintViolationException.class})
     public ResponseEntity<ErrorInfo> validatorExceptionHandler(Exception exception){
+
         String msg="";
+
         if(exception instanceof MethodArgumentNotValidException methodArgumentNotValidException){
-            msg= methodArgumentNotValidException
+
+            msg = methodArgumentNotValidException
                     .getAllErrors()
                     .stream()
                     .map(ObjectError::getDefaultMessage)
                     .collect(Collectors.joining(", "));
-        }else {
+
+        } else {
+
             ConstraintViolationException constraintViolationException = (ConstraintViolationException) exception;
-            msg=constraintViolationException
+
+            msg = constraintViolationException
                     .getConstraintViolations()
                     .stream()
                     .map(ConstraintViolation::getMessage)
                     .collect(Collectors.joining(", "));
         }
 
-        ErrorInfo error = new ErrorInfo(msg, HttpStatus.BAD_REQUEST.value(),
+        ErrorInfo error = new ErrorInfo(msg,
+                HttpStatus.BAD_REQUEST.value(),
                 LocalDateTime.now());
 
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
 
+    // =====================================================
+    // GENERIC EXCEPTION (ALWAYS LAST)
+    // =====================================================
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorInfo> generalException(Exception exception){
+
+        ErrorInfo error = new ErrorInfo(
+                exception.getMessage(),
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                LocalDateTime.now()
+        );
+
+        return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }

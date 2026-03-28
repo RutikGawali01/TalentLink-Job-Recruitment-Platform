@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.annotation.Id;
 
+import java.time.LocalDateTime;
 import java.util.Base64;
 
 
@@ -39,14 +40,18 @@ public class Company {
     @Indexed(unique = true)
     private String website;
 
+    @Indexed(unique = true)
+    private  String domain;
+
     private Integer foundedYear;
     private byte[] logo;
 
-    private Long employerId;
+    private Long employerId; // created by
 
     private boolean profileCompleted;
     private boolean verified;
 
+    private LocalDateTime created_at;
 
     public CompanyDTO toDTO() {
         return new CompanyDTO(
@@ -61,11 +66,13 @@ public class Company {
                 companySize,
                 workModel,
                 website,
+                domain,
                 foundedYear,
                 logo != null ? Base64.getEncoder().encodeToString(logo) : null,
                 employerId,
                 profileCompleted,
-                verified
+                verified,
+                created_at
         );
     }
 

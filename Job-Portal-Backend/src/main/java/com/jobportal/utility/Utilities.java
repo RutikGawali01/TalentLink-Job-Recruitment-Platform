@@ -11,6 +11,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
 
+import java.net.URI;
 import java.security.SecureRandom;
 
 
@@ -59,6 +60,23 @@ public class Utilities {
             otp.append(random.nextInt(10));
         }
         return otp.toString();
+    }
+
+    public String extractDomain(String website) {
+
+        try{
+            URI uri = new URI(website);
+            String host = uri.getHost();
+
+            if(host.startsWith("www.")){
+                host = host.substring(4);
+            }
+
+            return host;
+        }
+        catch(Exception e){
+            throw new RuntimeException("Invalid website");
+        }
     }
 
 

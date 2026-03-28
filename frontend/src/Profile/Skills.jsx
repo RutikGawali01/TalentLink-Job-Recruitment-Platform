@@ -23,11 +23,7 @@ const Skills = () => {
   };
 
   const handleSave = async () => {
-    const updatedProfile = {
-      ...profile,
-      skills,
-    };
-
+    const updatedProfile = { ...profile, skills };
     await dispatch(changeProfile(updatedProfile)).unwrap();
     setEdit(false);
     successNotification("Success", "Skills updated successfully");
@@ -35,110 +31,72 @@ const Skills = () => {
 
   if (!profile) {
     return (
-      <div className="p-6 text-center text-gray-500">
-        Loading profile...
+      <div className="flex items-center justify-center p-10">
+        <div className="w-8 h-8 rounded-full border-4 border-blue-100 border-t-blue-500 animate-spin" />
       </div>
     );
   }
 
   return (
-    <div
-      className="
-        bg-white 
-        rounded-2xl 
-        shadow-sm 
-        border-default
-        p-4 
-        sm:p-6 
-        md:p-8
-      "
-    >
-      {/* ===== Header ===== */}
-      <div className="flex justify-between items-center mb-6 pb-3 border-b-2 border-slate-200">
-        <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-slate-900">
-          Skills
-        </h2>
+    <div className="bg-white rounded-3xl shadow-lg border border-blue-100 p-5 sm:p-7 md:p-8">
+
+      {/* Header */}
+      <div className="flex justify-between items-center mb-6 pb-4 border-b border-blue-50">
+        <div className="flex items-center gap-3">
+          <div className="w-1 h-6 rounded-full bg-gradient-to-b from-blue-400 to-blue-600" />
+          <h2 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">Skills</h2>
+        </div>
 
         {!edit ? (
-          <ActionIcon
-            variant="subtle"
-            color="brand"
-            size="lg"
+          <button
             onClick={handleEdit}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-50 border border-blue-100 text-blue-600 text-xs font-semibold hover:bg-blue-100 transition-all duration-200"
           >
-            <IconPencil size={20} />
-          </ActionIcon>
+            <IconPencil size={13} /> Edit
+          </button>
         ) : (
           <div className="flex gap-2">
-            <ActionIcon
-              variant="subtle"
-              color="green.8"
-              size="lg"
+            <button
               onClick={handleSave}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-semibold hover:bg-emerald-100 transition-all duration-200"
             >
-              <IconCheck size={20} />
-            </ActionIcon>
-
-            <ActionIcon
-              variant="subtle"
-              color="red.8"
-              size="lg"
+              <IconCheck size={13} /> Save
+            </button>
+            <button
               onClick={handleCancel}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-red-50 border border-red-200 text-red-600 text-xs font-semibold hover:bg-red-100 transition-all duration-200"
             >
-              <IconX size={20} />
-            </ActionIcon>
+              <IconX size={13} /> Cancel
+            </button>
           </div>
         )}
       </div>
 
-      {/* ===== Content ===== */}
+      {/* Content */}
       {edit ? (
-        <div className="max-w-3xl">
-          <TagsInput
-            value={skills}
-            onChange={setSkills}
-            placeholder="Add skills (Press Enter or comma)"
-            splitChars={[",", " ", "|"]}
-            className="w-full text-sm sm:text-base"
-          />
-        </div>
+        <TagsInput
+          value={skills}
+          onChange={setSkills}
+          placeholder="Type a skill and press Enter..."
+          splitChars={[",", " ", "|"]}
+          styles={{
+            input: { borderRadius: "12px", borderColor: "#bfdbfe", background: "#f8faff", fontSize: "14px" },
+            pill: { borderRadius: "20px", background: "#eff6ff", color: "#1d4ed8", fontWeight: 600, fontSize: "12px" },
+          }}
+        />
       ) : (
-        <div
-          className="
-            flex 
-            flex-wrap 
-            gap-2 
-            sm:gap-3
-          "
-        >
+        <div className="flex flex-wrap gap-2">
           {profile?.skills?.length > 0 ? (
             profile.skills.map((skill, index) => (
               <span
                 key={index}
-                className="
-                  px-3 
-                  py-1 
-                  sm:px-4 
-                  sm:py-1.5
-                  rounded-full 
-                  text-xs 
-                  sm:text-sm 
-                  font-medium
-                  bg-slate-100 
-                  text-slate-800 
-                  border 
-                  border-slate-200
-                  hover:bg-slate-200
-                  transition
-                "
+                className="px-3 py-1 rounded-full text-xs sm:text-sm font-medium bg-blue-50 text-blue-700 border border-blue-100 hover:bg-blue-100 transition-colors duration-150"
               >
                 {skill}
               </span>
             ))
           ) : (
-            <p className="text-sm sm:text-base text-slate-400">
-              No skills added yet
-            </p>
+            <p className="text-sm text-slate-400 italic">No skills added yet</p>
           )}
         </div>
       )}

@@ -13,10 +13,10 @@ export const fetchCompanyByEmployerId = createAsyncThunk(
       return await getCompany(employerId);
     } catch (error) {
       return rejectWithValue(
-        error?.response?.data || "Failed to fetch company"
+        error?.response?.data || "Failed to fetch company",
       );
     }
-  }
+  },
 );
 
 // ===== SAVE COMPANY (UPSERT) =====
@@ -26,15 +26,15 @@ export const saveCompanyProfile = createAsyncThunk(
     try {
       if (company.id) {
         return await updateCompany(company.id, company);
-      } else {
-        return await createCompany(company);
       }
+
+      return await createCompany(company);
     } catch (error) {
       return rejectWithValue(
-        error?.response?.data || "Failed to save company"
+        error?.response?.data?.errorMessage || "Failed to save company",
       );
     }
-  }
+  },
 );
 
 const companySlice = createSlice({

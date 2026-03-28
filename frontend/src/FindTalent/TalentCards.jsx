@@ -1,13 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { IconHeart, IconMapPin, IconCalendarMonth } from "@tabler/icons-react";
-import {
-  Text,
-  Modal,
-  Divider,
-  Avatar,
-  useMantineTheme,
-  Button,
-} from "@mantine/core";
+import { IconCalendar } from "@tabler/icons-react";
+import { Text, Modal, Divider, Avatar, Button } from "@mantine/core";
 import { Link, useParams } from "react-router-dom";
 import { useDisclosure } from "@mantine/hooks";
 import { DateInput, TimeInput } from "@mantine/dates";
@@ -20,71 +14,37 @@ import {
 import { formatInterviewTime, openBase64PDF } from "../Services/Utilities";
 
 const TalentCards = (props) => {
-  // console.log(props);
-  const profileId = props.profileId ?? props.id; //
+  const profileId = props.profileId ?? props.id;
 
-  // console.log(props);
-
-  // talent profile id
-
-  // Find Talents page
-  // Posted Jobs → Applicants
-  // Interviewed candidates
-  // Offered / Rejected candidates
-
-  // INTERVIEWING status
   const [date, setDate] = useState(null);
   const [time, setTime] = useState(null);
 
-  const theme = useMantineTheme();
-  const [opened, { open, close }] = useDisclosure(false); //Schedule Interview modal
-
-  const ref = useRef(null); //Reference to <TimeInput /> to open time picker programmatically.
-
-  // this profile generally refers to the talents who is applying , interviewing , rejected  in posted-jobs component
+  const [opened, { open, close }] = useDisclosure(false);
+  const ref = useRef(null);
   const [profile, setProfile] = useState({});
-
-  const { id } = useParams(); // get jobId from path
-
-  // used while changing application status
-
+  const { id } = useParams();
   const [app, { open: openApp, close: closeApp }] = useDisclosure(false);
-  //Controls View Application modal
 
-  // profile loading logic
   useEffect(() => {
-    //console.log(props.totalExp);
-    // Applicant comes from posted jobs
     if (props.applicantId) {
       getProfile(profileId)
-        .then((res) => {
-          setProfile(res);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+        .then((res) => setProfile(res))
+        .catch((err) => console.log(err));
     } else {
-      //Find Talents page
-      // profile data already exists in props
       setProfile(props);
-      //console.log(props.interviewTime);
     }
   }, [props]);
 
   const openBase64PDF = (base64) => {
-  const byteCharacters = atob(base64);
-  const byteNumbers = new Array(byteCharacters.length);
-
-  for (let i = 0; i < byteCharacters.length; i++) {
-    byteNumbers[i] = byteCharacters.charCodeAt(i);
-  }
-
-  const byteArray = new Uint8Array(byteNumbers);
-  const blob = new Blob([byteArray], { type: "application/pdf" });
-
-  const blobUrl = URL.createObjectURL(blob);
-  window.open(blobUrl, "_blank");
-};
+    const byteCharacters = atob(base64);
+    const byteNumbers = new Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+    const byteArray = new Uint8Array(byteNumbers);
+    const blob = new Blob([byteArray], { type: "application/pdf" });
+    window.open(URL.createObjectURL(blob), "_blank");
+  };
 
   const handleOffer = (status) => {
     let interview = {
@@ -92,118 +52,123 @@ const TalentCards = (props) => {
       applicantId: props.applicantId,
       applicationStatus: status,
     };
-    console.log(interview);
-    if (status == "INTERVIEWING") {
-      const [hours, minutes] = time.split(":").map(Number); ////time = "14:30" --> split → [14, 30]
 
-      // Always convert to real Date object
+    if (status === "INTERVIEWING") {
+      const [hours, minutes] = time.split(":").map(Number);
       const interviewDate = new Date(date);
       interviewDate.setHours(hours, minutes, 0, 0);
-
       interview = { ...interview, interviewTime: interviewDate };
     }
+
     changeAppliStatus(interview)
-      .then((res) => {
-        console.log(res);
-        if (status == "INTERVIEWING") {
-          if (!date || !time) {
-            errorNotification("Error", "Please select date and time");
-            return;
-          }
-          successNotification(
-            "Interview Scheduled",
-            "Interview Scheduled Successfully",
-          );
-        } else if (status == "OFFERED") {
+      .then(() => {
+        if (status === "INTERVIEWING") {
+          if (!date || !time) { errorNotification("Error", "Please select date and time"); return; }
+          successNotification("Interview Scheduled", "Interview Scheduled Successfully");
+        } else if (status === "OFFERED") {
           successNotification("Offered", "Offer had been Sent Successfully");
         } else {
-          successNotification("Rejected", "applicant had been Rejected");
+          successNotification("Rejected", "Applicant had been Rejected");
         }
-
         window.location.reload();
       })
-      .catch((err) => {
-        console.log(err);
-        errorNotification("Error", err.response.data.errorMessage);
-      });
+      .catch((err) => errorNotification("Error", err.response.data.errorMessage));
   };
 
   return (
-    // Find Talents page
-    // Posted Jobs → Applicants
-    // Interviewed candidates
-    // Offered / Rejected candidates
     <div
-      className="bg-white cursor-pointer flex flex-col border  border-gray-300
-        gap-3 rounded-xl p-4 w-96 max-[900px]:w-[48%] max-[767px]:w-full hover:shadow-[0_0_5px_1px_blue] !shadow-[var(--blue-600)]"
+      className="
+        bg-white flex flex-col gap-3 rounded-2xl p-4
+        w-96 max-[900px]:w-[48%] max-[767px]:w-full
+        transition-all duration-200 cursor-pointer
+      "
+      style={{
+        border: "1.5px solid #bfdbfe",
+        boxShadow:
+          "0 0 0 4px rgba(191, 219, 254, 0.25), 0 4px 16px rgba(147, 197, 253, 0.18), 0 1.5px 6px rgba(96, 165, 250, 0.10)",
+        transition: "box-shadow 0.2s, border-color 0.2s",
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.borderColor = "#93c5fd";
+        e.currentTarget.style.boxShadow =
+          "0 0 0 5px rgba(147, 197, 253, 0.30), 0 6px 24px rgba(96, 165, 250, 0.22), 0 2px 8px rgba(59, 130, 246, 0.14)";
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.borderColor = "#bfdbfe";
+        e.currentTarget.style.boxShadow =
+          "0 0 0 4px rgba(191, 219, 254, 0.25), 0 4px 16px rgba(147, 197, 253, 0.18), 0 1.5px 6px rgba(96, 165, 250, 0.10)";
+      }}
     >
-      {/* Header */}
-      <div className="flex justify-between">
-        <div className="flex gap-2 items-center">
-          <div className="p-2 rounded-full bg-[var(--blue-100)]">
+      {/* ── Header ── */}
+      <div className="flex justify-between items-start">
+        <div className="flex gap-3 items-center">
+          <div className="p-0.5 rounded-full bg-[var(--blue-100)]">
             <Avatar
               size="lg"
-              src={
-                profile.picture
-                  ? `data:image/jpeg;base64,${profile.picture}`
-                  : "/avatar.png"
-              }
+              src={profile.picture ? `data:image/jpeg;base64,${profile.picture}` : "/avatar.png"}
               alt=""
             />
           </div>
-
           <div>
-            <div className="font-semibold text-lg">{props.name}</div>
-            <div className="text-sm text-[var(--blue-600)]">
-              {profile?.headline}
-            </div>
+            <div className="font-bold text-slate-800 text-sm">{props.name}</div>
+            <div className="text-xs font-medium text-[var(--blue-600)] mt-0.5">{profile?.headline}</div>
           </div>
         </div>
 
-        <IconHeart className="text-[var(--blue-400)] cursor-pointer" />
+        <IconHeart
+          className="text-[var(--blue-300)] cursor-pointer hover:text-[var(--blue-500)] transition-colors"
+          size={18}
+        />
       </div>
 
-      {/* Skills */}
-      <div className="flex flex-wrap gap-5 [&>div]:py-1 [&>div]:px-2 [&>div]:border [&>div]:border-default [&>div]:text-[var(--blue-600)] [&>div]:rounded-lg text-xs">
+      {/* ── Skills ── */}
+      <div className="flex flex-wrap gap-1.5">
         {profile?.skills?.map(
-          (skill, index) => index < 4 && <div key={index}>{skill}</div>,
+          (skill, index) =>
+            index < 4 && (
+              <span
+                key={index}
+                className="text-[11px] font-semibold px-2.5 py-1 rounded-full bg-[var(--blue-100)] text-[var(--blue-600)] border border-blue-200"
+              >
+                {skill}
+              </span>
+            ),
         )}
       </div>
 
-      {/* About */}
-      <Text className="!text-xs text-justify text-secondary" lineClamp={3}>
+      {/* ── About ── */}
+      <Text className="!text-xs text-justify !text-slate-400 !leading-relaxed" lineClamp={3}>
         {profile?.about}
       </Text>
 
-      <Divider size="xs" color="brand" />
-      {/*  interview info */}
+      <Divider size="xs" color="blue.1" />
+
+      {/* ── Interview info / Experience ── */}
       {props.invited ? (
-        <div className="flex gap-1 text-secondary text-sm items-center">
-          <IconCalendarMonth className="" stroke={1.5} />
-          Interview: {formatInterviewTime(props.interviewTime)}
+        <div className="flex gap-1.5 text-slate-500 text-xs items-center">
+          <IconCalendarMonth size={14} className="text-[var(--blue-600)]" stroke={1.5} />
+          <span>Interview: <span className="font-semibold text-[var(--blue-600)]">{formatInterviewTime(props.interviewTime)}</span></span>
         </div>
       ) : (
-        // in find talents page
-        <div className="flex justify-between">
-          <div className="font-semibold text-secondary">
-            Experience : {props.totalExp ? props.totalExp : 0} Years
+        <div className="flex justify-between items-center">
+          <div className="text-xs font-semibold text-slate-500">
+            Exp: <span className="text-[var(--blue-600)]">{props.totalExp ?? 0} yrs</span>
           </div>
-          <div className="flex gap-1 text-xs items-center text-mine-secondary">
-            <IconMapPin stroke={1.5} className="h-5 w-5" />
+          <div className="flex gap-1 text-xs items-center text-slate-400">
+            <IconMapPin stroke={1.5} size={13} className="text-[var(--blue-500)]" />
             {profile.location}
           </div>
         </div>
       )}
 
-      <Divider size="xs" color="brand" />
+      <Divider size="xs" color="blue.1" />
 
-      {/* Actions */}
-      <div className="flex [&>*]:w-1/2 [&>*]:p-2">
-        {/* not invited view profile & shedule or message */}
+      {/* ── Actions ── */}
+      <div className="flex gap-2 [&>*]:flex-1">
         {!props.invited && (
           <>
             <Link to={`/talent-profile/${profileId}`}>
-              <Button color="brand" fullWidth variant="outline">
+              <Button color="brand" fullWidth size="xs" variant="outline">
                 Profile
               </Button>
             </Link>
@@ -212,133 +177,235 @@ const TalentCards = (props) => {
               {props.posted ? (
                 <Button
                   onClick={open}
-                  rightSection={<IconCalendarMonth className="w-5 h-5" />}
+                  rightSection={<IconCalendarMonth size={13} />}
                   color="brand"
                   fullWidth
+                  size="xs"
                   variant="light"
                 >
-                  {" "}
-                  Schedule{" "}
+                  Schedule
                 </Button>
               ) : (
-                <Button color="brand" fullWidth variant="light">
-                  {" "}
+                <Button color="brand" fullWidth size="xs" variant="light">
                   Message
                 </Button>
               )}
             </div>
           </>
         )}
-        {/* if invited --- accept or  reject */}
+
         {props.invited && (
           <>
-            <div>
-              <Button
-                onClick={() => handleOffer("OFFERED")}
-                color="brand"
-                fullWidth
-                variant="outline"
-              >
-                {" "}
-                Accept
-              </Button>
-            </div>
-            <div>
-              <Button
-                onClick={() => handleOffer("REJECTED")}
-                color="brand"
-                fullWidth
-                variant="light"
-              >
-                Reject
-              </Button>
-            </div>
+            <Button onClick={() => handleOffer("OFFERED")} color="green.7" fullWidth size="xs" variant="light">
+              Accept
+            </Button>
+            <Button onClick={() => handleOffer("REJECTED")} color="red.6" fullWidth size="xs" variant="light">
+              Reject
+            </Button>
           </>
         )}
       </div>
-      {/* Shown only when employer is involved. */}
+
       {(props.invited || props.posted) && (
-        <Button
-          onClick={openApp}
-          color="brand"
-          fullWidth
-          autoContrast
-          variant="filled"
-        >
+        <Button onClick={openApp} color="brand" fullWidth size="xs" autoContrast variant="filled">
           View Application
         </Button>
       )}
 
-      {/* Modal  for sheduling interview */}
+      {/* ── Schedule Interview Modal ── */}
       <Modal
-        opened={opened}
-        onClose={close}
-        title="Schedule Interview"
-        centered
-      >
-        <div className="flex flex-col gap-3">
-          <DateInput
-            minDate={new Date()}
-            value={date}
-            onChange={setDate}
-            label="Date"
-            placeholder="Enter Date"
-          />
-          <TimeInput
-            value={time}
-            onChange={(event) => setTime(event.currentTarget.value)}
-            label="Time"
-            ref={ref}
-            onClick={() => ref.current?.showPicker()}
-          />
-          <Button
-            onClick={() => handleOffer("INTERVIEWING")}
-            color="brand"
-            fullWidth
-            variant="light"
-          >
-            Schedule
-          </Button>
-        </div>
-      </Modal>
-      {/* Application model  */}
-      <Modal opened={app} onClose={closeApp} title="Application" centered>
-        <div className="flex flex-col gap-3">
-          <div>
-            Email: &emsp;
-            <a
-              href={`mailto:${props.email}`}
-              className="text-[var(--blue-600)] text-center hover:underline cursor-pointer"
-            >
+  opened={opened}
+  onClose={close}
+  title="Schedule Interview"
+  centered
+  radius="lg"
+  styles={{
+    header: {
+      background: "linear-gradient(135deg, #ebf5ff, #dbeafe)",
+      borderBottom: "1px solid #bdd7f8",
+      padding: "1.1rem 1.4rem 1rem",
+    },
+    title: {
+      fontFamily: "poppins",
+      fontWeight: 700,
+      fontSize: "1rem",
+      color: "#0f2a50",
+      letterSpacing: "0.01em",
+      display: "flex",
+      alignItems: "center",
+      gap: "8px",
+    },
+    close: {
+      color: "#2563eb",
+      borderRadius: "8px",
+      "&:hover": { background: "#dbeafe" },
+    },
+    content: {
+      background: "#f5f9ff",
+      border: "1px solid #cde4ff",
+      boxShadow: "0 8px 32px rgba(30,111,204,0.12)",
+    },
+    body: {
+      padding: "1.3rem 1.4rem 1.4rem",
+    },
+  }}
+>
+  <div className="flex flex-col gap-4">
+
+    {/* Calendar icon in title area */}
+    <div style={{
+      display: "flex",
+      alignItems: "center",
+      gap: "10px",
+      padding: "0.75rem 1rem",
+      background: "#ffffff",
+      border: "1px solid #daeaff",
+      borderRadius: "12px",
+      marginBottom: "0.2rem",
+    }}>
+      <div style={{
+        background: "#dbeafe",
+        borderRadius: "8px",
+        padding: "6px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}>
+        <IconCalendar size={16} color="#2563eb" />
+      </div>
+      <span style={{ fontSize: "0.78rem", color: "#4a6b8a", fontWeight: 500 }}>
+        Pick a date and time to schedule the interview
+      </span>
+    </div>
+
+    <DateInput
+      minDate={new Date()}
+      value={date}
+      onChange={setDate}
+      label="Date"
+      placeholder="Pick a date"
+      styles={{
+        label: {
+          fontFamily: "poppins",
+          fontSize: "0.8rem",
+          fontWeight: 600,
+          color: "#1e6fcc",
+          marginBottom: "5px",
+        },
+        input: {
+          fontFamily: "poppins",
+          background: "#ffffff",
+          border: "1.5px solid #bdd7f8",
+          borderRadius: "10px",
+          color: "#0f2a50",
+          fontSize: "0.88rem",
+          "&:focus": {
+            borderColor: "#3b82f6",
+            boxShadow: "0 0 0 3px rgba(59,130,246,0.12)",
+          },
+          "&::placeholder": { color: "#93c5fd" },
+        },
+      }}
+    />
+
+    <TimeInput
+      value={time}
+      onChange={(event) => setTime(event.currentTarget.value)}
+      label="Time"
+      ref={ref}
+      onClick={() => ref.current?.showPicker()}
+      styles={{
+        label: {
+          fontFamily: "poppins",
+          fontSize: "0.8rem",
+          fontWeight: 600,
+          color: "#1e6fcc",
+          marginBottom: "5px",
+        },
+        input: {
+          fontFamily: "poppins",
+          background: "#ffffff",
+          border: "1.5px solid #bdd7f8",
+          borderRadius: "10px",
+          color: "#0f2a50",
+          fontSize: "0.88rem",
+          "&:focus": {
+            borderColor: "#3b82f6",
+            boxShadow: "0 0 0 3px rgba(59,130,246,0.12)",
+          },
+        },
+      }}
+    />
+
+    <Button
+      onClick={() => handleOffer("INTERVIEWING")}
+      fullWidth
+      style={{
+        background: "linear-gradient(135deg, #3b82f6, #1d6fd6)",
+        border: "none",
+        borderRadius: "10px",
+        fontFamily: "poppins",
+        fontWeight: 600,
+        fontSize: "0.88rem",
+        color: "#ffffff",
+        height: "42px",
+        boxShadow: "0 3px 12px rgba(59,130,246,0.28)",
+        transition: "box-shadow 0.2s, transform 0.15s",
+        marginTop: "0.2rem",
+      }}
+      onMouseEnter={e => {
+        e.currentTarget.style.boxShadow = "0 5px 18px rgba(59,130,246,0.38)";
+        e.currentTarget.style.transform = "translateY(-1px)";
+      }}
+      onMouseLeave={e => {
+        e.currentTarget.style.boxShadow = "0 3px 12px rgba(59,130,246,0.28)";
+        e.currentTarget.style.transform = "translateY(0)";
+      }}
+    >
+      Confirm Schedule
+    </Button>
+
+  </div>
+</Modal>
+
+      {/* ── Application Modal ── */}
+      <Modal opened={app} onClose={closeApp} title="Application Details" centered radius="lg">
+        <div className="flex flex-col gap-3 text-sm">
+          {/* Email */}
+          <div className="flex flex-col gap-0.5 p-3 rounded-xl bg-[var(--blue-50,#f0f6ff)] border border-blue-100">
+            <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Email</span>
+            <a href={`mailto:${props.email}`} className="text-[var(--blue-600)] hover:underline font-medium text-sm">
               {props.email}
             </a>
           </div>
-          <div>
-            website: &emsp;
-            <a
-              target="_blank"
-              href={props.website}
-              className="text-[var(--blue-600)] text-center hover:underline cursor-pointer"
-            >
+
+          {/* Website */}
+          <div className="flex flex-col gap-0.5 p-3 rounded-xl bg-[var(--blue-50,#f0f6ff)] border border-blue-100">
+            <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Website</span>
+            <a target="_blank" href={props.website} className="text-[var(--blue-600)] hover:underline font-medium text-sm">
               {props.website}
             </a>
           </div>
-          <div>
-            Resume: &emsp;
+
+          {/* Resume */}
+          <div className="flex flex-col gap-0.5 p-3 rounded-xl bg-[var(--blue-50,#f0f6ff)] border border-blue-100">
+            <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Resume</span>
             {props.resume ? (
               <span
                 onClick={() => openBase64PDF(props.resume)}
-                className="text-[var(--blue-600)] hover:underline cursor-pointer"
+                className="text-[var(--blue-600)] hover:underline cursor-pointer font-medium text-sm"
               >
                 {props.resumeName || "View Resume"}
               </span>
             ) : (
-              <span>No Resume Uploaded</span>
+              <span className="text-slate-400 text-sm">No Resume Uploaded</span>
             )}
           </div>
-          <div>
-            Cover Letter: &emsp;
-            <div>{props.coverLetter}</div>
+
+          {/* Cover Letter */}
+          <div className="flex flex-col gap-1 p-3 rounded-xl bg-[var(--blue-50,#f0f6ff)] border border-blue-100">
+            <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Cover Letter</span>
+            <div className="text-slate-600 text-sm leading-relaxed">{props.coverLetter}</div>
           </div>
         </div>
       </Modal>

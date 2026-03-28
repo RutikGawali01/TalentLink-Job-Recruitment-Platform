@@ -5,40 +5,41 @@ import StarterKit from '@tiptap/starter-kit';
 import TextAlign from '@tiptap/extension-text-align';
 import Superscript from '@tiptap/extension-superscript';
 import SubScript from '@tiptap/extension-subscript';
-  import {  useMantineTheme } from '@mantine/core';
-import {content} from "../assets/Data/PostJob"
-import {useEffect} from 'react';
-
-
-
+import { useEffect } from 'react';
+import { content } from "../assets/Data/PostJob";
 
 const TextEditor = (props) => {
-    const theme = useMantineTheme();
+  useEffect(() => {
+    editor?.commands.setContent(props.data);
+  }, [props.data]);
 
-    useEffect(() => {
-      editor?.commands.setContent(props.data);
-    }, [props.data]);
-    
-   
   const editor = useEditor({
     shouldRerenderOnTransaction: true,
     extensions: [
       StarterKit.configure({ link: false }),
-      Link,
-      Superscript,
-      SubScript,
-      Highlight,
+      Link, Superscript, SubScript, Highlight,
       TextAlign.configure({ types: ['heading', 'paragraph'] }),
     ],
-    content:props.form.getValues().description,
-    onUpdate({editor}){
+    content: props.form.getValues().description,
+    onUpdate({ editor }) {
       props.form.setFieldValue('description', editor.getHTML());
     },
   });
 
   return (
-    <RichTextEditor editor={editor}>
-      <RichTextEditor.Toolbar bg="var(--blue-100)" sticky  stickyOffset="var(--docs-header-height)">
+    <RichTextEditor editor={editor} style={{ border: "none" }}>
+      <RichTextEditor.Toolbar
+        sticky
+        stickyOffset={0}
+        style={{
+          background: "linear-gradient(135deg, #eff6ff, #dbeafe)",
+          borderBottom: "1px solid rgba(59,130,246,0.15)",
+          borderRadius: 0,
+          flexWrap: "wrap",
+          gap: 4,
+          padding: "6px 10px",
+        }}
+      >
         <RichTextEditor.ControlsGroup>
           <RichTextEditor.Bold />
           <RichTextEditor.Italic />
@@ -80,8 +81,14 @@ const TextEditor = (props) => {
         </RichTextEditor.ControlsGroup>
       </RichTextEditor.Toolbar>
 
-      <RichTextEditor.Content  className='bg-tertiary' />
+      <RichTextEditor.Content style={{
+        background: "rgba(255,255,255,0.7)",
+        minHeight: 180,
+        fontSize: 14,
+        lineHeight: 1.7,
+      }} />
     </RichTextEditor>
   );
-}
+};
+
 export default TextEditor;

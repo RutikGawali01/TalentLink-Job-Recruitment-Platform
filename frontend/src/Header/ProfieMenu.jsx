@@ -17,101 +17,125 @@ import { clearProfile } from "../Slice/ProfileSlice";
 
 import { removeJwt } from "../Slice/JwtSlice";
 
+
+
+// ─── ProfileMenu.jsx ──────────────────────────────────────────────────────────
 const ProfileMenu = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  // for state look up in userSLices
   const user = useSelector((state) => state.user);
-
+  const profile = useSelector((state) => state.profile);
   const [checked, setChecked] = useState(false);
   const [opened, setOpened] = useState(false);
 
   const handleLogOut = () => {
     dispatch(removeJwt());
     dispatch(removeUser());
-    dispatch(clearProfile()); // if exists
-    localStorage.clear(); // optional but strong
+    dispatch(clearProfile());
+    localStorage.clear();
     navigate("/");
   };
 
-  const profile = useSelector((state) => state.profile);
-  const employerProfile = useSelector((state) => state.employerProfile);
   const getProfileRoute = () => {
-    if (user.accountType === "APPLICANT") {
-      return "/applicant/profile";
-    }
-
+    if (user.accountType === "APPLICANT") return "/applicant/profile";
     if (user.accountType === "EMPLOYER") {
-      if (user.onboardingStep === 1) {
-        return `/employer/profile/${user.profileId}`;
-      } else {
-        return `/employer/company-profile/${user.profileId}`;
-      }
+      return user.onboardingStep === 1
+        ? `/employer/profile/${user.profileId}`
+        : `/employer/company-profile/${user.profileId}`;
     }
-
     return "/";
   };
 
   return (
-    <Menu shadow="md" width={200} opened={opened} onChange={setOpened}>
+    <Menu
+      shadow="lg"
+      width={220}
+      opened={opened}
+      onChange={setOpened}
+      radius="xl"
+      offset={8}
+    >
       <Menu.Target>
-        <div className="cursor-pointer flex items-center gap-2">
-          <div className="max-[476px]:">{user.name}</div>
+        <div className="
+          flex items-center gap-2.5 cursor-pointer
+          px-3 py-1.5 rounded-xl
+          border border-slate-200 bg-white
+          hover:border-blue-300 hover:bg-blue-50
+          transition-all duration-200
+          shadow-sm hover:shadow-md
+        ">
+          <span className="text-sm font-semibold text-slate-700 max-[476px]:hidden">
+            {user.name}
+          </span>
           <Avatar
             src={
               profile?.picture
-                ? `data:image/jpeg;base64,${profile?.picture}`
+                ? `data:image/jpeg;base64,${profile.picture}`
                 : "/avatar.png"
             }
-            alt="it's me"
+            size={32}
+            radius="xl"
+            className="ring-2 ring-blue-100"
+            alt="profile"
           />
         </div>
       </Menu.Target>
 
-      <Menu.Dropdown onChange={() => setOpened(true)}>
+      <Menu.Dropdown
+        className="!rounded-2xl !border-slate-200 !shadow-xl !shadow-slate-100"
+        styles={{ dropdown: { padding: "8px" } }}
+      >
         <Link to={getProfileRoute()}>
-          <Menu.Item leftSection={<IconUserCircle size={14} />}>
+          <Menu.Item
+            leftSection={<IconUserCircle size={15} className="text-blue-500" />}
+            className="!rounded-xl !text-slate-700 hover:!bg-blue-50 hover:!text-blue-600 !font-medium !text-sm"
+          >
             Profile
           </Menu.Item>
         </Link>
-        <Menu.Item leftSection={<IconMessageCircle size={14} />}>
+
+        <Menu.Item
+          leftSection={<IconMessageCircle size={15} className="text-blue-500" />}
+          className="!rounded-xl !text-slate-700 hover:!bg-blue-50 hover:!text-blue-600 !font-medium !text-sm"
+        >
           Messages
         </Menu.Item>
+
         {user?.accountType === "APPLICANT" && (
           <Link to="/applicant/profile#resume">
-            <Menu.Item leftSection={<IconFileText size={14} />}>
+            <Menu.Item
+              leftSection={<IconFileText size={15} className="text-blue-500" />}
+              className="!rounded-xl !text-slate-700 hover:!bg-blue-50 hover:!text-blue-600 !font-medium !text-sm"
+            >
               Resume
             </Menu.Item>
           </Link>
-        )}{" "}
+        )}
+
         <Menu.Item
-          leftSection={<IconMoon size={14} />}
+          leftSection={<IconMoon size={15} className="text-slate-400" />}
           rightSection={
             <Switch
               checked={checked}
-              onChange={(event) => setChecked(event.currentTarget.checked)}
-              size="md"
-              color="brand"
-              onLabel={
-                <IconSun size={16} stroke={2.5} color="var(--blue-500)" />
-              }
-              offLabel={
-                <IconMoonStars
-                  size={16}
-                  stroke={2.5}
-                  color="var(--bg-secondary)"
-                />
-              }
+              onChange={(e) => setChecked(e.currentTarget.checked)}
+              size="sm"
+              color="blue"
+              onLabel={<IconSun size={14} stroke={2.5} />}
+              offLabel={<IconMoonStars size={14} stroke={2.5} />}
             />
           }
+          className="!rounded-xl !text-slate-700 hover:!bg-slate-50 !font-medium !text-sm"
         >
           Dark mode
         </Menu.Item>
-        <Menu.Divider />
+
+        <Menu.Divider className="!border-slate-100 !my-1" />
+
         <Menu.Item
           onClick={handleLogOut}
           color="red"
-          leftSection={<IconLogout2 size={14} />}
+          leftSection={<IconLogout2 size={15} />}
+          className="!rounded-xl hover:!bg-red-50 !font-medium !text-sm"
         >
           Log Out
         </Menu.Item>
@@ -119,4 +143,5 @@ const ProfileMenu = () => {
     </Menu>
   );
 };
+
 export default ProfileMenu;

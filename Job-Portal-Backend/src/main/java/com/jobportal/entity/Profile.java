@@ -43,8 +43,9 @@
         private List<Long> savedJobs;
         private Portfolio portfolio;
 
-        private Boolean profileCompleted = false;
 
+        private Boolean profileCompleted = false;
+        private Boolean resumeUploaded = false;
 
         public ProfileDTO toDTO() {
             return new ProfileDTO(
@@ -67,7 +68,7 @@
                     educations,
                     savedJobs,
                     portfolio,
-                    profileCompleted
+                    profileCompleted,resumeUploaded
             );
         }
     }

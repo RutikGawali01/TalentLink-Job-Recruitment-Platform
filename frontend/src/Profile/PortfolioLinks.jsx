@@ -9,17 +9,13 @@ import {
 } from "../Services/NotificationService";
 import { PortfolioLinksView } from "./PortfolioLinksView";
 
+
 const PortfolioLinks = () => {
   const dispatch = useDispatch();
   const profile = useSelector((state) => state.profile.data);
 
   const [edit, setEdit] = useState(false);
-  const [form, setForm] = useState({
-    website: "",
-    linkedin: "",
-    github: "",
-    other: "",
-  });
+  const [form, setForm] = useState({ website: "", linkedin: "", github: "", other: "" });
 
   const handleEdit = () => {
     setForm({
@@ -33,18 +29,15 @@ const PortfolioLinks = () => {
 
   const handleSave = async () => {
     try {
-      await dispatch(
-        changeProfile({
-          ...profile,
-          portfolio: {
-            website: form.website || null,
-            linkedin: form.linkedin || null,
-            github: form.github || null,
-            other: form.other || null,
-          },
-        })
-      );
-
+      await dispatch(changeProfile({
+        ...profile,
+        portfolio: {
+          website: form.website || null,
+          linkedin: form.linkedin || null,
+          github: form.github || null,
+          other: form.other || null,
+        },
+      }));
       setEdit(false);
       successNotification("Success", "Portfolio links updated");
     } catch (err) {
@@ -54,94 +47,79 @@ const PortfolioLinks = () => {
 
   if (!profile) {
     return (
-      <div className="p-6 text-center text-gray-500">
-        Loading profile...
+      <div className="flex items-center justify-center p-10">
+        <div className="w-8 h-8 rounded-full border-4 border-blue-100 border-t-blue-500 animate-spin" />
       </div>
     );
   }
 
-  return (
-    <div
-      className="
-        bg-white 
-        rounded-2xl 
-        shadow-sm 
-        border-default
-        p-4 
-        sm:p-6 
-        md:p-8
-      "
-    >
-      {/* Header */}
-      <div className="flex justify-between items-center mb-6 pb-3 border-b-2 border-slate-200">
-        <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-slate-900">
-          Portfolio & Links
-        </h2>
+  const inputStyles = {
+    input: { borderRadius: "12px", borderColor: "#bfdbfe", background: "#fff", fontSize: "14px" },
+    label: { fontWeight: 600, color: "#1e3a5f", fontSize: "13px", marginBottom: "4px" },
+  };
 
+  return (
+    <div className="bg-white rounded-3xl shadow-lg border border-blue-100 p-5 sm:p-7 md:p-8">
+      {/* Header */}
+      <div className="flex justify-between items-center mb-6 pb-4 border-b border-blue-50">
+        <div className="flex items-center gap-3">
+          <div className="w-1 h-6 rounded-full bg-gradient-to-b from-blue-400 to-blue-600" />
+          <h2 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">Portfolio & Links</h2>
+        </div>
         {!edit ? (
-          <ActionIcon
-            variant="subtle"
-            color="brand"
-            size="lg"
+          <button
             onClick={handleEdit}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-50 border border-blue-100 text-blue-600 text-xs font-semibold hover:bg-blue-100 transition-all duration-200"
           >
-            <IconPencil size={20} />
-          </ActionIcon>
+            <IconPencil size={13} /> Edit
+          </button>
         ) : (
           <div className="flex gap-2">
-            <ActionIcon
-              variant="subtle"
-              color="green.8"
-              size="lg"
+            <button
               onClick={handleSave}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-semibold hover:bg-emerald-100 transition-all duration-200"
             >
-              <IconCheck size={20} />
-            </ActionIcon>
-            <ActionIcon
-              variant="subtle"
-              color="red.8"
-              size="lg"
+              <IconCheck size={13} /> Save
+            </button>
+            <button
               onClick={() => setEdit(false)}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-red-50 border border-red-200 text-red-600 text-xs font-semibold hover:bg-red-100 transition-all duration-200"
             >
-              <IconX size={20} />
-            </ActionIcon>
+              <IconX size={13} /> Cancel
+            </button>
           </div>
         )}
       </div>
 
       {edit ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 max-w-4xl">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-3xl">
           <TextInput
             label="Website"
             placeholder="https://yourwebsite.com"
             value={form.website}
-            onChange={(e) =>
-              setForm({ ...form, website: e.target.value })
-            }
+            onChange={(e) => setForm({ ...form, website: e.target.value })}
+            styles={inputStyles}
           />
           <TextInput
             label="LinkedIn"
             placeholder="https://linkedin.com/in/username"
             value={form.linkedin}
-            onChange={(e) =>
-              setForm({ ...form, linkedin: e.target.value })
-            }
+            onChange={(e) => setForm({ ...form, linkedin: e.target.value })}
+            styles={inputStyles}
           />
           <TextInput
             label="GitHub"
             placeholder="https://github.com/username"
             value={form.github}
-            onChange={(e) =>
-              setForm({ ...form, github: e.target.value })
-            }
+            onChange={(e) => setForm({ ...form, github: e.target.value })}
+            styles={inputStyles}
           />
           <TextInput
             label="Other"
             placeholder="Any other link"
             value={form.other}
-            onChange={(e) =>
-              setForm({ ...form, other: e.target.value })
-            }
+            onChange={(e) => setForm({ ...form, other: e.target.value })}
+            styles={inputStyles}
           />
         </div>
       ) : (

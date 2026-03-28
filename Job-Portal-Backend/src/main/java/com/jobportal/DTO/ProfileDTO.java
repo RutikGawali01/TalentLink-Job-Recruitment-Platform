@@ -36,7 +36,9 @@ public class ProfileDTO {
     private List<Long> savedJobs;
     private Portfolio portfolio;
 
+
     private Boolean profileCompleted = false;
+    private Boolean resumeUploaded = false;
 
     // Convert DTO → Entity
     public Profile toEntity() {
@@ -60,7 +62,7 @@ public class ProfileDTO {
                 educations,
                 savedJobs,
                 portfolio,
-                profileCompleted
+                profileCompleted, resumeUploaded
         );
     }
 }

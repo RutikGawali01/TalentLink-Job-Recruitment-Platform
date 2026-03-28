@@ -1,6 +1,5 @@
 import MultiInput from "../FindJobs/MultiInput";
 import {
-  Divider,
   Input,
   RangeSlider,
   useMantineTheme,
@@ -20,8 +19,8 @@ const SearchBar = () => {
   const dispatch = useDispatch();
 
   const [opened, { toggle }] = useDisclosure(false);
-  const [value, setValue] = useState([0, 40]); // Experience range
-  const [name, setName] = useState(""); // Talent name
+  const [value, setValue] = useState([0, 40]);
+  const [name, setName] = useState("");
 
   const handleChange = (type, event) => {
     if (type === "exp") {
@@ -33,86 +32,66 @@ const SearchBar = () => {
     }
   };
 
+  /* shared pill style */
+  const pill =
+    "flex items-center gap-2 px-4 py-3 bg-blue-50/70 border border-blue-200 hover:border-blue-400 hover:bg-blue-50 rounded-xl transition-all duration-150";
+
   return (
     <div>
-      {/* Toggle Button For Mobile */}
+      {/* ── Mobile Toggle ── */}
       <div className="flex justify-end">
         {matches && (
-          <Button onClick={toggle} variant="filled" m="xs" radius="lg">
+          <Button
+            onClick={toggle}
+            color="brand"
+            variant="light"
+            radius="xl"
+            size="sm"
+            m="xs"
+          >
             {opened ? "Close" : "Apply Filters"}
           </Button>
         )}
       </div>
 
-      {/* Collapse for mobile */}
       <Collapse in={opened || !matches}>
-        <div className="flex flex-wrap items-stretch gap-4 px-5 py-6 bg-white rounded-2xl">
-          
-          {/* TALENT NAME */}
-          <div
-            className="
-              w-[19%] 
-              max-xl:w-[23%]
-              max-lg:w-[30%]
-              max-md:w-[48%]
-              max-sm:w-full
-              flex items-center gap-2 
-              px-4 py-3
-              bg-tertiary rounded-2xl
-            "
-          >
-            <div className="text-[var(--blue-600)]">
-              <IconUserCircle size={24} />
-            </div>
+        <div className="flex flex-wrap items-stretch gap-3 px-1 py-1">
 
+          {/* ── Talent Name ── */}
+          <div className={`${pill} w-[19%] max-xl:w-[23%] max-lg:w-[30%] max-md:w-[48%] max-sm:w-full`}>
+            <div className="text-blue-500 shrink-0">
+              <IconUserCircle size={20} stroke={1.5} />
+            </div>
             <Input
               value={name}
               onChange={(e) => handleChange("name", e)}
               variant="unstyled"
               placeholder="Talent Name"
-              className="flex-1 [&_input]:!placeholder-gray-500"
+              className="flex-1 [&_input]:!text-sm [&_input]:!text-gray-700 [&_input]:!placeholder-blue-300"
             />
           </div>
 
-          {/* DROPDOWNS */}
+          {/* ── Dropdowns ── */}
           {searchFields.map((item, idx) => (
             <div
               key={idx}
-              className="
-                w-[19%] 
-                max-xl:w-[23%]
-                max-lg:w-[30%]
-                max-md:w-[48%]
-                max-sm:w-full
-                flex items-center 
-                px-3 py-3 
-                bg-tertiary rounded-2xl
-              "
+              className={`${pill} w-[19%] max-xl:w-[23%] max-lg:w-[30%] max-md:w-[48%] max-sm:w-full`}
             >
               <MultiInput {...item} />
             </div>
           ))}
 
-          {/* EXPERIENCE */}
+          {/* ── Experience Slider ── */}
           <div
-            className="
-              w-[19%] 
-              max-xl:w-[23%]
-              max-lg:w-[30%]
-              max-md:w-[48%]
-              max-sm:w-full
-              flex flex-col justify-center
-              px-4 py-3
-              bg-tertiary rounded-2xl
-            "
+            className={`flex flex-col justify-center w-[19%] max-xl:w-[23%] max-lg:w-[30%] max-md:w-[48%] max-sm:w-full
+              px-4 py-3 bg-blue-50/70 border border-blue-200 hover:border-blue-400 hover:bg-blue-50 rounded-xl transition-all duration-150`}
           >
-            <div className="flex justify-between text-xs mb-2">
-              <span className="font-medium">Experience</span>
-              <span className="text-gray-600">
-                {value[0]} - {value[1]} Years
+            <div className="flex justify-between text-xs mb-3">
+              <span className="font-semibold text-gray-700">Experience</span>
+              <span className="text-blue-600 font-semibold">
+                {value[0]}–{value[1]} yrs
               </span>
             </div>
-
             <RangeSlider
               min={0}
               max={40}
@@ -129,6 +108,7 @@ const SearchBar = () => {
               }}
             />
           </div>
+
         </div>
       </Collapse>
     </div>

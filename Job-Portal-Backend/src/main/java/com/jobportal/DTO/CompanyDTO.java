@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.Base64;
 
 @Data
@@ -26,6 +27,8 @@ public class CompanyDTO {
     private String workModel;
 
     private String website;
+    private  String domain;
+
     private Integer foundedYear;
     private String logo;
 
@@ -33,6 +36,8 @@ public class CompanyDTO {
 
     private boolean profileCompleted;
     private boolean verified;
+
+    private LocalDateTime created_at;
 
     public Company toEntity() {
         return new Company(
@@ -47,11 +52,13 @@ public class CompanyDTO {
                 companySize,
                 workModel,
                 website,
+                domain,
                 foundedYear,
                 logo != null ? Base64.getDecoder().decode(logo) : null,
                 employerId,
                 profileCompleted,
-                verified
+                verified,
+                created_at
         );
 
     }

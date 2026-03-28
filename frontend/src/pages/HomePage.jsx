@@ -5,15 +5,16 @@ import Working from "../LandingPage/Working.jsx";
 import Testimonials from "../LandingPage/Testimonials.jsx";
 import Subscribe from "../LandingPage/Subscribe.jsx";
 import { Divider } from "@mantine/core";
-
+import FeaturedJobs from "../LandingPage/FeaturedJobs.jsx";
 const HomePage = () => {
   return (
+    
     <div className="min-h-screen font-['Poppins'] overflow-x-hidden">
       <section className="w-full">
         <DreamJob />
       </section>
 
-      <section className="w-full px-4 sm:px-8 lg:px-20 py-6">
+      <section className="w-full">
         <Companies />
       </section>
       <Divider className="text-primary" />
@@ -21,6 +22,10 @@ const HomePage = () => {
       <section className="w-full ">
         <JobCategory />
       </section>
+    <section className="w-full ">
+        <FeaturedJobs />
+      </section>
+
 
       <Divider className="text-primary" />
 
@@ -30,14 +35,14 @@ const HomePage = () => {
       <Divider className="text-primary" />
       
 
-      <section className="w-full px-4 sm:px-8 lg:px-20 bg-[var(--blue-100)]">
+      <section className="w-full ">
         <Testimonials />
       </section>
 
-      <Divider className="text-primary" />
+      
 
 
-      <section className="w-full py-4">
+      <section className="w-full ">
         <Subscribe />
       </section>
     </div>

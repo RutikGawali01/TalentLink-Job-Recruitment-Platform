@@ -1,111 +1,117 @@
 import React from "react";
-import { work } from "../assets/Data/Data";
-import { Avatar } from "@mantine/core";
-import avatar1 from "/avatar1.png";
+
+const steps = [
+  {
+    num: "01",
+    icon: "👤",
+    title: "Create Your Profile",
+    desc: "Build a compelling profile that showcases your skills, experience, and what you're looking for.",
+    perk: "Free forever",
+  },
+  {
+    num: "02",
+    icon: "🔍",
+    title: "Discover Opportunities",
+    desc: "Browse thousands of curated listings filtered by role, location, salary, and company culture.",
+    perk: "100k+ listings",
+  },
+  {
+    num: "03",
+    icon: "🚀",
+    title: "Apply with Confidence",
+    desc: "One-click applications with your profile. Track every application in your personal dashboard.",
+    perk: "Real-time updates",
+  },
+];
+
+const CheckIcon = () => (
+  <svg
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="#10B981"
+    strokeWidth="2.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M20 6 9 17l-5-5" />
+  </svg>
+);
 
 const Working = () => {
   return (
-    <div className="py-16">
+    <section className="py-20 px-4 sm:px-8 lg:px-10 bg-white">
 
-      {/* Heading */}
-      <div className="text-center mb-4 px-4">
-        <h2 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-primary">
-          How it <span className="text-[var(--blue-600)]">works</span>
-        </h2>
-      </div>
+      <div className="max-w-6xl mx-auto">
 
-      {/* Subheading */}
-      <div className="text-sm sm:text-base md:text-lg mb-12 text-secondary text-center max-w-xl mx-auto px-4">
-        Effortlessly navigate through the process and land your dream job.
-      </div>
+        {/* Heading */}
+        <div className="text-center mb-16">
 
-      {/* Main Section */}
-      <div className="flex flex-col lg:flex-row items-center lg:items-start gap-12 px-6 sm:px-10 lg:px-20">
+          <span className="inline-flex items-center gap-1.5 bg-blue-50 border border-blue-200 rounded-full px-4 py-1 text-xs font-semibold text-blue-600 uppercase tracking-wider mb-4">
+            Simple Process
+          </span>
 
-        {/* IMAGE SECTION */}
-        <div className="relative flex justify-center w-full lg:w-1/2">
-
-          <img
-            className="w-[16rem] sm:w-[20rem] md:w-[24rem] lg:w-[30rem]"
-            src="/Working/Girl.png"
-            alt="girl"
-          />
-
-          {/* Floating Card */}
-          <div
-            className="
-            absolute
-            top-[8%]
-            right-[8%]
-            w-28 sm:w-32
-            flex flex-col items-center
-            border border-accent
-            rounded-xl
-            py-3 px-2
-            bg-white/90
-            backdrop-blur-md
-            shadow-md
-            "
+          <h2
+            className="serif text-3xl sm:text-4xl md:text-5xl text-slate-900"
+            style={{ fontWeight: 400, letterSpacing: "-0.02em" }}
           >
-            <Avatar
-              className="!h-10 !w-10 sm:!h-14 sm:!w-14"
-              src={avatar1}
-              alt="profile"
-            />
+            Get hired in <em className="text-blue-600">3 easy steps</em>
+          </h2>
 
-            <div className="text-xs sm:text-sm font-semibold text-secondary text-center mt-2">
-              Complete Your Profile
-            </div>
+          <p className="text-slate-500 text-sm sm:text-base mt-4 max-w-md mx-auto">
+            From profile to offer letter — the simplest hiring experience you've ever had.
+          </p>
 
-            <div className="text-[10px] sm:text-xs text-[var(--blue-600)]">
-              70% Completed
-            </div>
-          </div>
-          
         </div>
 
-        {/* STEPS SECTION */}
-        <div className="flex flex-col gap-6 w-full lg:w-1/2">
+        {/* Steps */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
 
-          {work.map((item, index) => (
+          {steps.map((step, i) => (
+
             <div
-              key={index}
-              className="
-              flex flex-col sm:flex-row
-              items-center sm:items-start
-              text-center sm:text-left
-              gap-4
-              p-4
-              rounded-lg
-              bg-[var(--blue-100)]
-              border border-default
-              shadow-sm
-              "
+              key={i}
+              className="bg-slate-50 border border-slate-200 rounded-2xl p-8 relative flex flex-col gap-4 hover:-translate-y-1 transition-all duration-200"
             >
-              {/* Icon */}
-              <div className="p-2.5 bg-[var(--blue-400)] rounded-full flex items-center justify-center">
-                <img
-                  className="h-8 w-8 sm:h-10 sm:w-10"
-                  src={`/Working/${item.name}.png`}
-                  alt={item.name}
-                />
+
+              {/* Step Badge */}
+              <div className="absolute -top-3 left-7 bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-full px-3 py-0.5 text-xs font-extrabold tracking-widest">
+                STEP {step.num}
               </div>
 
-              {/* Text */}
-              <div>
-                <div className="text-base sm:text-xl text-primary font-semibold">
-                  {item.name}
-                </div>
-                <div className="text-sm sm:text-base text-secondary">
-                  {item.desc}
-                </div>
+              {/* Icon */}
+              <div className="w-14 h-14 bg-blue-50 border border-blue-200 rounded-2xl flex items-center justify-center text-2xl mt-2">
+                {step.icon}
               </div>
+
+              {/* Title */}
+              <div className="font-extrabold text-lg sm:text-xl text-slate-900 tracking-tight">
+                {step.title}
+              </div>
+
+              {/* Description */}
+              <div className="text-sm text-slate-500 leading-relaxed">
+                {step.desc}
+              </div>
+
+              {/* Perk */}
+              <div className="flex items-center gap-2 mt-2">
+                <CheckIcon />
+                <span className="text-sm text-emerald-600 font-semibold">
+                  {step.perk}
+                </span>
+              </div>
+
             </div>
+
           ))}
 
         </div>
+
       </div>
-    </div>
+
+    </section>
   );
 };
 
