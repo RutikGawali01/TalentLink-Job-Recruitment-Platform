@@ -26,6 +26,9 @@ public class OpenRouterService {
 
 
     public String callAI(String prompt) {
+        if (apiKey == null || apiKey.isEmpty()) {
+            throw new RuntimeException("OpenRouter API KEY is missing!");
+        }
 
         RestTemplate restTemplate = new RestTemplate();
 

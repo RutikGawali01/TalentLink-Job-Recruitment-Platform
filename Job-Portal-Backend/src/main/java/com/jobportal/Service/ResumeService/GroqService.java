@@ -14,12 +14,18 @@ public class GroqService {
     @Value("${groq.api.key}")
     private String apiKey;
 
+
+
     private final WebClient webClient =
             WebClient.builder()
                     .baseUrl("https://api.groq.com/openai/v1/chat/completions")
                     .build();
 
     public String parseResume(String resumeText){
+
+        if (apiKey == null || apiKey.isEmpty()) {
+            throw new RuntimeException("GROQ API KEY is missing!");
+        }
 
         if(resumeText.length() > 6000){
             resumeText = resumeText.substring(0,6000);
