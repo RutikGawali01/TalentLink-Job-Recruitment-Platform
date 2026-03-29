@@ -403,9 +403,6 @@ export default function ResumeSection() {
                   color="blue"
                   radius="md"
                   size="sm"
-                  onClick={() =>
-                    // console.log("[ResumeSection] Re-Analyze Resume clicked")
-                  }
                   style={{ fontWeight: 600 }}
                 >
                   Re‑Analyze Resume
