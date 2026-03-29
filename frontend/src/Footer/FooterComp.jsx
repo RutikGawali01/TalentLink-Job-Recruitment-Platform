@@ -34,13 +34,13 @@ const FooterComp = () => {
               </div>
 
               <span className="text-xl font-extrabold text-white tracking-tight">
-                Hire<span className="text-blue-400">Flow</span>
+                Talent<span className="text-blue-400">Link</span>
               </span>
 
             </div>
 
             <p className="text-slate-500 text-sm leading-relaxed max-w-xs">
-              Job portal with user profiles, skill updates, certifications,
+              Job Recruting platform with user profiles, skill updates, certifications,
               work experience and admin job postings.
             </p>
 
@@ -89,7 +89,7 @@ const FooterComp = () => {
         <div className="border-t border-white/5 pt-6 flex flex-col sm:flex-row justify-between items-center gap-4">
 
           <div className="text-slate-600 text-xs text-center sm:text-left">
-            © 2026 HireFlow. All rights reserved.
+            © 2026 TalentLink. All rights reserved.
           </div>
 
           <div className="flex gap-6">

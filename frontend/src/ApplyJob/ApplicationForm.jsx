@@ -19,7 +19,7 @@ const ApplicationForm = () => {
   const handleSubmit = async () => {
     try {
       setSubmit(true);
-      console.log(user.id);
+      // console.log(user.id);
       // Only send jobId (backend will use profile data)
       await applyJob(id, {});
 

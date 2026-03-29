@@ -14,12 +14,12 @@ import { useDispatch, useSelector } from "react-redux";
 export default function WaitingApproval() {
   const companyName = "Acme Inc.";
   const employerProfile = useSelector((state) => state.employerProfile);
-  console.log(employerProfile);
+  // console.log(employerProfile);
   useEffect(() => {
     if (!employerProfile?.id) return;
 
     const interval = setInterval(() => {
-      console.log(employerProfile.id);
+      // console.log(employerProfile.id);
       checkStatus(employerProfile.id).then((res) => {
         if (res.status === "APPROVED") {
           dispatch(

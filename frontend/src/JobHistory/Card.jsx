@@ -13,7 +13,7 @@ import { changeProfile } from "../Slice/ProfileSlice";
 import { formatInterviewTime } from "../Services/Utilities";
 
 const Card = (props) => {
-  console.log(props);
+  // console.log(props);
   const dispatch = useDispatch();
   const profile = useSelector((state) => state.profile.data);
 

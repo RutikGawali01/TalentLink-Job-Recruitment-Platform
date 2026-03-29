@@ -99,7 +99,7 @@ const Header = () => {
                 select-none
               "
             >
-              HireFlow
+              TalentLink
             </span>
           </Link>
 

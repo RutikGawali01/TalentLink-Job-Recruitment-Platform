@@ -11,7 +11,6 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { getNotifications, readNotification } from "../Services/NotiService";
 
-
 // ─── NotifiMenu.jsx ───────────────────────────────────────────────────────────
 const NotifiMenu = () => {
   const navigate = useNavigate();
@@ -30,19 +29,30 @@ const NotifiMenu = () => {
     const noti = notifications[index];
     setNotifications((prev) => prev.filter((_, i) => i !== index));
     readNotification(noti.id)
-      .then((res) => console.log(res))
+      .then((res) =>
+         console.log(res)
+    )
       .catch((err) => console.log(err));
   };
 
   return (
-    <Menu shadow="lg" width={400} opened={opened} onChange={setOpened} radius="xl" offset={8}>
+    <Menu
+      shadow="lg"
+      width={400}
+      opened={opened}
+      onChange={setOpened}
+      radius="xl"
+      offset={8}
+    >
       <Menu.Target>
-        <div className="
+        <div
+          className="
           relative p-2 rounded-xl cursor-pointer
           border border-slate-200 bg-white
           hover:border-blue-300 hover:bg-blue-50
           transition-all duration-200 shadow-sm hover:shadow-md
-        ">
+        "
+        >
           <Indicator
             disabled={notifications.length <= 0}
             color="blue"

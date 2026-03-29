@@ -16,7 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class ResumeParserService {
 
     private final ResumeTextExtractor extractor;
-    private final GroqService groqService;
+    private final OpenRouterService openRouterService;
     private final ObjectMapper objectMapper;
 
 
@@ -24,19 +24,19 @@ public class ResumeParserService {
 
         try {
 
-            // 1️⃣ Extract resume text using Apache Tika
+            // 1️⃣ Extract resume text
             String resumeText = extractor.extractText(file);
 
-            // 2️⃣ Send text to Groq AI
-            String aiResponseJson = groqService.parseResume(resumeText);
+            // 2️⃣ Send to OpenRouter AI
+            String aiResponseJson = openRouterService.parseResume(resumeText);
 
-            // 3️⃣ Remove markdown formatting
+            // 3️⃣ Clean markdown
             aiResponseJson = aiResponseJson
                     .replace("```json", "")
                     .replace("```", "")
                     .trim();
 
-            // 4️⃣ Extract only JSON part safely
+            // 4️⃣ Extract valid JSON
             int start = aiResponseJson.indexOf("{");
             int end = aiResponseJson.lastIndexOf("}");
 
@@ -46,7 +46,7 @@ public class ResumeParserService {
 
             log.info("Clean JSON from AI: {}", aiResponseJson);
 
-            // 5️⃣ Convert JSON → DTO
+            // 5️⃣ Convert to DTO
             return objectMapper.readValue(aiResponseJson, ResumeParsedDTO.class);
 
         } catch (Exception e) {
@@ -55,6 +55,7 @@ public class ResumeParserService {
             throw new RuntimeException("Failed to parse resume using AI", e);
         }
     }
+
 
     public ResumeAnalysisResponse parseResponse(String response) {
         ObjectMapper mapper = new ObjectMapper();

@@ -62,14 +62,14 @@ export default function ResumeSection() {
   const handleFileUpload = (file) => {
     setFileValue(file);
     if (file) {
-      console.log("[ResumeSection] File selected:", file.name);
+      // console.log("[ResumeSection] File selected:", file.name);
       setHasResume(true);
     }
   };
 
   const handleAnalyze = () => {
     setAnalysisOpen((prev) => !prev);
-    console.log("[ResumeSection] Analyze Resume clicked – toggling analysis panel");
+    // console.log("[ResumeSection] Analyze Resume clicked – toggling analysis panel");
   };
 
   return (
@@ -404,7 +404,7 @@ export default function ResumeSection() {
                   radius="md"
                   size="sm"
                   onClick={() =>
-                    console.log("[ResumeSection] Re-Analyze Resume clicked")
+                    // console.log("[ResumeSection] Re-Analyze Resume clicked")
                   }
                   style={{ fontWeight: 600 }}
                 >

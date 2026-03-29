@@ -19,7 +19,7 @@ const JobCard = (props) => {
   const handleSaveJob = async () => {
     /* ---------- Ensure profile loaded ---------- */
     if (!profile || !profile.id) {
-      console.log("Profile not ready ❌");
+      // console.log("Profile not ready ❌");
       return;
     }
 

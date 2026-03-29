@@ -36,7 +36,7 @@ const ApplicantGuard = ({ children }) => {
   /* -------- Profile Completion Step -------- */
 
   if (profile.resumeUploaded && !profile.profileCompleted) {
-    console.log("reached applicant profile");
+    // console.log("reached applicant profile");
     if (location.pathname.startsWith("/applicant/profile")) {
       return (
         <Navigate
