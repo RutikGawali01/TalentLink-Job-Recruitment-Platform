@@ -67,7 +67,8 @@ public class AppConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth //🔹 Authorization Rules
-                        .requestMatchers("OPTIONS", "/**").permitAll()//Without this → CORS errors
+                        .requestMatchers("OPTIONS", "/**")
+                        .permitAll()//Without this → CORS errors
                         .requestMatchers("/auth/login", "/users/register", "/users/verifyOTP/**", "/users/sendOTP/**")// public api
                          // these api does not require jwt
                         .permitAll()

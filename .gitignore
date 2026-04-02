@@ -1,0 +1,112 @@
+# =========================
+
+# 🔥 Node.js / React
+
+# =========================
+
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+
+# Build outputs
+
+dist/
+build/
+.next/
+out/
+
+# Environment variables
+
+.env
+.env.*
+!.env.example
+
+# =========================
+
+# 🔥 Java / Spring Boot
+
+# =========================
+
+target/
+*.log
+*.class
+*.jar
+*.war
+*.ear
+
+# Maven wrapper
+
+.mvn/wrapper/maven-wrapper.jar
+
+# IntelliJ IDEA
+
+.idea/
+*.iml
+
+# Eclipse
+
+.project
+.classpath
+.settings/
+
+# VS Code
+
+.vscode/
+
+# =========================
+
+# 🔥 OS Files
+
+# =========================
+
+.DS_Store
+Thumbs.db
+
+# =========================
+
+# 🔥 Logs
+
+# =========================
+
+logs/
+*.log
+
+# =========================
+
+# 🔥 Temporary files
+
+# =========================
+
+*.tmp
+*.temp
+*.swp
+
+# =========================
+
+# 🔥 Coverage / Testing
+
+# =========================
+
+coverage/
+*.lcov
+
+# =========================
+
+# 🔥 Docker (optional)
+
+# =========================
+
+docker-compose.override.yml
+
+# =========================
+
+# 🔥 Misc
+
+# =========================
+
+*.pid
+*.seed
+*.pid.lock
