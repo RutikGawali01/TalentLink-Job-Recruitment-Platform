@@ -114,7 +114,7 @@ const Login = () => {
               navigate("/find-jobs");
             }
           }
-        }, 800);
+        }, 200);
       })
       .catch((err) => {
         setLoading(false);
