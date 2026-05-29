@@ -82,7 +82,7 @@ const SignUp = () => {
     registerUser({ ...data, accountType })
       .then(() => {
         successNotification("Registered Successfully", "Redirecting...");
-        setTimeout(() => navigate("/login"), 800);
+        setTimeout(() => navigate("/login"), 200);
       })
       .catch((err) => {
         errorNotification("Registration Failed", err?.response?.data?.errorMessage || "Something went wrong");
